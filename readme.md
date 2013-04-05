@@ -1,7 +1,7 @@
 Catch-22
 ========
 
-An online vicious circle gallery.
+An online gallery of vicious circles.
 
 What is this?
 -------------
@@ -10,13 +10,13 @@ It's an experiment in programming and psychology. The app will let you:
 
 1. add a vicious circle that you know about (eg. you are in, you were in, somebody you know is in)
 
-2. mark circles added by other people as concerning you too
+2. mark circles added by other people as concerning you as well
 
-3. write about your solution to this circle
+3. write about your solution to circle, which concerns you
 
-4. mark solution as the one that works for you, or
+4. mark solution added by someone else as the one that works for you, or
 
-5. mark solution as the one that you are going to try
+5. mark such solution as the one that you are going to try
 
 What for?
 ---------
