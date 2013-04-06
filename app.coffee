@@ -1,12 +1,18 @@
 flatiron = require 'flatiron'
-path     = require 'path'
+creamer  = require 'creamer'
+
 app      = flatiron.app;
 
-app.config.file file: path.join __dirname, 'config', 'config.json'
+app.config.file file: __dirname + '/config/config.json'
 
-app.use(flatiron.plugins.http);
+app.use flatiron.plugins.http
+app.use creamer,
+  layout:       require "./views/layout"
+  views:        __dirname + '/views'
+  controllers:  __dirname + '/controllers'
+
 
 app.router.get '/', () ->
-  @res.json 'hello': 'world'
+  @bind "index"
 
 app.start 4000;
