@@ -1,7 +1,7 @@
 # Shortcuts
-if @session?.username?  then @username = @session.username
-if @session?.user?      then @user = @session.user
 module.exports = ->
+  if @session?.username?  then @username = @session.username
+  if @session?.user?      then @user = @session.user
   doctype 5
   html ->
     head ->
@@ -29,7 +29,7 @@ module.exports = ->
             id: "signout"
             href: "#"
             class: "persona-button blue"
-          }, ->  span "Wyloguj"
+          }, ->  span "Wyloguj #{@username}"
           # a {
           #   id: "profile"
           #   class: "button blue"
