@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "vows --spec",
-    "start": "node app.js"
+    "start": "coffee app.coffee"
   },
   "homepage": "http://lazurski.pl/catch-22/",
   "name": "Catch-22",
