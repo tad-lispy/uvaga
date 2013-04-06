@@ -1,6 +1,6 @@
 {
   "description": "An online vicious circles gallery",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "union": "~0.3.5",
