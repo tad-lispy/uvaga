@@ -13,7 +13,8 @@
   },
   "devDependencies": {
     "api-easy": "0.3.2",
-    "vows": "0.6.x"
+    "vows": "0.6.x",
+    "docco": "~0.6.2"
   },
   "scripts": {
     "test": "vows --spec",
