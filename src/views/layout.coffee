@@ -1,4 +1,3 @@
-# Shortcuts
 module.exports = ->
   if @session?.username?  then @username = @session.username
   if @session?.user?      then @user = @session.user

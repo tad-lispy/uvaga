@@ -30,11 +30,6 @@ The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelen
     app.http.before.push do connect.cookieParser
     app.http.before.push connect.session secret: "Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!"
 
-TODO: Routes
-
-    app.router.get '/', () ->
-      @bind "index"
-
 Let's start listening to our participants requests at 4000
 
     app.start 4000, ->
