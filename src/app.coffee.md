@@ -1,5 +1,5 @@
-Catch-22
-========
+Application
+===========
 
 An online gallery of vicious circles.
 
@@ -17,7 +17,15 @@ The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelen
     connect  = require "connect"
     app      = flatiron.app
 
-    app.config.file file: __dirname + '/config/config.json'
+Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)
+    
+    app.config.defaults {
+      host    : "localhost"
+      port    : 4000
+      secret  : "Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!"
+    }
+    # TODO: Doesn't read ?
+    app.config.file file: __dirname + '/../config/config.json' 
 
     app.use flatiron.plugins.http
     # TODO: this should be somehow configurable
@@ -28,12 +36,12 @@ The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelen
       controllers:  __dirname + '/controllers'
 
     app.http.before.push do connect.cookieParser
-    app.http.before.push connect.session secret: "Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!"
+    app.http.before.push connect.session secret: app.config.get "secret"
 
-Let's start listening to our participants requests at 4000
+Let's start listening to requests from our participants:
 
-    app.start 4000, ->
-      app.log.info "The circles are turning at http://localhost:4000/"
+    app.start (app.config.get "port"), ->
+      app.log.info "The circles are turning at http://#{app.config.get "host"}:#{app.config.get "port"}/}"
 
 [Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle
 [Flatiron]:         http://flatironjs.org/

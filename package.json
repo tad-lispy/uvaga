@@ -6,19 +6,17 @@
   "dependencies": {
     "union": "~0.3.5",
     "flatiron": "~0.3.4",
-    "vows": "~0.6.4",
-    "api-easy": "~0.3.2",
     "connect": "~2.7.4",
     "creamer": "~0.3.2",
     "request": "~2.16.6"
   },
   "devDependencies": {
-    "api-easy": "0.3.2",
-    "vows": "0.6.x",
-    "docco": "~0.6.2"
+    "coffee-script": "~1.6.2",
+    "mocha": "~1.9.0",
+    "groc": "~0.4.0"
   },
   "scripts": {
-    "test": "vows --spec",
+    "test": "mocha",
     "start": "node lib/app.js"
   },
   "homepage": "http://lazurski.pl/catch-22/",

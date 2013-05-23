@@ -1,4 +1,7 @@
-This is a main controller. It controlls `/`.
+Main controller
+===============
+
+It controlls `/`.
 
 Learn [more about controllers](https://github.com/twilson63/creamer/tree/master/examples/mvc).
 
