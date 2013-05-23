@@ -1,3 +1,4 @@
 {
-  "port": 5000
+  "port": 5000,
+  "secret": "Nigdy wam nie powiem co mi siedzi w głowie!"
 }

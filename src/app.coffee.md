@@ -14,22 +14,21 @@ The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelen
     flatiron = require 'flatiron'
     creamer  = require 'creamer'
     persona  = require 'flatiron-persona'
-    connect  = require "connect"
+    connect  = require 'connect'
+    path     = require 'path'
     app      = flatiron.app
 
 Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)
     
+    app.config.use 'file', file: path.join(__dirname, '/../config/config.json')
     app.config.defaults {
       host    : "localhost"
       port    : 4000
       secret  : "Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!"
     }
-    # TODO: Doesn't read ?
-    app.config.file file: __dirname + '/../config/config.json' 
 
     app.use flatiron.plugins.http
-    # TODO: this should be somehow configurable
-    app.use persona, audience: "http://localhost:4000/" 
+    app.use persona, audience: "http://#{app.config.get "host"}:#{app.config.get "port"}/"
     app.use creamer,
       layout:       require "./views/layout"
       views:        __dirname + '/views'
@@ -41,7 +40,7 @@ Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)
 Let's start listening to requests from our participants:
 
     app.start (app.config.get "port"), ->
-      app.log.info "The circles are turning at http://#{app.config.get "host"}:#{app.config.get "port"}/}"
+      app.log.info "The circles are turning at http://#{app.config.get "host"}:#{app.config.get "port"}/"
 
 [Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle
 [Flatiron]:         http://flatironjs.org/
