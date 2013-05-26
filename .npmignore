@@ -1,0 +1,7 @@
+src
+docs
+doc
+test
+node_modules
+Makefile
+.watch_pid

@@ -8,4 +8,4 @@ Learn [more about controllers](https://github.com/twilson63/creamer/tree/master/
     module.exports = 
       "/":
         get: ->
-          @bind "index", 
+          @bind "index"

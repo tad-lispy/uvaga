@@ -16,6 +16,7 @@ The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelen
     persona  = require 'flatiron-persona'
     connect  = require 'connect'
     path     = require 'path'
+    mongoose = require 'mongoose'
     app      = flatiron.app
 
 Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)
@@ -37,9 +38,14 @@ Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)
     app.http.before.push do connect.cookieParser
     app.http.before.push connect.session secret: app.config.get "secret"
 
+If participant is authenticated via Persona but has no profile, redirect him to /participants?new to create one.
+    
+    app.http.before.push require "./profile-check"
+
 Let's start listening to requests from our participants:
 
     app.start (app.config.get "port"), ->
+      mongoose.connect 'mongodb://localhost/test'
       app.log.info "The circles are turning at http://#{app.config.get "host"}:#{app.config.get "port"}/"
 
 [Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle
