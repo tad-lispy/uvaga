@@ -40,7 +40,7 @@ Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)
 
 If participant is authenticated via Persona but has no profile, redirect him to /participants?new to create one.
     
-    app.http.before.push require "./profile-check"
+    app.http.before.push require "./middleware/profile"
 
 Let's start listening to requests from our participants:
 

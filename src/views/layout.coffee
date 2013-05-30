@@ -1,6 +1,11 @@
 module.exports = ->
-  if @session?.username?  then @username = @session.username
-  if @session?.user?      then @user = @session.user
+  ###
+    `session.username` is set only if participant is authenticated via Persona. Then it contains a string with users e-mail.
+
+    `session.profile` is set only if participant is authenticated and has a profile. Then it's an object with email (same as username), name (public name) and slug (public identifier used in urls)
+  ###
+  if @session?.username?  then @username  = @session.username
+  if @session?.profile?   then @profile   = @session.profile
   doctype 5
   html ->
     head ->
@@ -18,19 +23,29 @@ module.exports = ->
         h1 "Catch-22"
         h2 "An online gallery of vicious circles"
         unless @username
-          a {
-            id: "signin"
-            "data-signin": true
-            href: "#"
-            class: "persona-button dark"
-          }, ->  span "Logowanie"
+          p -> 
+            text "You are annonymous to us. "
+            a {
+              id: "signin"
+              "data-signin": true
+              href: "#"
+              class: "persona-button dark"
+            }, ->  span "Introduce yourself"
+            text " to us!"
         else
-          a {
-            id: "signout"
-            "data-signout": true
-            href: "#"
-            class: "persona-button blue"
-          }, ->  span "Wyloguj #{@username}"
+          p ->
+            text "We know who you are. You are "
+            if @participant?
+              a href: "participants/#{@participant.slug}", @participant.name
+            else text @username
+            text "! Would you rather "
+            a {
+              id: "signout"
+              "data-signout": true
+              href: "#"
+              class: "persona-button blue"
+            }, ->  span "stay annonymous"
+            text "?"
           # a {
           #   id: "profile"
           #   class: "button blue"

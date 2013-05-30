@@ -1,15 +1,13 @@
 module.exports = ->
-  h1 "Your profile, #{@username}"
-  if @participant?.slug then p "Slug is #{@participant.slug}"
-  else 
-    p "You need to create one before you can interact with others. Here's your chance :)"
-    p ->
-      text "You don't want to? No problem here. Just "
-      a "data-signout": true, href: "#", "logout"
-      text " and we'll be fine with you."
+  # No `@participant` indicates that we are in `/participants?new`
+  if not @participant?
+    p "Hello! Thanks for authenticating."
+    p "Before we let you play with us, we really need to know one thing."
+    form class: "profile create", method: "post", action: "/participants", ->
+      label for: "name", "How shall we address you in public?"
+      input type: "text", name: "name"
+      input type: "submit", value: "save"
 
-  form method: "post", action: "/participants", ->
-    label for: "name", "Participant name (public)"
-    console.dir @participant
-    input type: "text", name: "name"
-    input type: "submit", value: "save"
+  else
+    h1 "Public profile of #{@participant.name}"
+

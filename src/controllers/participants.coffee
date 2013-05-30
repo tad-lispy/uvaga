@@ -46,4 +46,5 @@ module.exports =
         a = @
         Participant.findOne { slug }, (error, participant) ->
           if error then throw error
-          a.bind "profile", { participant }
+          if participant then a.bind "profile", { participant }
+          else a.bind "not-found"
