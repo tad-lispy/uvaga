@@ -20,12 +20,14 @@ module.exports = ->
         unless @username
           a {
             id: "signin"
+            "data-signin": true
             href: "#"
             class: "persona-button dark"
           }, ->  span "Logowanie"
         else
           a {
             id: "signout"
+            "data-signout": true
             href: "#"
             class: "persona-button blue"
           }, ->  span "Wyloguj #{@username}"
@@ -71,6 +73,6 @@ module.exports = ->
               }
           }
 
-          ($ "#signin").click  -> do navigator.id.request
-          ($ "#signout").click -> do navigator.id.logout
+          ($ "a[data-signin]").click  -> do navigator.id.request
+          ($ "a[data-signout]").click -> do navigator.id.logout
 
