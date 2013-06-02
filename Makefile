@@ -24,7 +24,7 @@ test:
 	npm test
 
 docs:
-	./node_modules/.bin/groc src/*.coffee?(.md) src/**/*.coffee?(.md) readme.md
+	./node_modules/.bin/groc "src/*.coffee?(.md)" "src/**/*.coffee?(.md)" readme.md
 
 clean-docs:
 	rm -rf doc/*

@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><title>models/Participant.coffee</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="models/Participant.coffee"><meta name="groc-project-path" content="src/models/Participant.coffee.md"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/models/Participant.coffee.md</div></div><div id="document"><div class="segment"><div class="comments"><div class="wrapper"><h1 id="participant-model">Participant model</h1>
+
+<p>This represents a single participant.</p>
+
+<h2 id="who-is-a-participant">Who is a participant?</h2>
+
+<p>Participant is a person, you would normally call "a user". Why not "user"? Because we don't use them, nor do they use us. We all participate in the experiment :)</p>
+
+<p>All persistant data, including participants profiles is handeld by <a href="http://mongoosejs.com/">mongoose</a>.</p>
+
+<pre><code>mongoose = require "mongoose"
+</code></pre>
+
+<p>Each participant has </p>
+
+<ul>
+<li>a name, which is presented to other participants;</li>
+<li>an e-mail, by which he is authenticated with Persona;</li>
+<li>a slug, which is calculated from name to be used in urls.</li>
+</ul>
+
+<p>Take a look at my <a href="slugify">mongoose slugify plugin</a></p>
+
+<pre><code>Participant = new mongoose.Schema {
+  name  :
+    type      : String
+    required  : true
+  email : 
+    type      : String
+    lowercase : true
+    unique    : true
+    required  : true
+  slug  :
+    type      : String
+    unique    : true
+    required  : true
+}
+
+Participant.plugin require "./slugify"
+
+module.exports = mongoose.model 'Participant', Participant
+</code></pre></div></div></div></div></body></html>

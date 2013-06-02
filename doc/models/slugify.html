@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><title>models/slugify</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="models/slugify"><meta name="groc-project-path" content="src/models/slugify.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/models/slugify.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">###</span>
+<span class="cm">Slugify</span>
+<span class="cm">=======</span>
+
+<span class="cm">It&#39;s a [mongoose plugin][] that makes proper slugs for documents</span>
+<span class="cm">###</span>
+
+<span class="nv">mongoose = </span><span class="nx">require</span> <span class="s">&quot;mongoose&quot;</span>
+<span class="nv">_        = </span><span class="nx">require</span> <span class="s">&quot;underscore.string&quot;</span>
+
+<span class="nv">defaults = </span>
+  <span class="nv">base: </span><span class="s">&quot;name&quot;</span>
+
+<span class="nv">module.exports = </span><span class="nf">(schema, options = {}) -&gt;</span>
+  <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="k">of</span> <span class="nx">defaults</span>
+    <span class="nx">options</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">?=</span> <span class="nx">value</span>
+
+  <span class="k">if</span> <span class="o">not</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">paths</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">base</span><span class="p">]</span> <span class="k">then</span> <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">    Given schema has no field &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">base</span><span class="si">}</span><span class="s">&#39;.</span>
+<span class="s">    You can set field on which slug will be based using &#39;base&#39; property of options object (second parameter to Schema.plugin method).</span>
+<span class="s">  &quot;&quot;&quot;</span>
+
+  <span class="nx">schema</span><span class="p">.</span><span class="nx">pre</span> <span class="s">&quot;validate&quot;</span><span class="p">,</span> <span class="nf">(next) -&gt;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>If slug is already set, then just make sure it's proper.</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="nx">@slug</span> <span class="k">then</span> <span class="vi">@slug = </span><span class="nx">_</span><span class="p">.</span><span class="nx">slugify</span> <span class="nx">@slug</span>
+    <span class="k">else</span>
+      <span class="nv">source = </span><span class="nx">@</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">base</span><span class="p">]</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>if it's an array, convert it to string</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="nx">source</span> <span class="k">instanceof</span> <span class="nb">Array</span> <span class="k">then</span> <span class="nv">source = </span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&quot;-&quot;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>if it's anything else, convert it to string</p></div></div><div class="code"><div class="wrapper">      <span class="k">else</span> <span class="nv">source = </span><span class="nx">do</span> <span class="nx">source</span><span class="p">.</span><span class="nx">toString</span>
+      
+      <span class="vi">@slug = </span><span class="nx">_</span><span class="p">.</span><span class="nx">slugify</span> <span class="nx">source</span>
+
+    <span class="k">if</span> <span class="nx">@slug</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^[0-9]+$/</span> <span class="k">then</span> <span class="vi">@slug = </span><span class="s">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">@slug</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Limit length of slug to 64 characters</p></div></div><div class="code"><div class="wrapper">    <span class="vi">@slug = </span><span class="nx">@slug</span><span class="p">.</span><span class="nx">substr</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">64</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>TODO: make it smarter - if slug is already in use, add suffix.</p></div></div><div class="code"><div class="wrapper">    <span class="nv">model = </span><span class="nx">@model</span> <span class="nx">@constructor</span><span class="p">.</span><span class="nx">modelName</span>
+    <span class="nv">doc   = </span><span class="nx">@</span>
+    <span class="nv">increment_slug = </span><span class="o">-&gt;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&quot;trying </span><span class="si">#{</span><span class="nx">doc</span><span class="p">.</span><span class="nx">slug</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="nx">model</span><span class="p">.</span><span class="nx">count</span> <span class="nv">slug: </span><span class="nx">doc</span><span class="p">.</span><span class="nx">slug</span><span class="p">,</span> <span class="nv">_id: $ne: </span><span class="nx">doc</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nf">(error, count) -&gt;</span>
+        <span class="k">if</span> <span class="nx">error</span> <span class="k">then</span> <span class="k">throw</span> <span class="nx">error</span>  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>if the slug is unique we are done</p></div></div><div class="code"><div class="wrapper">        <span class="k">if</span> <span class="o">not</span> <span class="nx">count</span> <span class="k">then</span> <span class="nx">do</span> <span class="nx">next</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>if it's in use, increment it and try again</p></div></div><div class="code"><div class="wrapper">        <span class="k">else</span> 
+          <span class="nv">doc.slug = </span><span class="k">if</span> <span class="nv">match = </span><span class="nx">doc</span><span class="p">.</span><span class="nx">slug</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/-(\d+)$/</span> 
+            <span class="nx">doc</span><span class="p">.</span><span class="nx">slug</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\d+$/</span><span class="p">,</span> <span class="p">(</span><span class="nb">parseInt</span> <span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span>
+          <span class="k">else</span> <span class="nx">doc</span><span class="p">.</span><span class="nx">slug</span> <span class="o">+=</span> <span class="s">&quot;-1&quot;</span>
+          <span class="nx">do</span> <span class="nx">increment_slug</span>
+
+    <span class="nx">do</span> <span class="nx">increment_slug</span>
+
+<span class="cm">###</span>
+<span class="cm">[mongoose plugin]: #</span>
+<span class="cm">###</span></div></div></div></div></body></html>

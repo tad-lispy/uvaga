@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><title>app</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="app"><meta name="groc-project-path" content="src/app.coffee"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/app.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">###</span>
+<span class="cm">Application</span>
+<span class="cm">===========</span>
+
+<span class="cm">An online gallery of vicious circles.</span>
+
+<span class="cm">It&#39;s an application to let people share insights on [vicious circles][Vicious circle] they are affected by or they know about. Also it lets participants share their solutions to the circles and vote for them.</span>
+
+<span class="cm">Learn more at https://github.com/lzrski/catch-22</span>
+
+<span class="cm">This file is an entry point of the app (see [./package.json][]).</span>
+
+<span class="cm">The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelent [Coffecup][] plugin with MVC capabilities. User authentication uses [Mozilla Persona][] with my humble [plugin][Flatiron Persona], which requires session and cookie parser middleware from [Connect][]. </span>
+<span class="cm">###</span>
+
+<span class="nv">flatiron = </span><span class="nx">require</span> <span class="s">&#39;flatiron&#39;</span>
+<span class="nv">creamer  = </span><span class="nx">require</span> <span class="s">&#39;creamer&#39;</span>
+<span class="nv">persona  = </span><span class="nx">require</span> <span class="s">&#39;flatiron-persona&#39;</span>
+<span class="nv">connect  = </span><span class="nx">require</span> <span class="s">&#39;connect&#39;</span>
+<span class="nv">path     = </span><span class="nx">require</span> <span class="s">&#39;path&#39;</span>
+<span class="nv">mongoose = </span><span class="nx">require</span> <span class="s">&#39;mongoose&#39;</span>
+<span class="nv">app      = </span><span class="nx">flatiron</span><span class="p">.</span><span class="nx">app</span>
+
+<span class="cm">###</span>
+<span class="cm">Runtime configuration is done with [nconf](https://github.com/flatiron/nconf)</span>
+<span class="cm">###</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">use</span> <span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="nv">file: </span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s">&#39;/../config/config.json&#39;</span><span class="p">)</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">defaults</span> <span class="p">{</span>
+  <span class="nv">host    : </span><span class="s">&quot;localhost&quot;</span>
+  <span class="nv">port    : </span><span class="mi">4000</span>
+  <span class="nv">secret  : </span><span class="s">&quot;Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!&quot;</span>
+<span class="p">}</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span> <span class="nx">flatiron</span><span class="p">.</span><span class="nx">plugins</span><span class="p">.</span><span class="nx">http</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span> <span class="nx">persona</span><span class="p">,</span> <span class="nv">audience: </span><span class="s">&quot;http://</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;host&quot;</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="si">}</span><span class="s">/&quot;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span> <span class="nx">creamer</span><span class="p">,</span>
+  <span class="nv">layout: </span>      <span class="nx">require</span> <span class="s">&quot;./views/layout&quot;</span>
+  <span class="nv">views: </span>       <span class="nx">__dirname</span> <span class="o">+</span> <span class="s">&#39;/views&#39;</span>
+  <span class="nv">controllers: </span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s">&#39;/controllers&#39;</span>
+
+<span class="cm">###</span>
+<span class="cm">This enables trailing slashes in routes - otherwise it&#39;s 404</span>
+<span class="cm">See: https://github.com/flatiron/director/issues/74</span>
+<span class="cm">###</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">configure</span> <span class="nv">strict: </span><span class="kc">false</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">do</span> <span class="nx">connect</span><span class="p">.</span><span class="nx">cookieParser</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">connect</span><span class="p">.</span><span class="nx">session</span> <span class="nv">secret: </span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;secret&quot;</span>
+
+<span class="cm">###</span>
+<span class="cm">If participant is authenticated via Persona but has no profile, redirect him to `/participants?new` to create one.</span>
+<span class="cm">###</span> 
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">require</span> <span class="s">&quot;./middleware/profile&quot;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Let's start listening to requests from our participants:</p></div></div><div class="code"><div class="wrapper"><span class="nx">app</span><span class="p">.</span><span class="nx">start</span> <span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="p">),</span> <span class="o">-&gt;</span>
+  <span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span> <span class="s">&#39;mongodb://localhost/test&#39;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">info</span> <span class="s">&quot;The circles are turning at http://</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;host&quot;</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="si">}</span><span class="s">/&quot;</span>
+
+<span class="cm">###</span>
+<span class="cm">[Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle</span>
+<span class="cm">[Flatiron]:         http://flatironjs.org/</span>
+<span class="cm">[Creamer]:          https://github.com/twilson63/creamer</span>
+<span class="cm">[Coffecup]:         https://github.com/gradus/coffeecup</span>
+<span class="cm">[Mozilla Persona]:  http://www.mozilla.org/en-US/persona/</span>
+<span class="cm">[Flatiron Persona]: https://github.com/lzrski/flatiron-persona</span>
+<span class="cm">[Connect]:          http://www.senchalabs.org/connect/</span>
+<span class="cm">###</span></div></div></div></div></body></html>
