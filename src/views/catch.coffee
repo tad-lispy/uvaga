@@ -1,3 +1,5 @@
+_ = require "underscore.string"
+
 module.exports = ->
   # No `@catch` indicates that we are in `/catches?new`
   if not @catch?
@@ -11,32 +13,28 @@ module.exports = ->
           size: 128
       input id: "submit", type: "submit", value: "save"
 
+    coffeescript ->
+      jQuery ($) ->
+        list = $("#steps")
+        do list.sortable
+        do list.disableSelection
+
+        # It seems we can't use `list.find()` here. The `live` goes nuts.
+        $("#steps li:last-child input[name=steps]").live "focus", ->
+          item = $(@).parent().clone().hide()
+          item.appendTo(list).fadeIn "slow"
+          item.find("input").val("")
+          $(@).one "blur", ->
+            unless $(@).val()
+              do item.remove
+              do $("#submit").focus
+          list.sortable "refresh"
+
   else
-    h1 "Public profile of #{@participant.name}"
-    # if @username is @participant.email then participant is viewing his own profile and should be able to change it
-    if @username is @participant.email
-      form class: "profile update", method: "post", action: "/participants", ->
-        label for: "name", "How shall we address you in public?"
-        input type: "text", name: "name", value: @profile.name
-        input type: "submit", value: "save"
-
-  coffeescript ->
-    jQuery ($) ->
-      list = $("#steps")
-      do list.sortable
-      do list.disableSelection
-
-      # It seems we can't use `list.find()` here. The `live` goes nuts.
-      $("#steps li:last-child input[name=steps]").live "focus", ->
-        item = $(@).parent().clone().hide()
-        item.appendTo(list).fadeIn "slow"
-        item.find("input").val("")
-        $(@).one "blur", ->
-          unless $(@).val()
-            do item.remove
-            do $("#submit").focus
-        list.sortable "refresh"
-        
-
-
-
+    h1 "The catch is this"
+    console.dir @catch.victims
+    ul id: "victims", ->
+      for victim in @catch.victims
+        li -> a href: "/participants/#{victim.slug}", victim.name
+    ol id: "steps", ->
+      li step for step in @catch.steps

@@ -17,36 +17,31 @@ module.exports =
       else @bind "catches"
 
     post: ->
-      data = _.pick @req.body, ["steps", "victim"]
-      console.dir data
-      console.dir @req.body
-      do @res.end
-    #   a = @
-    #   # TODO: Check permission
-    #   Participant.findOneAndUpdate
-    #     email: @req.session.username,
-    #     data,
-    #     upsert: true,
-    #     (error, participant) ->
-    #       if error then throw error
+      data = _.pick @req.body, ["steps"]   
+      data.steps = data.steps.filter (e) -> if e then true else false
+      
+      a = @
+      if not @req.session.username then @res.end "Not authorized."
+      Participant.findOne email: @req.session.username, (error, participant) ->
+        if error then thorw error
+        if not participant then return a.res.end "Not authorized. Create a profile first."
 
-    #       ###
-    #       We need to save in order to trigger [slugify middleware](../models/slugify.coffee), which updates .slug according to .name.
+        # `catch` is a reserved word :P
+        new_catch = new Catch
+          victims : [participant]
+          steps   : data.steps
 
-    #       Only then we can redirect browser to this slug.
-    #       ###
-    #       participant.save (error) ->
-    #         if error then throw error
-    #         a.res.redirect "/participants/" + participant.slug
+        new_catch.save (error) ->
+          if error then throw error
+          a.res.redirect "/catches/" + new_catch.slug
       
 
-    # "/:slug":
-    #   get: (slug) -> 
-    #     a = @
-    #     Participant.findOne { slug }, (error, participant) ->
-    #       if error then throw error
-    #       if participant then a.bind "profile", { participant }
-    #       else
-    #         # a.res.end 404, "No such participant" 
-    #         a.res.statusCode = 404
-    #         a.bind "not-found"
+    "/:slug":
+      get: (slug) -> 
+        a = @
+        Catch.findOne({ slug }).populate('victims').exec (error, the_catch) ->
+          if error then throw error
+          if the_catch then a.bind "catch", { catch: the_catch }
+          else
+            a.res.statusCode = 404
+            a.bind "not-found"
