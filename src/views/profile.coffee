@@ -10,4 +10,10 @@ module.exports = ->
 
   else
     h1 "Public profile of #{@participant.name}"
+    # if @username is @participant.email then participant is viewing his own profile and should be able to change it
+    if @username is @participant.email
+      form class: "profile update", method: "post", action: "/participants", ->
+        label for: "name", "How shall we address you in public?"
+        input type: "text", name: "name", value: @profile.name
+        input type: "submit", value: "save"
 

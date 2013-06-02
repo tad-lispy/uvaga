@@ -1,32 +1,25 @@
 ###
-Participants controller
-=======================
+Catches controller
+==================
 
-This controlls /participants/ urls, that are related to participants (so called users), as you can guess.
+This controlls /catches/ urls, that are related to catches (aka vicious circles).
 
 ###
 
+Catch       = require "../models/Catch"
 Participant = require "../models/Participant"
-_ = require "underscore"
+_           = require "underscore"
 
 module.exports = 
-  "/participants":
+  "/catches":
     get: ->
-      if @req.query.new? then @bind "profile"
-      else 
-        a = @
-        Participant.find (error, participants) ->
-          if error then throw error
-          a.bind "participants", { participants }
-
+      if @req.query.new? then @bind "catch"
+      else @bind "catches"
     post: ->
-      unless @req.session.username
-        @res.statusCode = 407
-        @bind "profile"
-        return
-      
-      data = _.pick @req.body, ["email", "name"]
+      data = _.pick @req.body, ["steps", "victim"]
+      console.log data
       a = @
+      # TODO: Check permission
       Participant.findOneAndUpdate
         email: @req.session.username,
         data,

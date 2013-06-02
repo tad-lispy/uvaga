@@ -24,19 +24,19 @@ module.exports = ->
         h2 "An online gallery of vicious circles"
         unless @username
           p -> 
-            text "You are annonymous to us. "
+            text "You are annonymous to us. You may "
             a {
               id: "signin"
               "data-signin": true
               href: "#"
               class: "persona-button dark"
-            }, ->  span "Introduce yourself"
-            text " to us!"
+            }, ->  span "introduce yourself"
+            text " at any time."
         else
           p ->
             text "We know who you are. You are "
-            if @participant?
-              a href: "participants/#{@participant.slug}", @participant.name
+            if @profile?
+              a href: "/participants/#{@profile.slug}", @profile.name
             else text @username
             text "! Would you rather "
             a {

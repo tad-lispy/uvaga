@@ -23,7 +23,6 @@ Take a look at my [mongoose slugify plugin][]
     Participant = new mongoose.Schema {
       name  :
         type      : String
-        unique    : true
         required  : true
       email : 
         type      : String
@@ -33,6 +32,7 @@ Take a look at my [mongoose slugify plugin][]
       slug  :
         type      : String
         unique    : true
+        required  : true
     }
     
     Participant.plugin require "./slugify"
