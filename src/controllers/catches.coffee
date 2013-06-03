@@ -13,8 +13,12 @@ _           = require "underscore"
 module.exports = 
   "/catches":
     get: ->
-      if @req.query.new? then @bind "catch"
-      else @bind "catches"
+      if @req.query.new? then return @bind "catch"
+      
+      a = @
+      Catch.find().populate('victims').sort(bodycount: -1).exec (error, catches) ->
+        if error then throw error
+        a.bind "catches", {catches}
 
     post: ->
       data = _.pick @req.body, ["steps"]   

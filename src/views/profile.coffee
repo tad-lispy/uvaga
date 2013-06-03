@@ -17,3 +17,9 @@ module.exports = ->
         input type: "text", name: "name", value: @profile.name
         input type: "submit", value: "save"
 
+    h2 "I sometimes get cought, when..."
+    ol id: "catches", ->
+      for the_catch in @participant.catches
+        li class: "catch", ->
+          a href: "/catches/#{the_catch.slug}", the_catch.steps[0]
+

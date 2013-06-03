@@ -7,7 +7,8 @@ This controlls /participants/ urls, that are related to participants (so called 
 ###
 
 Participant = require "../models/Participant"
-_ = require "underscore"
+Catch       = require "../models/Catch"
+_           = require "underscore"
 
 module.exports = 
   "/participants":
@@ -49,7 +50,14 @@ module.exports =
         a = @
         Participant.findOne { slug }, (error, participant) ->
           if error then throw error
-          if participant then a.bind "profile", { participant }
+          # TODO: use virtuals?
+          if participant 
+            Catch.find
+              victims: participant._id,
+              (error, catches) ->
+                if error then throw error
+                participant.catches = catches
+                a.bind "profile", { participant }
           else
             # a.res.end 404, "No such participant" 
             a.res.statusCode = 404
