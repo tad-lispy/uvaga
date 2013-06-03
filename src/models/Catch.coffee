@@ -23,6 +23,7 @@ Catch = new mongoose.Schema {
     type  : mongoose.Schema.Types.ObjectId
     ref   : 'Participant'
   ]
+  # We use bodycount to count victims. We need that to sort catches when querying.
   bodycount: Number
   slug  :
     type  : String
@@ -30,6 +31,7 @@ Catch = new mongoose.Schema {
 }
 
 Catch.pre "save", (next) ->
+  # Make sure bodycount is in sync with victims
   @bodycount = @victims.length
   do next
 
