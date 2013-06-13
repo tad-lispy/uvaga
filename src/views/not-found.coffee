@@ -1,2 +1,3 @@
 module.exports = ->
-  p "We don't have that. Sorry."
+  h1 "404, man."
+  p @message

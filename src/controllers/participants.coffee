@@ -9,16 +9,20 @@ This controlls /participants/ urls, that are related to participants (so called 
 Participant = require "../models/Participant"
 Catch       = require "../models/Catch"
 _           = require "underscore"
+###
+TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
+###
+helpers     = require "creamer-helpers"
+
 
 module.exports = 
   "/participants":
     get: ->
       if @req.query.new? then @bind "profile"
-      else 
-        a = @
-        Participant.find (error, participants) ->
+      else
+        Participant.find (error, participants) =>
           if error then throw error
-          a.bind "participants", { participants }
+          @bind "participants", { participants }
 
     post: ->
       unless @req.session.username
@@ -27,12 +31,11 @@ module.exports =
         return
       
       data = _.pick @req.body, ["email", "name"]
-      a = @
       Participant.findOneAndUpdate
         email: @req.session.username,
         data,
         upsert: true,
-        (error, participant) ->
+        (error, participant) =>
           if error then throw error
 
           ###
@@ -42,23 +45,19 @@ module.exports =
           ###
           participant.save (error) ->
             if error then throw error
-            a.res.redirect "/participants/" + participant.slug
+            @res.redirect "/participants/" + participant.slug
       
 
     "/:slug":
       get: (slug) -> 
-        a = @
-        Participant.findOne { slug }, (error, participant) ->
+        Participant.findOne { slug }, (error, participant) =>
           if error then throw error
           # TODO: use virtuals?
           if participant 
             Catch.find
               victims: participant._id,
-              (error, catches) ->
+              (error, catches) =>
                 if error then throw error
                 participant.catches = catches
-                a.bind "profile", { participant }
-          else
-            # a.res.end 404, "No such participant" 
-            a.res.statusCode = 404
-            a.bind "not-found"
+                @bind "profile", { participant }
+          else helpers.not_found @, "Nobody at this address."

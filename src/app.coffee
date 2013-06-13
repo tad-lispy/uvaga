@@ -44,7 +44,15 @@ This enables trailing slashes in routes - otherwise it's 404
 See: https://github.com/flatiron/director/issues/74
 ###
 
-app.router.configure strict: false
+app.router.configure 
+  strict: false
+  on: ->
+    # TODO: access control
+    # which route will be called for this request?
+    # does the participant have sufficien access level for this route?
+    # console.dir app.router.routes
+    # console.dir @
+
 
 app.http.before.push do connect.cookieParser
 app.http.before.push connect.session secret: app.config.get "secret"

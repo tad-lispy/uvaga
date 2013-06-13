@@ -32,7 +32,6 @@ module.exports = ->
 
   else
     h1 "The catch is this"
-    console.dir @catch.victims
     ul id: "victims", ->
       for victim in @catch.victims
         li -> a href: "/participants/#{victim.slug}", victim.name
