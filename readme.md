@@ -18,7 +18,14 @@ User stories
 
 Person can:
 
-* share an issue
+* fill his / her profile, with following data
+  * name
+  * telephone number
+  * list of departments (groups?)
+  * occupation
+* share an issue, with following details
+  * description (text)
+  * scope (e.g. whole organisation, department, location)
 * list issues
 * view an issue
 * mark an issue as affecting him / her
@@ -26,9 +33,15 @@ Person can:
 * mark an issue as being attended by him / her (become attender to the issue)
 * suggest attenders for an issue
 * comment on an issue
+* list closed issues (see below)
+* reopen closed issue
+
+Person affected by  and attender to a given issue can:
+
+* change issue details
 * close an issue (mark as no longer concerning the organisation)
-* list closed issues
-* reopen closed issue (see below)
+
+
 
 TODO: elaborate on details
 
