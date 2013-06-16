@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>#</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Application
+===========
+
+This is the main entry point of Uvaga application.
+
+It's an application to ...
+
+The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelent [Coffecup][] plugin with MVC capabilities. User authentication uses [Mozilla Persona][] with my humble [plugin][Flatiron Persona], which requires session and cookie parser middleware from [Connect][].</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>flatiron = require <span class="string">'flatiron'</span>
+creamer  = require <span class="string">'creamer'</span>
+persona  = require <span class="string">'flatiron-persona'</span>
+connect  = require <span class="string">'connect'</span>
+path     = require <span class="string">'path'</span>
+mongoose = require <span class="string">'mongoose'</span>
+app      = flatiron.app</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Runtime configuration <span class="keyword">is</span> done <span class="reserved">with</span> [nconf](https:<span class="regexp">//gi</span>thub.com<span class="regexp">/flatiron/</span>nconf)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.config.use <span class="string">'file'</span>, file: path.join(__dirname, <span class="string">'/../config/config.json'</span>)
+app.config.defaults {
+  host    : <span class="string">"localhost"</span>
+  port    : <span class="number">4000</span>
+  secret  : <span class="string">"Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!"</span>
+}
+
+app.use flatiron.plugins.http
+app.use persona, audience: <span class="string">"http://<span class="subst">#{app.config.get "host"}</span>:<span class="subst">#{app.config.get "port"}</span>/"</span>
+app.use creamer,
+  layout:       require <span class="string">"./views/layout"</span>
+  views:        __dirname + <span class="string">'/views'</span>
+  controllers:  __dirname + <span class="string">'/controllers'</span>
+
+
+
+app.router.configure</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>This enables trailing slashes in routes - otherwise it&#39;s 404
+See: <a href="https://github.com/flatiron/director/issues/74">https://github.com/flatiron/director/issues/74</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  strict: <span class="literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>TODO: access control
+which route will be called for this request?
+does agent have sufficien access level for this route?  </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="literal">on</span>: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>console.dir app.router.routes
+console.dir @</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.http.before.push <span class="keyword">do</span> connect.cookieParser
+app.http.before.push connect.session secret: app.config.get <span class="string">"secret"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>If agent is authenticated via Persona but has no profile, redirect him to <code>/stakeholders/__new</code> to create one.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.http.before.push require <span class="string">"./middleware/profile"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Let&#39;s start listening to requests from our stakeholders:</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>app.start (app.config.get <span class="string">"port"</span>), -&gt;
+  mongoose.connect <span class="string">'mongodb://localhost/uvaga'</span>
+  app.log.info <span class="string">"Uvaga! http://<span class="subst">#{app.config.get "host"}</span>:<span class="subst">#{app.config.get "port"}</span>/"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>[Vicious circle]:   http:<span class="regexp">//</span>en.wikipedia.org<span class="regexp">/wiki/</span>Vicious_circle
+[Flatiron]:         http:<span class="regexp">//</span>flatironjs.org/
+[Creamer]:          https:<span class="regexp">//gi</span>thub.com<span class="regexp">/twilson63/</span>creamer
+[Coffecup]:         https:<span class="regexp">//gi</span>thub.com<span class="regexp">/gradus/</span>coffeecup
+[Mozilla Persona]:  http:<span class="regexp">//</span>www.mozilla.org<span class="regexp">/en-US/persona/</span>
+[Flatiron Persona]: https:<span class="regexp">//gi</span>thub.com<span class="regexp">/lzrski/</span>flatiron-persona
+[Connect]:          http:<span class="regexp">//</span>www.senchalabs.org<span class="regexp">/connect/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

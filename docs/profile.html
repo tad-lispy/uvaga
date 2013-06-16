@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>profile.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="catches.html">
+                catches.coffee
+              </a>
+            
+              
+              <a class="source" href="stakeholder.html">
+                stakeholder.coffee
+              </a>
+            
+              
+              <a class="source" href="access_control.html">
+                access_control.coffee
+              </a>
+            
+              
+              <a class="source" href="profile.html">
+                profile.coffee
+              </a>
+            
+              
+              <a class="source" href="Catch.html">
+                Catch.coffee
+              </a>
+            
+              
+              <a class="source" href="Stakeholder.html">
+                Stakeholder.coffee
+              </a>
+            
+              
+              <a class="source" href="slugify.html">
+                slugify.coffee
+              </a>
+            
+              
+              <a class="source" href="catch.html">
+                catch.coffee
+              </a>
+            
+              
+              <a class="source" href="catches.html">
+                catches.coffee
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="not-found.html">
+                not-found.coffee
+              </a>
+            
+              
+              <a class="source" href="profile.html">
+                profile.coffee
+              </a>
+            
+              
+              <a class="source" href="stakeholder.html">
+                stakeholder.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>profile.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.<span class="function"><span class="title">exports</span></span> = -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>No <code>@stakeholder</code> indicates that we are in <code>/stakeholders?new</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@stakeholder</span>?
+    p <span class="string">"Hello! Thanks for authenticating."</span>
+    p <span class="string">"Before we let you play with us, we really need to know one thing."</span>
+    form class: <span class="string">"profile create"</span>, method: <span class="string">"post"</span>, action: <span class="string">"/stakeholders"</span>, -&gt;
+      label <span class="keyword">for</span>: <span class="string">"name"</span>, <span class="string">"How shall we address you in public?"</span>
+      input type: <span class="string">"text"</span>, name: <span class="string">"name"</span>
+      input type: <span class="string">"submit"</span>, value: <span class="string">"save"</span>
+
+  <span class="keyword">else</span>
+    h1 <span class="string">"Public profile of <span class="subst">#{@stakeholder.name}</span>"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>if @username is @stakeholder.email then stakeholder is viewing his own profile and should be able to change it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> <span class="property">@username</span> <span class="keyword">is</span> <span class="property">@stakeholder</span>.email
+      form class: <span class="string">"profile update"</span>, method: <span class="string">"post"</span>, action: <span class="string">"/stakeholders"</span>, -&gt;
+        label <span class="keyword">for</span>: <span class="string">"name"</span>, <span class="string">"How shall we address you in public?"</span>
+        input type: <span class="string">"text"</span>, name: <span class="string">"name"</span>, value: <span class="property">@profile</span>.name
+        input type: <span class="string">"submit"</span>, value: <span class="string">"save"</span>
+
+    h2 <span class="string">"I sometimes get cought, when..."</span>
+    ol id: <span class="string">"catches"</span>, -&gt;
+      <span class="keyword">for</span> the_catch <span class="keyword">in</span> <span class="property">@stakeholder</span>.catches
+        li class: <span class="string">"catch"</span>, -&gt;
+          a href: <span class="string">"/catches/<span class="subst">#{the_catch.slug}</span>"</span>, the_catch.steps[<span class="number">0</span>]</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

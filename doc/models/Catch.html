@@ -6,24 +6,28 @@
 
 <span class="cm">Catch has:</span>
 
-<span class="cm">1. victims (participants affected)</span>
+<span class="cm">1. victims (stakeholders affected)</span>
 <span class="cm">2. steps to reproduce (list of at least two 128 character strings)</span>
 <span class="cm">3. recoveries</span>
+<span class="cm">4. bodycount (number of victims)</span>
 <span class="cm">###</span>
 
 <span class="nv">mongoose = </span><span class="nx">require</span> <span class="s">&quot;mongoose&quot;</span>
 
-<span class="nv">Participant = </span><span class="nx">require</span> <span class="s">&quot;./Participant&quot;</span>
+<span class="nv">Stakeholder = </span><span class="nx">require</span> <span class="s">&quot;./Stakeholder&quot;</span>
 
 <span class="nv">Catch = </span><span class="k">new</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Schema definition</p></div></div><div class="code"><div class="wrapper">  <span class="nv">steps  : </span><span class="p">[</span><span class="nb">String</span><span class="p">]</span>
   <span class="nv">victims: </span><span class="p">[</span>
     <span class="nv">type  : </span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">.</span><span class="nx">Types</span><span class="p">.</span><span class="nx">ObjectId</span>
-    <span class="nv">ref   : </span><span class="s">&#39;Participant&#39;</span>
-  <span class="p">]</span>
+    <span class="nv">ref   : </span><span class="s">&#39;Stakeholder&#39;</span>
+  <span class="p">]</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>We use bodycount to count victims. We need that to sort catches when querying.</p></div></div><div class="code"><div class="wrapper">  <span class="nv">bodycount: </span><span class="nb">Number</span>
   <span class="nv">slug  :</span>
     <span class="nv">type  : </span><span class="nb">String</span>
     <span class="nv">unique: </span><span class="kc">true</span>
 <span class="p">}</span>
+
+<span class="nx">Catch</span><span class="p">.</span><span class="nx">pre</span> <span class="s">&quot;save&quot;</span><span class="p">,</span> <span class="nf">(next) -&gt;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Make sure bodycount is in sync with victims</p></div></div><div class="code"><div class="wrapper">  <span class="vi">@bodycount = </span><span class="nx">@victims</span><span class="p">.</span><span class="nx">length</span>
+  <span class="nx">do</span> <span class="nx">next</span>
 
 <span class="nv">slugify = </span><span class="nx">require</span> <span class="s">&quot;./slugify&quot;</span>
 <span class="nx">Catch</span><span class="p">.</span><span class="nx">plugin</span> <span class="nx">slugify</span><span class="p">,</span> <span class="nv">base: </span><span class="s">&quot;steps&quot;</span>

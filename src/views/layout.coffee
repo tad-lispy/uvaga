@@ -1,15 +1,26 @@
 module.exports = ->
-  ###
-    `session.username` is set only if participant is authenticated via Persona. Then it contains a string with users e-mail.
 
-    `session.profile` is set only if participant is authenticated and has a profile. Then it's an object with email (same as username), name (public name) and slug (public identifier used in urls)
+  ###
+  `session.username` is set only if agent is authenticated via Persona. Then it contains a string with users e-mail.
+
+  `session.profile` is set only if agent is authenticated and has a profile (stakeholder document). Then it's an object with profile data, i.e. at least
+  
+      * email (same as username),
+      * name (public name),
+      * and slug (public identifier used in urls).
+  
+  There may be other data.
   ###
   if @session?.username?  then @username  = @session.username
   if @session?.profile?   then @profile   = @session.profile
+  if not @title?          then @title = "Synergy stimulant for the masses."
+  ###
+  The rest is [html as coffescript](https://github.com/gradus/coffeecup#coffeecup-).
+  ###
   doctype 5
   html ->
     head ->
-      title "Catch-22"
+      title "Uvaga ! " + @title or "Hello."
       meta charset: "utf-8"
       meta "http-equiv": "X-UA-Compatible", content: "IE=Edge"
 
@@ -22,8 +33,8 @@ module.exports = ->
 
     body "data-username": @username, ->
       header ->
-        h1 "Catch-22"
-        h2 "An online gallery of vicious circles"
+        h1 "Uvaga!"
+        h2 @title
         unless @username
           p -> 
             text "You are annonymous to us. You may "
@@ -38,7 +49,7 @@ module.exports = ->
           p ->
             text "We know who you are. You are "
             if @profile?
-              a href: "/participants/#{@profile.slug}", @profile.name
+              a href: "/stakeholders/#{@profile.slug}", @profile.name
             else text @username
             text "! Would you rather "
             a {
@@ -60,36 +71,5 @@ module.exports = ->
       footer ->
         p "A footy footer is here"
 
-      coffeescript ->
-        ($ document).ready ->
-          username = ($ "body").data "username" ? null
-          if username then console.log "Logged in as #{username}"
-          else console.log "Not logged in (yet?)"
-
-          navigator.id.watch {
-            loggedInUser: username
-            onlogin     : (assertion) ->
-              console.log "Logging in..."
-              $.ajax {
-                type  : "POST"
-                url   : "/auth/login"
-                data  : 
-                  assertion : assertion
-                success : -> do window.location.reload
-                error   : (xhr, status, error) -> 
-                  console.dir xhr
-                  do navigator.id.logout
-              }
-            onlogout    : ->
-              console.log "Logging out..."
-              $.ajax {
-                type  : "POST"
-                url   : "/auth/logout"
-                success : -> do window.location.reload
-                error   : (xhr, status, error) -> console.error "Logout failed: #{error}"
-              }
-          }
-
-          ($ "a[data-signin]").click  -> do navigator.id.request
-          ($ "a[data-signout]").click -> do navigator.id.logout
+      script src: "/assets/scripts/app/persona.js"
 

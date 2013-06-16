@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>#</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="catches.html">
+                catches.coffee
+              </a>
+            
+              
+              <a class="source" href="stakeholder.html">
+                stakeholder.coffee
+              </a>
+            
+              
+              <a class="source" href="access_control.html">
+                access_control.coffee
+              </a>
+            
+              
+              <a class="source" href="profile.html">
+                profile.coffee
+              </a>
+            
+              
+              <a class="source" href="Catch.html">
+                Catch.coffee
+              </a>
+            
+              
+              <a class="source" href="Stakeholder.html">
+                Stakeholder.coffee
+              </a>
+            
+              
+              <a class="source" href="slugify.html">
+                slugify.coffee
+              </a>
+            
+              
+              <a class="source" href="catch.html">
+                catch.coffee
+              </a>
+            
+              
+              <a class="source" href="catches.html">
+                catches.coffee
+              </a>
+            
+              
+              <a class="source" href="index.html">
+                index.coffee
+              </a>
+            
+              
+              <a class="source" href="layout.html">
+                layout.coffee
+              </a>
+            
+              
+              <a class="source" href="not-found.html">
+                not-found.coffee
+              </a>
+            
+              
+              <a class="source" href="profile.html">
+                profile.coffee
+              </a>
+            
+              
+              <a class="source" href="stakeholder.html">
+                stakeholder.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Stakeholder model
+=================
+
+This represents a single stakeholder.
+
+Who is a stakeholder?
+---------------------
+
+In terms of data structures, stakeholder is a person you would normally call "a user". Why not "user"? Because it's not about using! It's about sharing goals, ideas and concerns. It's about [engaging stakeholders][stakeholder engagement] :)
+
+All persistant data, including stakeholders profiles is handeld by [mongoose][].</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>mongoose = require <span class="string">"mongoose"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Each stakeholder has 
+
+    * a name, which <span class="keyword">is</span> presented to other stakeholders;
+    * an e-mail, <span class="keyword">by</span> which he <span class="keyword">is</span> authenticated <span class="reserved">with</span> Persona;
+    * a slug, which <span class="keyword">is</span> calculated from name to be used <span class="keyword">in</span> urls.
+      Take a look at my [mongoose slugify plugin][]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Stakeholder = <span class="keyword">new</span> mongoose.Schema {
+  name  :
+    type      : String
+    required  : <span class="literal">true</span>
+  email : 
+    type      : String
+    lowercase : <span class="literal">true</span>
+    unique    : <span class="literal">true</span>
+    required  : <span class="literal">true</span>
+  slug  :
+    type      : String
+    unique    : <span class="literal">true</span>
+    required  : <span class="literal">true</span>
+}
+    
+Stakeholder.plugin require <span class="string">"./slugify"</span>
+
+module.exports = mongoose.model <span class="string">'Stakeholder'</span>, Stakeholder</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>[mongoose]:                 http:<span class="regexp">//m</span>ongoosejs.com/
+[mongoose slugify plugin]:  slugify
+[stakeholder engagement]:   https:<span class="regexp">//</span>en.wikipedia.org<span class="regexp">/wiki/</span>Stakeholder_engagement</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h1>#</h1>
+
+            </div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

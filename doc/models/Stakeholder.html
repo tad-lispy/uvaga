@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head><title>models/Stakeholder</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="models/Stakeholder"><meta name="groc-project-path" content="src/models/Stakeholder.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/models/Stakeholder.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">###</span>
+
+<span class="cm">Stakeholder model</span>
+<span class="cm">=================</span>
+
+<span class="cm">This represents a single stakeholder.</span>
+
+<span class="cm">Who is a stakeholder?</span>
+<span class="cm">---------------------</span>
+
+<span class="cm">In terms of data structures, stakeholder is a person you would normally call &quot;a user&quot;. Why not &quot;user&quot;? Because it&#39;s not about using! It&#39;s about sharing goals, ideas and concerns. It&#39;s about [engaging stakeholders][stakeholder engagement] :)</span>
+
+<span class="cm">All persistant data, including stakeholders profiles is handeld by [mongoose][].</span>
+
+<span class="cm">###</span>
+
+<span class="nv">mongoose = </span><span class="nx">require</span> <span class="s">&quot;mongoose&quot;</span>
+
+<span class="cm">###</span>
+
+<span class="cm">Each stakeholder has </span>
+
+<span class="cm">    * a name, which is presented to other stakeholders;</span>
+<span class="cm">    * an e-mail, by which he is authenticated with Persona;</span>
+<span class="cm">    * a slug, which is calculated from name to be used in urls.</span>
+<span class="cm">      Take a look at my [mongoose slugify plugin][]</span>
+
+<span class="cm">###</span>
+
+<span class="nv">Stakeholder = </span><span class="k">new</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span> <span class="p">{</span>
+  <span class="nv">name  :</span>
+    <span class="nv">type      : </span><span class="nb">String</span>
+    <span class="nv">required  : </span><span class="kc">true</span>
+  <span class="nv">email : </span>
+    <span class="nv">type      : </span><span class="nb">String</span>
+    <span class="nv">lowercase : </span><span class="kc">true</span>
+    <span class="nv">unique    : </span><span class="kc">true</span>
+    <span class="nv">required  : </span><span class="kc">true</span>
+  <span class="nv">slug  :</span>
+    <span class="nv">type      : </span><span class="nb">String</span>
+    <span class="nv">unique    : </span><span class="kc">true</span>
+    <span class="nv">required  : </span><span class="kc">true</span>
+<span class="p">}</span>
+    
+<span class="nx">Stakeholder</span><span class="p">.</span><span class="nx">plugin</span> <span class="nx">require</span> <span class="s">&quot;./slugify&quot;</span>
+
+<span class="nv">module.exports = </span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s">&#39;Stakeholder&#39;</span><span class="p">,</span> <span class="nx">Stakeholder</span>
+
+<span class="cm">###</span>
+
+<span class="cm">[mongoose]:                 http://mongoosejs.com/</span>
+<span class="cm">[mongoose slugify plugin]:  slugify</span>
+<span class="cm">[stakeholder engagement]:   https://en.wikipedia.org/wiki/Stakeholder_engagement</span>
+<span class="cm">###</span></div></div></div></div></body></html>

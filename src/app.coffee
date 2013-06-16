@@ -2,13 +2,9 @@
 Application
 ===========
 
-An online gallery of vicious circles.
+This is the main entry point of Uvaga application.
 
-It's an application to let people share insights on [vicious circles][Vicious circle] they are affected by or they know about. Also it lets participants share their solutions to the circles and vote for them.
-
-Learn more at https://github.com/lzrski/catch-22
-
-This file is an entry point of the app (see [./package.json][]).
+It's an application to ...
 
 The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelent [Coffecup][] plugin with MVC capabilities. User authentication uses [Mozilla Persona][] with my humble [plugin][Flatiron Persona], which requires session and cookie parser middleware from [Connect][]. 
 ###
@@ -38,36 +34,36 @@ app.use creamer,
   layout:       require "./views/layout"
   views:        __dirname + '/views'
   controllers:  __dirname + '/controllers'
-
-###
-This enables trailing slashes in routes - otherwise it's 404
-See: https://github.com/flatiron/director/issues/74
-###
+app.registerHelper "textbox", (attributes) ->
+  attributes.type = "text"
+  attributes.id  ?= attributes.name
+  input attributes
 
 app.router.configure 
+  # This enables trailing slashes in routes - otherwise it's 404
+  # See: https://github.com/flatiron/director/issues/74
   strict: false
+  
+  # TODO: access control
+  # which route will be called for this request?
+  # does agent have sufficien access level for this route?  
   on: ->
-    # TODO: access control
-    # which route will be called for this request?
-    # does the participant have sufficien access level for this route?
     # console.dir app.router.routes
     # console.dir @
 
+app.use flatiron.plugins.static, dir: "assets/", url: "/assets/"
 
 app.http.before.push do connect.cookieParser
 app.http.before.push connect.session secret: app.config.get "secret"
 
-###
-If participant is authenticated via Persona but has no profile, redirect him to `/participants?new` to create one.
-### 
-
+# If agent is authenticated via Persona but has no profile, redirect him to `/stakeholders/__new` to create one.
 app.http.before.push require "./middleware/profile"
 
-# Let's start listening to requests from our participants:
+# Let's start listening to requests from our stakeholders:
 
 app.start (app.config.get "port"), ->
-  mongoose.connect 'mongodb://localhost/test'
-  app.log.info "The circles are turning at http://#{app.config.get "host"}:#{app.config.get "port"}/"
+  mongoose.connect 'mongodb://localhost/uvaga'
+  app.log.info "Uvaga! http://#{app.config.get "host"}:#{app.config.get "port"}/"
 
 ###
 [Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle

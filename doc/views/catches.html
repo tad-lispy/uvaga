@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><title>views/catches</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="views/catches"><meta name="groc-project-path" content="src/views/catches.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/views/catches.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nv">module.exports = </span><span class="o">-&gt;</span>
+  <span class="nx">h1</span> <span class="s">&quot;Theese are some of the worst catches!&quot;</span>
+  <span class="nx">table</span> <span class="nv">id: </span><span class="s">&quot;cateches&quot;</span><span class="p">,</span> <span class="o">-&gt;</span>
+    <span class="nx">tr</span> <span class="o">-&gt;</span>
+      <span class="nx">th</span> <span class="s">&quot;Body count&quot;</span>
+      <span class="nx">th</span> <span class="s">&quot;First step&quot;</span>
+
+    <span class="k">for</span> <span class="nx">the_catch</span> <span class="k">in</span> <span class="nx">@catches</span>
+      <span class="nx">tr</span> <span class="k">class</span><span class="o">:</span> <span class="s">&quot;catch&quot;</span><span class="p">,</span> <span class="o">-&gt;</span>
+        <span class="nx">td</span> <span class="k">class</span><span class="o">:</span> <span class="s">&quot;victims&quot;</span><span class="p">,</span> <span class="nx">the_catch</span><span class="p">.</span><span class="nx">victims</span><span class="p">.</span><span class="nx">length</span>
+        <span class="nx">td</span> <span class="k">class</span><span class="o">:</span> <span class="s">&quot;step-1&quot;</span><span class="p">,</span> <span class="o">-&gt;</span>
+          <span class="nx">a</span> <span class="nv">href: </span><span class="s">&quot;/catches/</span><span class="si">#{</span><span class="nx">the_catch</span><span class="p">.</span><span class="nx">slug</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">the_catch</span><span class="p">.</span><span class="nx">steps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div></div></div></body></html>

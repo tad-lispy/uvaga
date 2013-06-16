@@ -1,15 +1,16 @@
 ###
-Catches controller
-==================
+Issues controller
+=================
+
+TODO: convert to issues :)
 
 This controlls /catches/ urls, that are related to catches (aka vicious circles).
 
 ###
 
 Catch       = require "../models/Catch"
-Participant = require "../models/Participant"
+Stakeholder = require "../models/Stakeholder"
 _           = require "underscore"
-helpers     = require "creamer-helpers"
 
 
 module.exports = 
@@ -26,13 +27,13 @@ module.exports =
       data.steps = data.steps.filter (e) -> if e then true else false
       
       if not @req.session.username then @res.end "Not authorized."
-      Participant.findOne email: @req.session.username, (error, participant) =>
+      Stakeholder.findOne email: @req.session.username, (error, stakeholder) =>
         if error then thorw error
-        if not participant then return @res.end "Not authorized. Create a profile first."
+        if not stakeholder then return @res.end "Not authorized. Create a profile first."
 
         # `catch` is a reserved word :P
         new_catch = new Catch
-          victims : [participant]
+          victims : [stakeholder]
           steps   : data.steps
 
         new_catch.save (error) =>
@@ -44,7 +45,7 @@ module.exports =
         @bind "catch", action: "new"
 
       post: ->
-        helpers.not_implemented @
+        @res.end 501, "not implemented yet :P"
 
 
     "/:slug":
@@ -52,4 +53,5 @@ module.exports =
         Catch.findOne({ slug }).populate('victims').exec (error, the_catch) =>
           if error then throw error
           if the_catch then @bind "catch", { catch: the_catch }
-          else helpers.not_found @
+          @res.statusCode = 404
+          @bind "not-found", {message}

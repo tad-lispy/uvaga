@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head><title>controllers/stakeholder</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/stakeholder"><meta name="groc-project-path" content="src/controllers/stakeholder.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/controllers/stakeholder.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="cm">###</span>
+<span class="cm">Stakeholders controller</span>
+<span class="cm">=======================</span>
+
+<span class="cm">This controlls /stakeholders/ urls, that are related to stakeholders (so called users), as you can guess.</span>
+
+<span class="cm">###</span>
+
+<span class="nv">Stakeholder = </span><span class="nx">require</span> <span class="s">&quot;../models/Stakeholder&quot;</span>
+<span class="nv">Catch       = </span><span class="nx">require</span> <span class="s">&quot;../models/Catch&quot;</span>
+<span class="nv">_           = </span><span class="nx">require</span> <span class="s">&quot;underscore&quot;</span>
+<span class="cm">###</span>
+<span class="cm">TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?</span>
+<span class="cm">###</span>
+<span class="nv">helpers     = </span><span class="nx">require</span> <span class="s">&quot;creamer-helpers&quot;</span>
+
+
+<span class="nv">module.exports = </span>
+  <span class="s">&quot;/stakeholders&quot;</span><span class="o">:</span>
+    <span class="nv">get: </span><span class="o">-&gt;</span>
+      <span class="k">if</span> <span class="nx">@req</span><span class="p">.</span><span class="nx">query</span><span class="p">.</span><span class="k">new</span><span class="o">?</span> <span class="k">then</span> <span class="nx">@bind</span> <span class="s">&quot;profile&quot;</span>
+      <span class="k">else</span>
+        <span class="nx">Stakeholder</span><span class="p">.</span><span class="nx">find</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">stakeholders</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="k">if</span> <span class="nx">error</span> <span class="k">then</span> <span class="k">throw</span> <span class="nx">error</span>
+          <span class="nx">@bind</span> <span class="s">&quot;stakeholders&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">stakeholders</span> <span class="p">}</span>
+
+    <span class="nv">post: </span><span class="o">-&gt;</span>
+      <span class="nx">unless</span> <span class="nx">@req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">username</span>
+        <span class="vi">@res.statusCode = </span><span class="mi">407</span>
+        <span class="nx">@bind</span> <span class="s">&quot;profile&quot;</span>
+        <span class="k">return</span>
+      
+      <span class="nv">data = </span><span class="nx">_</span><span class="p">.</span><span class="nx">pick</span> <span class="nx">@req</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">,</span> <span class="s">&quot;name&quot;</span><span class="p">]</span>
+      <span class="nx">Stakeholder</span><span class="p">.</span><span class="nx">findOneAndUpdate</span>
+        <span class="nv">email: </span><span class="nx">@req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">,</span>
+        <span class="nv">upsert: </span><span class="kc">true</span><span class="p">,</span>
+        <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">stakeholder</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="k">if</span> <span class="nx">error</span> <span class="k">then</span> <span class="k">throw</span> <span class="nx">error</span>
+
+          <span class="cm">###</span>
+<span class="cm">          We need to save in order to trigger [slugify middleware](../models/slugify.coffee), which updates .slug according to .name.</span>
+
+<span class="cm">          Only then we can redirect browser to this slug.</span>
+<span class="cm">          ###</span>
+          <span class="nx">stakeholder</span><span class="p">.</span><span class="nx">save</span> <span class="nf">(error) -&gt;</span>
+            <span class="k">if</span> <span class="nx">error</span> <span class="k">then</span> <span class="k">throw</span> <span class="nx">error</span>
+            <span class="nx">@res</span><span class="p">.</span><span class="nx">redirect</span> <span class="s">&quot;/stakeholders/&quot;</span> <span class="o">+</span> <span class="nx">stakeholder</span><span class="p">.</span><span class="nx">slug</span>
+      
+
+    <span class="s">&quot;/:slug&quot;</span><span class="o">:</span>
+      <span class="nv">get: </span><span class="nf">(slug) -&gt;</span> 
+        <span class="nx">Stakeholder</span><span class="p">.</span><span class="nx">findOne</span> <span class="p">{</span> <span class="nx">slug</span> <span class="p">},</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">stakeholder</span><span class="p">)</span> <span class="o">=&gt;</span>
+          <span class="k">if</span> <span class="nx">error</span> <span class="k">then</span> <span class="k">throw</span> <span class="nx">error</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>TODO: use virtuals?</p></div></div><div class="code"><div class="wrapper">          <span class="k">if</span> <span class="nx">stakeholder</span> 
+            <span class="nx">Catch</span><span class="p">.</span><span class="nx">find</span>
+              <span class="nv">victims: </span><span class="nx">stakeholder</span><span class="p">.</span><span class="nx">_id</span><span class="p">,</span>
+              <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">catches</span><span class="p">)</span> <span class="o">=&gt;</span>
+                <span class="k">if</span> <span class="nx">error</span> <span class="k">then</span> <span class="k">throw</span> <span class="nx">error</span>
+                <span class="nv">stakeholder.catches = </span><span class="nx">catches</span>
+                <span class="nx">@bind</span> <span class="s">&quot;profile&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">stakeholder</span> <span class="p">}</span>
+          <span class="k">else</span> <span class="nx">helpers</span><span class="p">.</span><span class="nx">not_found</span> <span class="nx">@</span><span class="p">,</span> <span class="s">&quot;Nobody at this address.&quot;</span></div></div></div></div></body></html>

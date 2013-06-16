@@ -14,7 +14,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "singleLineComment": ["#"],
           "name": "CoffeeScript"
         },
-        "sourcePath": "/home/www/catch-22/Application/src/app.coffee",
+        "sourcePath": "/home/www/uvaga/Application/src/app.coffee",
         "projectPath": "src/app.coffee",
         "targetPath": "app",
         "title": "app"
@@ -38,7 +38,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/controllers/catches.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/controllers/catches.coffee",
             "projectPath": "src/controllers/catches.coffee",
             "targetPath": "controllers/catches",
             "title": "catches"
@@ -53,7 +53,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "commentsOnly": true,
               "name": "Markdown"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/controllers/index.coffee.md",
+            "sourcePath": "/home/www/uvaga/Application/src/controllers/index.coffee.md",
             "projectPath": "src/controllers/index.coffee.md",
             "targetPath": "controllers/index.coffee",
             "firstHeader": {
@@ -79,10 +79,10 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/controllers/participants.coffee",
-            "projectPath": "src/controllers/participants.coffee",
-            "targetPath": "controllers/participants",
-            "title": "participants"
+            "sourcePath": "/home/www/uvaga/Application/src/controllers/stakeholder.coffee",
+            "projectPath": "src/controllers/stakeholder.coffee",
+            "targetPath": "controllers/stakeholder",
+            "title": "stakeholder"
           },
           "depth": 2,
           "outline": []
@@ -105,7 +105,23 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/middleware/profile.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/middleware/access_control.coffee",
+            "projectPath": "src/middleware/access_control.coffee",
+            "targetPath": "middleware/access_control",
+            "title": "access_control"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".coffee", "Cakefile"],
+              "pygmentsLexer": "coffee-script",
+              "singleLineComment": ["#"],
+              "name": "CoffeeScript"
+            },
+            "sourcePath": "/home/www/uvaga/Application/src/middleware/profile.coffee",
             "projectPath": "src/middleware/profile.coffee",
             "targetPath": "middleware/profile",
             "title": "profile"
@@ -131,7 +147,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/models/Catch.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/models/Catch.coffee",
             "projectPath": "src/models/Catch.coffee",
             "targetPath": "models/Catch",
             "title": "Catch"
@@ -142,48 +158,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "file",
           "data": {
             "language": {
-              "nameMatchers": [".md"],
-              "commentsOnly": true,
-              "name": "Markdown"
+              "nameMatchers": [".coffee", "Cakefile"],
+              "pygmentsLexer": "coffee-script",
+              "singleLineComment": ["#"],
+              "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/models/Participant.coffee.md",
-            "projectPath": "src/models/Participant.coffee.md",
-            "targetPath": "models/Participant.coffee",
-            "firstHeader": {
-              "type": "heading",
-              "data": {
-                "level": 1,
-                "title": "Participant model",
-                "slug": "participant-model",
-                "isFileHeader": true
-              },
-              "depth": 1,
-              "children": [
-                {
-                  "type": "heading",
-                  "data": {
-                    "level": 2,
-                    "title": "Who is a participant?",
-                    "slug": "who-is-a-participant"
-                  },
-                  "depth": 2
-                }
-              ]
-            },
-            "title": "Participant model"
+            "sourcePath": "/home/www/uvaga/Application/src/models/Stakeholder.coffee",
+            "projectPath": "src/models/Stakeholder.coffee",
+            "targetPath": "models/Stakeholder",
+            "title": "Stakeholder"
           },
           "depth": 2,
-          "outline": [
-            {
-              "type": "heading",
-              "data": {
-                "level": 2,
-                "title": "Who is a participant?",
-                "slug": "who-is-a-participant"
-              },
-              "depth": 2
-            }
-          ]
+          "outline": []
         }, {
           "type": "file",
           "data": {
@@ -193,7 +179,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/models/slugify.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/models/slugify.coffee",
             "projectPath": "src/models/slugify.coffee",
             "targetPath": "models/slugify",
             "title": "slugify"
@@ -210,15 +196,15 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "commentsOnly": true,
           "name": "Markdown"
         },
-        "sourcePath": "/home/www/catch-22/Application/readme.md",
+        "sourcePath": "/home/www/uvaga/Application/readme.md",
         "projectPath": "readme.md",
         "targetPath": "readme",
         "firstHeader": {
           "type": "heading",
           "data": {
             "level": 1,
-            "title": "Catch-22",
-            "slug": "catch-22",
+            "title": "Uvaga",
+            "slug": "uvaga",
             "isFileHeader": true
           },
           "depth": 1,
@@ -227,16 +213,24 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "type": "heading",
               "data": {
                 "level": 2,
-                "title": "What is this?",
-                "slug": "what-is-this"
+                "title": "The problem",
+                "slug": "the-problem"
               },
               "depth": 2
             }, {
               "type": "heading",
               "data": {
                 "level": 2,
-                "title": "What for?",
-                "slug": "what-for"
+                "title": "The solution",
+                "slug": "the-solution"
+              },
+              "depth": 2
+            }, {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "User stories",
+                "slug": "user-stories"
               },
               "depth": 2
             }, {
@@ -258,7 +252,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             }
           ]
         },
-        "title": "Catch-22"
+        "title": "Uvaga"
       },
       "depth": 1,
       "outline": [
@@ -266,16 +260,24 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
           "type": "heading",
           "data": {
             "level": 2,
-            "title": "What is this?",
-            "slug": "what-is-this"
+            "title": "The problem",
+            "slug": "the-problem"
           },
           "depth": 2
         }, {
           "type": "heading",
           "data": {
             "level": 2,
-            "title": "What for?",
-            "slug": "what-for"
+            "title": "The solution",
+            "slug": "the-solution"
+          },
+          "depth": 2
+        }, {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "User stories",
+            "slug": "user-stories"
           },
           "depth": 2
         }, {
@@ -313,7 +315,39 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/views/index.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/views/catch.coffee",
+            "projectPath": "src/views/catch.coffee",
+            "targetPath": "views/catch",
+            "title": "catch"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".coffee", "Cakefile"],
+              "pygmentsLexer": "coffee-script",
+              "singleLineComment": ["#"],
+              "name": "CoffeeScript"
+            },
+            "sourcePath": "/home/www/uvaga/Application/src/views/catches.coffee",
+            "projectPath": "src/views/catches.coffee",
+            "targetPath": "views/catches",
+            "title": "catches"
+          },
+          "depth": 2,
+          "outline": []
+        }, {
+          "type": "file",
+          "data": {
+            "language": {
+              "nameMatchers": [".coffee", "Cakefile"],
+              "pygmentsLexer": "coffee-script",
+              "singleLineComment": ["#"],
+              "name": "CoffeeScript"
+            },
+            "sourcePath": "/home/www/uvaga/Application/src/views/index.coffee",
             "projectPath": "src/views/index.coffee",
             "targetPath": "views/index",
             "title": "index"
@@ -329,7 +363,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/views/layout.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/views/layout.coffee",
             "projectPath": "src/views/layout.coffee",
             "targetPath": "views/layout",
             "title": "layout"
@@ -345,7 +379,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/views/not-found.coffee",
+            "sourcePath": "/home/www/uvaga/Application/src/views/not-found.coffee",
             "projectPath": "src/views/not-found.coffee",
             "targetPath": "views/not-found",
             "title": "not-found"
@@ -361,10 +395,10 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/views/participants.coffee",
-            "projectPath": "src/views/participants.coffee",
-            "targetPath": "views/participants",
-            "title": "participants"
+            "sourcePath": "/home/www/uvaga/Application/src/views/profile.coffee",
+            "projectPath": "src/views/profile.coffee",
+            "targetPath": "views/profile",
+            "title": "profile"
           },
           "depth": 2,
           "outline": []
@@ -377,10 +411,10 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
               "singleLineComment": ["#"],
               "name": "CoffeeScript"
             },
-            "sourcePath": "/home/www/catch-22/Application/src/views/profile.coffee",
-            "projectPath": "src/views/profile.coffee",
-            "targetPath": "views/profile",
-            "title": "profile"
+            "sourcePath": "/home/www/uvaga/Application/src/views/stakeholder.coffee",
+            "projectPath": "src/views/stakeholder.coffee",
+            "targetPath": "views/stakeholder",
+            "title": "stakeholder"
           },
           "depth": 2,
           "outline": []
@@ -395,7 +429,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   setTableOfContentsActive = function(active) {
     var html$;
-
     html$ = $('html');
     if (active) {
       nav$.addClass('active');
@@ -414,7 +447,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   focusCurrentNode = function() {
     var currentNodeBottom, currentNodeTop;
-
     currentNodeTop = currentNode$.offset().top - toc$.children(':visible').first().offset().top;
     currentNodeBottom = currentNodeTop + currentNode$.children('.label').height();
     if (currentNodeTop < toc$.scrollTop()) {
@@ -427,7 +459,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   setCurrentNodeExpanded = function(expanded) {
     var parents$;
-
     if (expanded) {
       currentNode$.addClass('expanded');
     } else {
@@ -452,7 +483,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   selectNodeByDocumentPath = function(documentPath, headerSlug) {
     var link, urlChunks, _i, _len, _ref;
-
     if (headerSlug == null) {
       headerSlug = null;
     }
@@ -475,7 +505,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   moveCurrentNode = function(up) {
     var i, newIndex, node, visibleNodes$, _i, _len;
-
     visibleNodes$ = toc$.find('li:visible:not(.filtered)');
     newIndex = 0;
     for (i = _i = 0, _len = visibleNodes$.length; _i < _len; i = ++_i) {
@@ -496,7 +525,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   visitCurrentNode = function() {
     var labelLink$;
-
     labelLink$ = currentNode$.children('a.label');
     if (labelLink$.length > 0) {
       return window.location = labelLink$.attr('href');
@@ -509,7 +537,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   appendSearchNode = function(node$) {
     var text$;
-
     text$ = node$.find('> .label .text');
     return searchableNodes.push([text$.text().toLowerCase(), node$, text$]);
   };
@@ -518,7 +545,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   searchNodes = function(queryString) {
     var c, filtered, matched, matcher, nodeInfo, p, _i, _j, _k, _len, _len1, _len2, _results;
-
     queryString = queryString.toLowerCase().replace(/\s+/, '');
     if (queryString === currentQuery) {
       return;
@@ -529,7 +555,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
     }
     matcher = new RegExp(((function() {
       var _i, _len, _results;
-
       _results = [];
       for (_i = 0, _len = queryString.length; _i < _len; _i++) {
         c = queryString[_i];
@@ -565,7 +590,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       highlightMatch(nodeInfo[2], queryString);
       _results.push((function() {
         var _l, _len3, _ref, _results1;
-
         _ref = nodeInfo[1].parents('li');
         _results1 = [];
         for (_l = 0, _len3 = _ref.length; _l < _len3; _l++) {
@@ -580,7 +604,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   clearFilter = function() {
     var nodeInfo, _i, _len, _results;
-
     nav$.removeClass('searching');
     currentQuery = '';
     _results = [];
@@ -594,7 +617,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   highlightMatch = function(text$, queryString) {
     var char, foundIndex, furthestIndex, lowerText, markedText, nodeText, _i, _len;
-
     nodeText = text$.text();
     lowerText = nodeText.toLowerCase();
     markedText = '';
@@ -616,7 +638,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   buildNav = function(metaInfo) {
     var node, sourceURL, _i, _len;
-
     nav$ = $("<nav>\n  <ul class=\"tools\">\n    <li class=\"toggle\">Table of Contents</li>\n    <li class=\"search\">\n      <input id=\"search\" type=\"search\" autocomplete=\"off\"/>\n    </li>\n  </ul>\n  <ol class=\"toc\"/>\n  </div>\n</nav>").appendTo($('body'));
     toc$ = nav$.find('.toc');
     if (metaInfo.githubURL) {
@@ -636,7 +657,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   buildTOCNode = function(node, metaInfo) {
     var c, children$, discloser$, label$, node$, _i, _len, _ref, _ref1, _ref2;
-
     node$ = $("<li class=\"" + node.type + "\"/>");
     switch (node.type) {
       case 'file':
@@ -675,7 +695,6 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
   $(function() {
     var lastMousedownTimestamp, metaInfo, search$, toggle$;
-
     metaInfo = {
       relativeRoot: $('meta[name="groc-relative-root"]').attr('content'),
       githubURL: $('meta[name="groc-github-url"]').attr('content'),

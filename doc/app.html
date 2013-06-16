@@ -2,13 +2,9 @@
 <span class="cm">Application</span>
 <span class="cm">===========</span>
 
-<span class="cm">An online gallery of vicious circles.</span>
+<span class="cm">This is the main entry point of Uvaga application.</span>
 
-<span class="cm">It&#39;s an application to let people share insights on [vicious circles][Vicious circle] they are affected by or they know about. Also it lets participants share their solutions to the circles and vote for them.</span>
-
-<span class="cm">Learn more at https://github.com/lzrski/catch-22</span>
-
-<span class="cm">This file is an entry point of the app (see [./package.json][]).</span>
+<span class="cm">It&#39;s an application to ...</span>
 
 <span class="cm">The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelent [Coffecup][] plugin with MVC capabilities. User authentication uses [Mozilla Persona][] with my humble [plugin][Flatiron Persona], which requires session and cookie parser middleware from [Connect][]. </span>
 <span class="cm">###</span>
@@ -39,23 +35,17 @@
   <span class="nv">views: </span>       <span class="nx">__dirname</span> <span class="o">+</span> <span class="s">&#39;/views&#39;</span>
   <span class="nv">controllers: </span> <span class="nx">__dirname</span> <span class="o">+</span> <span class="s">&#39;/controllers&#39;</span>
 
-<span class="cm">###</span>
-<span class="cm">This enables trailing slashes in routes - otherwise it&#39;s 404</span>
-<span class="cm">See: https://github.com/flatiron/director/issues/74</span>
-<span class="cm">###</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">configure</span> <span class="nv">strict: </span><span class="kc">false</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">do</span> <span class="nx">connect</span><span class="p">.</span><span class="nx">cookieParser</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">connect</span><span class="p">.</span><span class="nx">session</span> <span class="nv">secret: </span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;secret&quot;</span>
-
-<span class="cm">###</span>
-<span class="cm">If participant is authenticated via Persona but has no profile, redirect him to `/participants?new` to create one.</span>
-<span class="cm">###</span> 
-
-<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">require</span> <span class="s">&quot;./middleware/profile&quot;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Let's start listening to requests from our participants:</p></div></div><div class="code"><div class="wrapper"><span class="nx">app</span><span class="p">.</span><span class="nx">start</span> <span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="p">),</span> <span class="o">-&gt;</span>
-  <span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span> <span class="s">&#39;mongodb://localhost/test&#39;</span>
-  <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">info</span> <span class="s">&quot;The circles are turning at http://</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;host&quot;</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="si">}</span><span class="s">/&quot;</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">configure</span> </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>This enables trailing slashes in routes - otherwise it's 404
+See: https://github.com/flatiron/director/issues/74</p></div></div><div class="code"><div class="wrapper">  <span class="nv">strict: </span><span class="kc">false</span>
+  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>TODO: access control
+which route will be called for this request?
+does agent have sufficien access level for this route?  </p></div></div><div class="code"><div class="wrapper">  <span class="kc">on</span><span class="o">:</span> <span class="o">-&gt;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>console.dir app.router.routes
+console.dir @</p></div></div><div class="code"><div class="wrapper"><span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">do</span> <span class="nx">connect</span><span class="p">.</span><span class="nx">cookieParser</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">connect</span><span class="p">.</span><span class="nx">session</span> <span class="nv">secret: </span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;secret&quot;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>If agent is authenticated via Persona but has no profile, redirect him to <code>/stakeholders/__new</code> to create one.</p></div></div><div class="code"><div class="wrapper"><span class="nx">app</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">before</span><span class="p">.</span><span class="nx">push</span> <span class="nx">require</span> <span class="s">&quot;./middleware/profile&quot;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Let's start listening to requests from our stakeholders:</p></div></div><div class="code"><div class="wrapper"><span class="nx">app</span><span class="p">.</span><span class="nx">start</span> <span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="p">),</span> <span class="o">-&gt;</span>
+  <span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span> <span class="s">&#39;mongodb://localhost/uvaga&#39;</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">info</span> <span class="s">&quot;Uvaga! http://</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;host&quot;</span><span class="si">}</span><span class="s">:</span><span class="si">#{</span><span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">get</span> <span class="s">&quot;port&quot;</span><span class="si">}</span><span class="s">/&quot;</span>
 
 <span class="cm">###</span>
 <span class="cm">[Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle</span>

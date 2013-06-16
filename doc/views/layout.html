@@ -1,15 +1,26 @@
 <!DOCTYPE html><html lang="en"><head><title>views/layout</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="views/layout"><meta name="groc-project-path" content="src/views/layout.coffee"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">src/views/layout.coffee</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nv">module.exports = </span><span class="o">-&gt;</span>
-  <span class="cm">###</span>
-<span class="cm">    `session.username` is set only if participant is authenticated via Persona. Then it contains a string with users e-mail.</span>
 
-<span class="cm">    `session.profile` is set only if participant is authenticated and has a profile. Then it&#39;s an object with email (same as username), name (public name) and slug (public identifier used in urls)</span>
+  <span class="cm">###</span>
+<span class="cm">  `session.username` is set only if agent is authenticated via Persona. Then it contains a string with users e-mail.</span>
+
+<span class="cm">  `session.profile` is set only if agent is authenticated and has a profile (stakeholder document). Then it&#39;s an object with profile data, i.e. at least</span>
+<span class="cm">  </span>
+<span class="cm">      * email (same as username),</span>
+<span class="cm">      * name (public name),</span>
+<span class="cm">      * and slug (public identifier used in urls).</span>
+<span class="cm">  </span>
+<span class="cm">  There may be other data.</span>
 <span class="cm">  ###</span>
   <span class="k">if</span> <span class="nx">@session</span><span class="o">?</span><span class="p">.</span><span class="nx">username</span><span class="o">?</span>  <span class="k">then</span> <span class="vi">@username  = </span><span class="nx">@session</span><span class="p">.</span><span class="nx">username</span>
   <span class="k">if</span> <span class="nx">@session</span><span class="o">?</span><span class="p">.</span><span class="nx">profile</span><span class="o">?</span>   <span class="k">then</span> <span class="vi">@profile   = </span><span class="nx">@session</span><span class="p">.</span><span class="nx">profile</span>
+  
+  <span class="cm">###</span>
+<span class="cm">  The rest is [html as coffescript](https://github.com/gradus/coffeecup#coffeecup-).</span>
+<span class="cm">  ###</span>
   <span class="nx">doctype</span> <span class="mi">5</span>
   <span class="nx">html</span> <span class="o">-&gt;</span>
     <span class="nx">head</span> <span class="o">-&gt;</span>
-      <span class="nx">title</span> <span class="s">&quot;Catch-22&quot;</span>
+      <span class="nx">title</span> <span class="s">&quot;Uvaga ! &quot;</span> <span class="o">+</span> <span class="nx">@title</span> <span class="o">or</span> <span class="s">&quot;Hello.&quot;</span>
       <span class="nx">meta</span> <span class="nv">charset: </span><span class="s">&quot;utf-8&quot;</span>
       <span class="nx">meta</span> <span class="s">&quot;http-equiv&quot;</span><span class="o">:</span> <span class="s">&quot;X-UA-Compatible&quot;</span><span class="p">,</span> <span class="nv">content: </span><span class="s">&quot;IE=Edge&quot;</span>
 
@@ -17,11 +28,13 @@
 
       <span class="nx">script</span> <span class="nv">src: </span><span class="s">&quot;http://code.jquery.com/jquery-1.9.1.min.js&quot;</span>
       <span class="nx">script</span> <span class="nv">src: </span><span class="s">&quot;http://code.jquery.com/jquery-migrate-1.1.1.min.js&quot;</span>
+      <span class="nx">script</span> <span class="nv">src: </span><span class="s">&quot;http://code.jquery.com/ui/1.10.3/jquery-ui.js&quot;</span>
+      <span class="nx">link</span>  <span class="nv">href: </span><span class="s">&quot;http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css&quot;</span><span class="p">,</span> <span class="nv">rel: </span><span class="s">&quot;stylesheet&quot;</span><span class="p">,</span> <span class="nv">type: </span><span class="s">&quot;text/css&quot;</span>
 
     <span class="nx">body</span> <span class="s">&quot;data-username&quot;</span><span class="o">:</span> <span class="nx">@username</span><span class="p">,</span> <span class="o">-&gt;</span>
       <span class="nx">header</span> <span class="o">-&gt;</span>
-        <span class="nx">h1</span> <span class="s">&quot;Catch-22&quot;</span>
-        <span class="nx">h2</span> <span class="s">&quot;An online gallery of vicious circles&quot;</span>
+        <span class="nx">h1</span> <span class="s">&quot;Uvaga!&quot;</span>
+        <span class="nx">h2</span> <span class="s">&quot;Synergy stimulant for the masses.&quot;</span>
         <span class="nx">unless</span> <span class="nx">@username</span>
           <span class="nx">p</span> <span class="o">-&gt;</span> 
             <span class="nx">text</span> <span class="s">&quot;You are annonymous to us. You may &quot;</span>
@@ -36,7 +49,7 @@
           <span class="nx">p</span> <span class="o">-&gt;</span>
             <span class="nx">text</span> <span class="s">&quot;We know who you are. You are &quot;</span>
             <span class="k">if</span> <span class="nx">@profile</span><span class="o">?</span>
-              <span class="nx">a</span> <span class="nv">href: </span><span class="s">&quot;/participants/</span><span class="si">#{</span><span class="nx">@profile</span><span class="p">.</span><span class="nx">slug</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">@profile</span><span class="p">.</span><span class="nx">name</span>
+              <span class="nx">a</span> <span class="nv">href: </span><span class="s">&quot;/stakeholders/</span><span class="si">#{</span><span class="nx">@profile</span><span class="p">.</span><span class="nx">slug</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">@profile</span><span class="p">.</span><span class="nx">name</span>
             <span class="k">else</span> <span class="nx">text</span> <span class="nx">@username</span>
             <span class="nx">text</span> <span class="s">&quot;! Would you rather &quot;</span>
             <span class="nx">a</span> <span class="p">{</span>

@@ -34,6 +34,6 @@ module.exports = ->
     h1 "The catch is this"
     ul id: "victims", ->
       for victim in @catch.victims
-        li -> a href: "/participants/#{victim.slug}", victim.name
+        li -> a href: "/stakeholders/#{victim.slug}", victim.name
     ol id: "steps", ->
       li step for step in @catch.steps
