@@ -28,42 +28,27 @@ module.exports = ->
 
       script src: "http://code.jquery.com/jquery-1.9.1.min.js"
       script src: "http://code.jquery.com/jquery-migrate-1.1.1.min.js"
-      script src: "http://code.jquery.com/ui/1.10.3/jquery-ui.js"
-      link  href: "http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css", rel: "stylesheet", type: "text/css"
+      # script src: "http://code.jquery.com/ui/1.10.3/jquery-ui.js"
+      # link  href: "http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css", rel: "stylesheet", type: "text/css"
+
+      script src: "/assets/scripts/vendor/selectize/selectize.js"
+      link {
+        rel: "stylesheet",
+        type: "text/css",
+        href: "/assets/scripts/vendor/selectize/selectize.css"
+      }
+      style """
+        .selectize-control {
+          width: 100%;
+        }
+      """
 
     body "data-username": @username, ->
       header ->
         h1 "Uvaga!"
         h2 @title
-        unless @username
-          p -> 
-            text "You are annonymous to us. You may "
-            a {
-              id: "signin"
-              "data-signin": true
-              href: "#"
-              class: "persona-button dark"
-            }, ->  span "introduce yourself"
-            text " at any time."
-        else
-          p ->
-            text "We know who you are. You are "
-            if @profile?
-              a href: "/stakeholders/#{@profile.slug}", @profile.name
-            else text @username
-            text "! Would you rather "
-            a {
-              id: "signout"
-              "data-signout": true
-              href: "#"
-              class: "persona-button blue"
-            }, ->  span "stay annonymous"
-            text "?"
-          # a {
-          #   id: "profile"
-          #   class: "button blue"
-          #   href: "/profile"
-          # }, @user?.name ? "utwórz profil"
+
+      div class: "authentication", do authentication
 
       section id: "main", ->
         do content

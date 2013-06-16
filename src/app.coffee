@@ -34,10 +34,8 @@ app.use creamer,
   layout:       require "./views/layout"
   views:        __dirname + '/views'
   controllers:  __dirname + '/controllers'
-app.registerHelper "textbox", (attributes) ->
-  attributes.type = "text"
-  attributes.id  ?= attributes.name
-  input attributes
+app.registerHelper "textbox", require "./views/helpers/textbox"
+app.registerHelper "authentication", require "./views/helpers/authentication"
 
 app.router.configure 
   # This enables trailing slashes in routes - otherwise it's 404

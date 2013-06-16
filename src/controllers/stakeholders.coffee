@@ -14,7 +14,6 @@ TODO: integrate helpers with creamer. Maybe just add third parameter (status cod
 ###
 # helpers     = require "creamer-helpers"
 
-
 module.exports = 
   "/stakeholders":
     get: ->
@@ -28,7 +27,17 @@ module.exports =
         @bind "profile"
         return
       
-      data = _.pick @req.body, ["email", "name"]
+      data = _.pick @req.body, [
+        "name"
+        "telephone"
+        "occupation"
+        "groups"
+      ]
+      if typeof data.groups == "string"
+        data.groups = data.groups.split /; ?/
+
+      console.dir data
+
       Stakeholder.findOneAndUpdate
         email: @req.session.username,
         data,
@@ -41,12 +50,13 @@ module.exports =
 
           Only then we can redirect browser to this slug.
           ###
-          stakeholder.save (error) ->
+          stakeholder.save (error) =>
             if error then throw error
             @res.redirect "/stakeholders/" + stakeholder.slug
     
     "/__new":
       get: -> 
+        # Only let authenticated users in
         # if @req.session?.username? then 
         @bind "stakeholder"
         # else 
@@ -58,13 +68,15 @@ module.exports =
         Stakeholder.findOne { slug }, (error, stakeholder) =>
           if error then throw error
           # TODO: use virtuals?
-          if stakeholder 
-            Catch.find
-              victims: stakeholder._id,
-              (error, catches) =>
-                if error then throw error
-                stakeholder.catches = catches
-                @bind "profile", { stakeholder }
+          if stakeholder
+            @bind "stakeholder", { stakeholder }
+
+            # Catch.find
+            #   victims: stakeholder._id,
+            #   (error, catches) =>
+            #     if error then throw error
+            #     stakeholder.catches = catches
+            #     
           else 
             @res.statusCode = 404
             @bind "not-found", "Nobody at this address."

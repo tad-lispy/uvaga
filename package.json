@@ -11,7 +11,8 @@
     "mongoose": "~3.6.11",
     "underscore.string": "~2.3.1",
     "underscore": "~1.4.4",
-    "st": "~0.1.4"
+    "st": "~0.1.4",
+    "creamer": "*"
   },
   "devDependencies": {
     "coffee-script": "~1.6.2",
