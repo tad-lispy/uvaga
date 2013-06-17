@@ -50,30 +50,26 @@ module.exports = ->
       tr ->
         td -> label for: "groups", "What groups / units / departments #{if mode is 'create' then 'you' else 'a stakeholder'} belongs to:"
         td ->
-          textbox {
-            name: "groups",
-            placeholder: "Select one or more groups..."
-          }
+          select
+            id          : "groups"
+            name        : "groups"
+            placeholder : "Select one or more groups..."
+            multiple    : true
+            ->
+              for group in @suggestions.groups
+                option 
+                  value: group
+                  selected: group in @form_context.groups,
+                  group 
+
         tr ->
           td colspan: 2, -> input type: "submit", value: "done!"
 
   coffeescript ->
     ($ document).ready ->
+      ($ "#groups").selectize
+        delimiter: ";"
+        create: (input) -> text: input, value: input
 
-
-      $.ajax {
-        url       : "/json/groups"
-        type      : "GET"
-        dataType  : "json"
-        success   : (res) -> 
-          groups = res.groups.map (element) -> 
-            text: element, value: element
-          
-          ($ "#groups").selectize {
-            delimiter: ";"
-            create: (input) -> text: input, value: input
-            options: groups
-          }
-      }
 
     

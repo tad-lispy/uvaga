@@ -11,6 +11,9 @@ install:
 build: clean install
 	./node_modules/.bin/coffee -c -o lib src
 
+dev: watch
+	ENVIRONMENT=development nodemon
+
 watch: end-watch
 	./node_modules/.bin/coffee -cw -o lib src & echo $$! > .watch_pid
 

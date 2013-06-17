@@ -7,46 +7,88 @@ This is a [middleware][] that checks whether authenticated agent have created a 
 
 `Stakeholder` is a [mongoose][] model describing a profile.
 
-####
+###
 
 Stakeholder = require "../models/Stakeholder"
 
+###
+
+Summary
+-------
+
+Requests should be only allowed when:
+
+* Agent is authenticated and has a stakeholders profile
+* Method is GET  and url is /stakeholders/__new
+* Method is GET  and url is /assets/*
+* Method is POST and url is /stakeholders/
+
+###
+
+# TODO: module
+$ = (dump) ->
+  if process.env.ENVIRONMENT is "development"
+    if typeof dump is "string" then console.log dump
+    else console.dir dump
+
 module.exports = (req, res) ->
-  # TODO: refactoring.
-  # Requests should be only allowed when:
-  # Method is GET and url is /stakeholders/__new
-  # Method is GET and url matches /assets/*
-  # Method is POST and url is /stakeholders/
+  $ "# #{req.method}\t: #{req.url} requested"
+  # If agent is not authenticated, then let him in (security will hendle him later)
+  if not req.session.username? then return res.emit "next"
+  # If agent is authenticated
+  else
+    $ "user is authenticated"
+    # and if profile exists and is loaded into session
+    # then let the agent in
+    if req.session.stakeholder?
+      $ "profile exists and is loaded into session"
+      return res.emit "next"
+    # else check if profile exists in DB, but is not yet loaded
+    else Stakeholder.findOne
+      email: req.session.username
+      (error, stakeholder) ->
+        if error then throw error
+        
+        ###
 
-  # In the mean time:
-  # if it's a GET request and agent is authenticated...
-  if req.method is "GET" and req.session.username?
-    # ...and agent is not trying to create a profile
-    unless (
-      req.url is "/stakeholders/__new" or
-      Boolean (req.url.match /\/assets/) or
-      # This below is to let agent request suggestions for forms - /json/groups ATM.
-      # TODO: This is a security hole! Gather suggestions in model or controller, not via ajax.
-      Boolean (req.url.match /\/json/)
-    )
-      Stakeholder.findOne
-        email: req.session.username,
-        (error, stakeholder) ->
-          if error then throw error
-          
-          ###
-          If there is a profile for this stakeholder
-          then put this profile data into agent's session
-          ###
-          if stakeholder? res.emit "next"
-          
-          else res.redirect "/stakeholders/__new"
+        If there is a profile for this stakeholder,
+        but it wasn't loaded into session yet
+        then put this profile data into agent's session
+        and let the agent in
+        
+        **Why?**
+        
+        To save a db query on every subsequent request, dear Watson.
 
-    # if url is `/stakeholders/__new` or `/assets/*` or `/json/*`
-    # then perhaps agent is trying to create a profile or access some assets
-    # so proceed as usual
-    else res.emit "next" 
-  
-  # same if `req.method` isn't GET or agent is not authenticated
-  # TODO: This is a security hole as well. See above.
-  else res.emit "next"
+        ###
+
+        if stakeholder?
+          $ "there is a profile for this stakeholder,
+        but it wasn't loaded into session yet"
+          req.session.stakeholder = stakeholder
+          return res.emit "next"
+
+          ###
+
+          If, however, there is no profile in db as well
+          then redirect our fellow agent to the form,
+
+          unless
+
+          ###
+        else
+          $ "there is no profile in db as well"
+          return res.redirect "/stakeholders/__new" unless (
+            req.method is "GET" and (
+              # 1. agent is already going to fill a profile form
+              req.url is "/stakeholders/__new" or
+              # 2. agent want's some assets
+              Boolean (req.url.match /^\/assets/)
+            ) or req.method is "POST" and (
+              # 3. the form is being sent along with this request
+              req.url is "/stakeholders" or
+              # 4. agent wants to authenticate or logout
+              Boolean (req.url.match /^\/auth/)
+            )
+          ) 
+          res.emit "next"

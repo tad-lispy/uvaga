@@ -9,9 +9,14 @@ This controlls /stakeholders/ urls, that are related to stakeholders (so called 
 Stakeholder = require "../models/Stakeholder"
 Catch       = require "../models/Catch"
 _           = require "underscore"
+async       = require "async"
+
 ###
+
 TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
+
 ###
+
 # helpers     = require "creamer-helpers"
 
 module.exports = 
@@ -56,27 +61,48 @@ module.exports =
     
     "/__new":
       get: -> 
+        data = 
+          suggestions: {}
+
+        async.parallel [
+          (done) ->
+            Stakeholder.find().distinct "groups", (error, groups) ->
+              _.extend data.suggestions, { groups }
+              done error
+        ], (error) =>
+          if error then throw error
+          @bind "stakeholder", data
+
         # Only let authenticated users in
         # if @req.session?.username? then 
-        @bind "stakeholder"
+        #   @bind "stakeholder"
         # else 
         #   @res.statusCode = 401
         #   @res.end "Not authenticated."
 
     "/:slug":
       get: (slug) -> 
-        Stakeholder.findOne { slug }, (error, stakeholder) =>
-          if error then throw error
-          # TODO: use virtuals?
-          if stakeholder
-            @bind "stakeholder", { stakeholder }
+        # Try to DRY here. See `/__new`
+        data = 
+          suggestions: {}
 
-            # Catch.find
-            #   victims: stakeholder._id,
-            #   (error, catches) =>
-            #     if error then throw error
-            #     stakeholder.catches = catches
-            #     
-          else 
-            @res.statusCode = 404
-            @bind "not-found", "Nobody at this address."
+        async.parallel [
+          
+          # Get stakeholder
+          (done) ->
+            Stakeholder.findOne { slug }, (error, stakeholder) =>
+              if stakeholder then _.extend data, { stakeholder }
+              else
+                @res.statusCode = 404
+                @bind "not-found", "Nobody at this address."
+
+              done error
+          
+          # get group suggestions
+          (done) ->
+            Stakeholder.find().distinct "groups", (error, groups) ->
+              _.extend data.suggestions, { groups }
+              done error
+        ], (error) =>
+          if error then throw error
+          @bind "stakeholder", data
