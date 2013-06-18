@@ -1,4 +1,5 @@
 module.exports = -> 
+
   # No `@stakeholder` indicates that we are in `/stakeholders/__new`
   # TODO: Unite it! Anybody can edit anybody's profile, but before the changes will be saved, stakeholder must aggree for them.  
 
@@ -11,6 +12,7 @@ module.exports = ->
       mode = "view"
       h1 "Public profile of #{@stakeholder.name}" 
   else # We are in `/stakeholders/__new`
+    @form_context = {}
     mode = "create"
     h1 "Hello! Thanks for authenticating."
     p  "Please fill your profile beolw."
@@ -48,18 +50,18 @@ module.exports = ->
         td -> label for: "occupation", "Occupation"
         td -> textbox name: "occupation"
       tr ->
-        td -> label for: "groups", "What groups / units / departments #{if mode is 'create' then 'you' else 'a stakeholder'} belongs to:"
+        td -> label for: "groups", "Groups:"
         td ->
           select
             id          : "groups"
             name        : "groups"
-            placeholder : "Select one or more groups..."
+            placeholder : "Select one or more groups  #{if mode is 'create' then 'you' else 'a stakeholder'} belong to..."
             multiple    : true
             ->
               for group in @suggestions.groups
                 option 
                   value: group
-                  selected: group in @form_context.groups,
+                  # selected: group in @form_context.groups,
                   group 
 
         tr ->

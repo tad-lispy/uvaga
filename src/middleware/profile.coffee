@@ -26,10 +26,7 @@ Requests should be only allowed when:
 ###
 
 # TODO: module
-$ = (dump) ->
-  if process.env.ENVIRONMENT is "development"
-    if typeof dump is "string" then console.log dump
-    else console.dir dump
+$ = require "../debug"
 
 module.exports = (req, res) ->
   $ "# #{req.method}\t: #{req.url} requested"
@@ -59,6 +56,12 @@ module.exports = (req, res) ->
         **Why?**
         
         To save a db query on every subsequent request, dear Watson.
+
+        **Potential bug**
+
+        If data is in the session, but not in the db (eg. if stakeholder document was removed after stakeholder authenticated), then agent will be passed through.
+
+        Won't fix?
 
         ###
 

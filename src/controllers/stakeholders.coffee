@@ -10,7 +10,7 @@ Stakeholder = require "../models/Stakeholder"
 Catch       = require "../models/Catch"
 _           = require "underscore"
 async       = require "async"
-
+$           = require "../debug"
 ###
 
 TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
@@ -38,25 +38,37 @@ module.exports =
         "occupation"
         "groups"
       ]
-      if typeof data.groups == "string"
+      if typeof data.groups is "string"
         data.groups = data.groups.split /; ?/
+      data.email = @req.session.username
 
-      console.dir data
+      $ "New stakeholder's data:"
+      $ data
 
-      Stakeholder.findOneAndUpdate
+      Stakeholder.findOne
         email: @req.session.username,
-        data,
-        upsert: true,
         (error, stakeholder) =>
           if error then throw error
+          $ "Ok so far."
 
+          if stakeholder?
+            $ "# Warning: new stakeholder document requested, but email is already registered."
+            $ "## New data:"
+            $ data
+            $ "## Existing data:"
+            $ data
+          else stakeholder = new Stakeholder data
           ###
           We need to save in order to trigger [slugify middleware](../models/slugify.coffee), which updates .slug according to .name.
 
           Only then we can redirect browser to this slug.
           ###
           stakeholder.save (error) =>
-            if error then throw error
+            if error
+              $ "Error saving stakeholder's document"
+              $ error
+              # TODO: @bind stakeholder with error data
+              return @res.redirect "/stakeholders/__new"
             @res.redirect "/stakeholders/" + stakeholder.slug
     
     "/__new":
@@ -66,11 +78,15 @@ module.exports =
 
         async.parallel [
           (done) ->
-            Stakeholder.find().distinct "groups", (error, groups) ->
+            Stakeholder
+            .find()
+            .distinct "groups", (error, groups) ->
+              $ groups
               _.extend data.suggestions, { groups }
               done error
         ], (error) =>
           if error then throw error
+          $ data
           @bind "stakeholder", data
 
         # Only let authenticated users in
@@ -100,7 +116,9 @@ module.exports =
           
           # get group suggestions
           (done) ->
-            Stakeholder.find().distinct "groups", (error, groups) ->
+            Stakeholder
+            .find()
+            .distinct "groups", (error, groups) ->
               _.extend data.suggestions, { groups }
               done error
         ], (error) =>

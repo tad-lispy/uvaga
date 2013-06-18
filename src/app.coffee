@@ -15,6 +15,7 @@ persona  = require 'flatiron-persona'
 connect  = require 'connect'
 path     = require 'path'
 mongoose = require 'mongoose'
+$        = require "./debug"
 app      = flatiron.app
 
 ###
@@ -36,7 +37,7 @@ app.use creamer,
   controllers:  __dirname + '/controllers'
 app.registerHelper "textbox", require "./views/helpers/textbox"
 app.registerHelper "authentication", require "./views/helpers/authentication"
-
+app.registerHelper "$", $
 app.router.configure 
   # This enables trailing slashes in routes - otherwise it's 404
   # See: https://github.com/flatiron/director/issues/74
