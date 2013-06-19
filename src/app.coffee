@@ -9,6 +9,7 @@ It's an application to ...
 The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelent [Coffecup][] plugin with MVC capabilities. User authentication uses [Mozilla Persona][] with my humble [plugin][Flatiron Persona], which requires session and cookie parser middleware from [Connect][]. 
 ###
 
+fs       = require 'fs'
 flatiron = require 'flatiron'
 creamer  = require 'creamer'
 persona  = require 'flatiron-persona'
@@ -32,12 +33,12 @@ app.config.defaults {
 app.use flatiron.plugins.http
 app.use persona, audience: "http://#{app.config.get "host"}:#{app.config.get "port"}/"
 app.use creamer,
-  layout:       require "./views/layout"
-  views:        __dirname + '/views'
-  controllers:  __dirname + '/controllers'
-app.registerHelper "textbox", require "./views/helpers/textbox"
-app.registerHelper "authentication", require "./views/helpers/authentication"
+  layout      : require "./views/layout"
+  views       : __dirname + '/views'
+  helpers     : __dirname + '/views/helpers'
+  controllers : __dirname + '/controllers'
 app.registerHelper "$", $
+
 app.router.configure 
   # This enables trailing slashes in routes - otherwise it's 404
   # See: https://github.com/flatiron/director/issues/74
@@ -57,6 +58,7 @@ app.http.before.push connect.session secret: app.config.get "secret"
 
 # If agent is authenticated via Persona but has no profile, redirect him to `/stakeholders/__new` to create one.
 app.http.before.push require "./middleware/profile"
+app.http.before.push require "./middleware/access-control"
 
 # Let's start listening to requests from our stakeholders:
 

@@ -48,8 +48,6 @@ module.exports = ->
         h1 "Uvaga!"
         h2 @title
 
-      div class: "authentication", do authentication
-
       section id: "main", ->
         do content
 

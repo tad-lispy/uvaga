@@ -25,11 +25,11 @@ Requests should be only allowed when:
 
 ###
 
-# TODO: module
 $ = require "../debug"
 
 module.exports = (req, res) ->
-  $ "# #{req.method}\t: #{req.url} requested"
+  $ "# Profile check middleware"
+  $ "#{req.method}\t: #{req.url} requested"
   # If agent is not authenticated, then let him in (security will hendle him later)
   if not req.session.username? then return res.emit "next"
   # If agent is authenticated
