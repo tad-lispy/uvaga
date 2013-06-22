@@ -1,4 +1,4 @@
-($ document).ready ->
+jQuery ($) ->
   username = ($ "body").data "username" ? null
   if username then console.log "Logged in as #{username}"
   else console.log "Not logged in (yet?)"

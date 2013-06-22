@@ -61,7 +61,7 @@ module.exports = ->
               for group in @suggestions.groups
                 option 
                   value: group
-                  # selected: group in @form_context.groups,
+                  selected: group in @form_context.groups
                   group 
 
         tr ->
