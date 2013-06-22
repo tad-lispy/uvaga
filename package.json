@@ -13,7 +13,8 @@
     "underscore": "~1.4.4",
     "st": "~0.1.4",
     "creamer": "*",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "flatiron-persona": "~0.2.0"
   },
   "devDependencies": {
     "coffee-script": "~1.6.2",
