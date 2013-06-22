@@ -9,6 +9,7 @@ Learn [more about controllers](https://github.com/twilson63/creamer/tree/master/
 
 
 ###
+$ = require "../debug"
 
 module.exports = 
   "/":
@@ -17,4 +18,4 @@ module.exports =
 
   "/auth":
     get: ->
-      @bind "authenticate"
+      @bind "authenticate", layout: navbar: false

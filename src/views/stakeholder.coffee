@@ -67,11 +67,5 @@ module.exports = ->
         tr ->
           td colspan: 2, -> input type: "submit", value: "done!"
 
-  coffeescript ->
-    ($ document).ready ->
-      ($ "#groups").selectize
-        delimiter: ";"
-        create: (input) -> text: input, value: input
-
 
     

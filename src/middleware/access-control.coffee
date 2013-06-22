@@ -20,14 +20,15 @@ module.exports = (req, res) ->
   # If agent is not authenticated, then redirect him to `/`
   # unless he is already heading there or trying to authenticate
   # TODO: configuration awareness - make access control profiles, and aply them as midlewares.
-  if req.session.username? then res.emit "next"
-  else
+  unless req.session.username? 
     if req.method is 'GET'
       if req.url is '/auth'
         $ "ok: Letting agent in to authenticate"
         return res.emit "next"
       else
         $ "not authorized: Redirecting agent to authenticate"
+        # Store requested url in order to redirect agent back after succesful authentication
+        req.session.redirect = req.url
         res.redirect '/auth'
     else 
       if req.method is 'POST' and req.url is '/auth/login'
@@ -37,5 +38,11 @@ module.exports = (req, res) ->
         $ "not authorized: agent is not authenticated"
         res.statusCode = 401
         res.end "Not authorized."
+  else
+    if req.session.redirect? 
+      $ "Redirecting agent back to #{req.session.redirect}"
+      res.redirect req.session.redirect
+      delete req.session.redirect
+    else res.emit "next"
     
   

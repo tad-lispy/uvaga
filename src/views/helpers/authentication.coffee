@@ -1,29 +1,32 @@
 module.exports = (attributes) ->
-  attributes     ?= {}
+  attributes     ?= {} # Obsolate?
   unless @username
     p -> 
-      text "You are annonymous to us. You may "
-      a {
+      a
         id: "signin"
         "data-signin": true
         href: "#"
-        class: "persona-button dark"
-      }, ->  span "introduce yourself"
-      text " at any time."
+        class: "btn btn-large btn-primary"
+        ->
+          i class: "icon-chevron-sign-right"
+          text " Introduce yourself"
+
   else
     p ->
-      text "We know who you are. You are "
+      text "You are authenticated as "
       if @profile?
         a href: "/stakeholders/#{@profile.slug}", @profile.name
       else text @username
-      text "! Would you rather "
-      a {
+    p ->
+      a
         id: "signout"
         "data-signout": true
         href: "#"
-        class: "persona-button blue"
-      }, ->  span "stay annonymous"
-      text "?"
+        class: "btn btn-large btn-danger"
+        -> 
+          i class: "icon-chevron-sign-left"
+          text " Get annonymous"
+
     # a {
     #   id: "profile"
     #   class: "button blue"

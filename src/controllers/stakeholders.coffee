@@ -74,7 +74,10 @@ module.exports =
     "/__new":
       get: -> 
         data = 
-          suggestions: {}
+          suggestions : {}
+          scripts     : [
+            "/assets/stakeholder.js"
+          ]
 
         async.parallel [
           (done) ->
@@ -101,7 +104,10 @@ module.exports =
         # Try to DRY here. See `/__new`
         data = 
           suggestions: {}
-
+          scripts     : [
+            "/assets/stakeholder.js"
+          ]
+          
         async.parallel [
           
           # Get stakeholder

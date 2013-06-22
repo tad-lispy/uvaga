@@ -28,8 +28,8 @@ module.exports = ->
 
   ###
   
-  if @session?.username?  then @username  = @session.username
-  if @session?.profile?   then @profile   = @session.profile
+  if @session?.username?    then @username = @session.username
+  if @session?.stakeholder? then @profile  = @session.stakeholder
 
   ###
 
@@ -46,6 +46,9 @@ module.exports = ->
 
   Navigation menu items
   ---------------------
+
+  See navbar below
+
   ###
 
   @navigation ?= [
@@ -63,9 +66,9 @@ module.exports = ->
   ###
 
   doctype 5
-  html ->
+  html lang: "en", ->
     head ->
-      title "Uvaga ! " + @title or "Hello."
+      title "Uvaga ! " + @title
       meta charset: "utf-8"
       meta "http-equiv": "X-UA-Compatible", content: "IE=Edge"
       meta 
@@ -88,52 +91,26 @@ module.exports = ->
 
       stylus """
         body
-          padding-top 40px
+          padding-top 60px
         @media screen and (max-width: 979px)
           body
             padding-top 0px
       """
     body "data-username": @username, ->
-      div class: "navbar navbar-inverse navbar-fixed-top", ->
-        div class: "navbar-inner", ->
-          div class: "container", ->
-            button
-              type        : "button"
-              class       : "btn btn-navbar"
-              data-toggle : "collapse"
-              data-target : ".nav-collapse"
-              ->
-                span class: "icon-bar"
-                span class: "icon-bar"
-                span class: "icon-bar"
-                
-            a href: "/", class: "brand", ->
-              strong "Uvaga ! "
-              span class: "title", @title
+      navbar @navigation unless @layout?.navbar is false
 
-            div class: "nav-collapse collapse", ->
-              ul class: "nav", ->
-                for item in @navigation
-                  li -> a item, item.title
-                    
+      div class: 'container-fluid', ->
+        do content
 
+        div class: footer ->
+          do footer
 
-      div class: 'container', ->
-        h1 class: "brand", "Uvaga!"
-        h2 class: "title", @title
+      script src: "http://code.jquery.com/jquery-1.9.1.min.js"
+      script src: "http://code.jquery.com/jquery-migrate-1.1.1.min.js"
+      script src: "/assets/scripts/app/persona.js"
+      script src: "//login.persona.org/include.js"
+      script src: "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"
 
-        section id: "main", ->
-          do content
-
-        footer ->
-          p "A footy footer is here"
-
-        script src: "http://code.jquery.com/jquery-1.9.1.min.js"
-        script src: "http://code.jquery.com/jquery-migrate-1.1.1.min.js"
-        script src: "/assets/scripts/app/persona.js"
-        script src: "//login.persona.org/include.js"
-        script src: "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"
-
-        script src: "/assets/scripts/vendor/selectize/selectize.js"
+      script src: "/assets/scripts/vendor/selectize/selectize.js"
 
 
