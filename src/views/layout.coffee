@@ -72,7 +72,6 @@ module.exports = ->
         name    : "viewport"
         content :"width=device-width, initial-scale=1.0"
 
-
       link
         rel : "stylesheet"
         type: "text/css"
@@ -87,7 +86,13 @@ module.exports = ->
         type: "text/css"
         href: "/assets/scripts/vendor/selectize/selectize.css"
 
-
+      stylus """
+        body
+          padding-top 40px
+        @media screen and (max-width: 979px)
+          body
+            padding-top 0px
+      """
     body "data-username": @username, ->
       div class: "navbar navbar-inverse navbar-fixed-top", ->
         div class: "navbar-inner", ->
