@@ -7,7 +7,7 @@ This controlls /stakeholders/ urls, that are related to stakeholders (so called 
 ###
 
 Stakeholder = require "../models/Stakeholder"
-Catch       = require "../models/Catch"
+Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
 $           = require "../debug"

@@ -4,4 +4,8 @@ module.exports = ->
       p -> strong @profile.name
 
     div class: "span9", ->
-      p "Everything" 
+      div class: "row", ->
+        a 
+          class: "btn-primary btn-large"
+          href: "/issues/__new"
+          "I have an issue!"

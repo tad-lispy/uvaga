@@ -9,7 +9,8 @@ mongoose = require "mongoose"
 _        = require "underscore.string"
 
 defaults = 
-  base: "name"
+  base    : "name"  # path to base slug on
+  numeric : false   # can a slug be numeric only
 
 module.exports = (schema, options = {}) ->
   for key, value of defaults
@@ -32,7 +33,8 @@ module.exports = (schema, options = {}) ->
       
       @slug = _.slugify source
 
-    if @slug.match /^[0-9]+$/ then @slug = "_" + @slug
+    if options.numeric is false and @slug.match /^[0-9]+$/
+      @slug = "_" + @slug
     # Limit length of slug to 64 characters
     @slug = @slug.substr 0, 64
 
