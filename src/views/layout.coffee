@@ -95,11 +95,19 @@ module.exports = ->
         @media screen and (max-width: 979px)
           body
             padding-top 0px
+
+        .selectize-control
+          margin-left: 0
       """
     body "data-username": @username, ->
       navbar @navigation unless @layout?.navbar is false
 
       div class: 'container-fluid', ->
+        do messages
+        div class: "page-header", ->
+          h1 ->
+            text "Uvaga ! "
+            small @title
         do content
 
         div class: footer ->
@@ -112,5 +120,6 @@ module.exports = ->
       script src: "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"
 
       script src: "/assets/scripts/vendor/selectize/selectize.js"
+      if @scripts? then script src: path for path in @scripts
 
 

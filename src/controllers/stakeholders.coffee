@@ -24,14 +24,9 @@ module.exports =
     get: ->
       Stakeholder.find (error, stakeholders) =>
         if error then throw error
-        @bind "stakeholders", { stakeholders }
+        @bind "stakeholders", { stakeholders, title: "Stakeholders" }
 
     post: ->
-      unless @req.session.username?
-        @res.statusCode = 407
-        @bind "profile"
-        return
-      
       data = _.pick @req.body, [
         "name"
         "telephone"
@@ -49,7 +44,6 @@ module.exports =
         email: @req.session.username,
         (error, stakeholder) =>
           if error then throw error
-          $ "Ok so far."
 
           if stakeholder?
             $ "# Warning: new stakeholder document requested, but email is already registered."
@@ -57,26 +51,40 @@ module.exports =
             $ data
             $ "## Existing data:"
             $ data
-          else stakeholder = new Stakeholder data
-          ###
-          We need to save in order to trigger [slugify middleware](../models/slugify.coffee), which updates .slug according to .name.
+            @res.message """ 
+              This e-mail (#{stakeholder.email}) is already in use.
+              You cannot create more then one profile.
+              Would you rather
+              <a href='/stakeholders/#{stakeholder.slug}'>
+              make changes to the one you already have
+              </a>?
+            """, "error"
 
-          Only then we can redirect browser to this slug.
-          ###
+          else stakeholder = new Stakeholder data
+
           stakeholder.save (error) =>
             if error
               $ "Error saving stakeholder's document"
               $ error
-              # TODO: @bind stakeholder with error data
+              if error.name is "ValidationError"
+                for field of error.errors
+                  @res.message "#{field} was missing.", "error"
+              else
+                @res.message "There was an error. Sorry !(", "error"
+              # @bind stakeholder with error data
               return @res.redirect "/stakeholders/__new"
-            @res.redirect "/stakeholders/" + stakeholder.slug
+
+            # if everything is fine
+            $ "New stakeholder document saved"
+            @res.message "Thank you! You are good to go."
+            @res.redirect "/"
     
     "/__new":
       get: -> 
         data = 
           suggestions : {}
           scripts     : [
-            "/assets/stakeholder.js"
+            "/assets/scripts/app/stakeholder.js"
           ]
 
         async.parallel [
@@ -84,12 +92,10 @@ module.exports =
             Stakeholder
             .find()
             .distinct "groups", (error, groups) ->
-              $ groups
               _.extend data.suggestions, { groups }
               done error
         ], (error) =>
           if error then throw error
-          $ data
           @bind "stakeholder", data
 
         # Only let authenticated users in
@@ -105,9 +111,9 @@ module.exports =
         data = 
           suggestions: {}
           scripts     : [
-            "/assets/stakeholder.js"
+            "/assets/scripts/app/stakeholder.js"
           ]
-          
+
         async.parallel [
           
           # Get stakeholder
@@ -130,3 +136,43 @@ module.exports =
         ], (error) =>
           if error then throw error
           @bind "stakeholder", data
+
+      post: (slug) ->
+        $ "Updating #{slug}"
+        data = _.pick @req.body, [
+          "name"
+          "telephone"
+          "occupation"
+          "groups"
+        ]
+        if typeof data.groups is "string"
+          data.groups = data.groups.split /; ?/
+
+        $ "Updated stakeholder's data:"
+        $ data
+
+        Stakeholder.findOne
+          slug: slug
+          (error, stakeholder) =>
+            if error then throw error
+
+            if not stakeholder?
+              $ "# Warning: stakeholder update requested for nonexistent slug: #{slug}."
+              $ data
+              @res.message "There was an error. Sorry !(", "error"
+              return @res.redirect "/stakeholders/#{slug}"
+
+            for attribute, value of  data
+              stakeholder[attribute] = value
+
+            stakeholder.save (error) =>
+              if error
+                $ "Error saving stakeholder's document"
+                $ error
+                if error.name is "ValidationError"
+                  for field of error.errors
+                    @res.message "#{field} was missing.", "error"
+                else
+                  @res.message "There was an error. Sorry !(", "error"
+                return @res.redirect "/stakeholders/#{slug}"
+              @res.redirect "/stakeholders/" + stakeholder.slug

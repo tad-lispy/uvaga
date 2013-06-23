@@ -66,8 +66,7 @@ module.exports = (req, res) ->
         ###
 
         if stakeholder?
-          $ "there is a profile for this stakeholder,
-        but it wasn't loaded into session yet"
+          $ "there is a profile for this stakeholder, but it wasn't loaded into session yet"
           req.session.stakeholder = stakeholder
           return res.emit "next"
 
@@ -81,7 +80,7 @@ module.exports = (req, res) ->
           ###
         else
           $ "there is no profile in db as well"
-          return res.redirect "/stakeholders/__new" unless (
+          unless (
             req.method is "GET" and (
               # 1. agent is already going to fill a profile form
               req.url is "/stakeholders/__new" or
@@ -93,5 +92,8 @@ module.exports = (req, res) ->
               # 4. agent wants to authenticate or logout
               Boolean (req.url.match /^\/auth/)
             )
-          ) 
+          )
+            # TODO: It is displayed for new stakeholders, before they fill profile. Stop it!
+            res.message "Please provide at least your name before proceeding to #{req.url}", "error" unless req.url is "/auth"
+            return res.redirect "/stakeholders/__new" 
           res.emit "next"

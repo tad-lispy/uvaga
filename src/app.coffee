@@ -55,6 +55,7 @@ app.use flatiron.plugins.static, dir: "assets/", url: "/assets/"
 
 app.http.before.push do connect.cookieParser
 app.http.before.push connect.session secret: app.config.get "secret"
+app.http.before.push require "./middleware/session-messages"
 
 # If agent is authenticated via Persona but has no profile, redirect him to `/stakeholders/__new` to create one.
 app.http.before.push require "./middleware/profile"

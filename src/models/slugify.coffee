@@ -41,16 +41,20 @@ module.exports = (schema, options = {}) ->
     doc   = @
     increment_slug = ->
       console.log "trying #{doc.slug}"
-      model.count slug: doc.slug, _id: $ne: doc.id, (error, count) ->
-        if error then throw error  
-        # if the slug is unique we are done
-        if not count then do next
-        # if it's in use, increment it and try again
-        else 
-          doc.slug = if match = doc.slug.match /-(\d+)$/ 
-            doc.slug.replace /\d+$/, (parseInt match[1])+1
-          else doc.slug += "-1"
-          do increment_slug
+      model.count
+        slug: doc.slug
+        _id:
+          $ne: doc.id
+        (error, count) ->
+          if error then throw error  
+          # if the slug is unique we are done
+          if not count then do next
+          # if it's in use, increment it and try again
+          else 
+            doc.slug = if match = doc.slug.match /-(\d+)$/ 
+              doc.slug.replace /\d+$/, (parseInt match[1])+1
+            else doc.slug += "-1"
+            do increment_slug
 
     do increment_slug
 

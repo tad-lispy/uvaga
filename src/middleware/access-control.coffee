@@ -17,16 +17,24 @@ $ = require "../debug"
 module.exports = (req, res) ->
   $ "# Access control middleware"
   $ "#{req.method}\t: #{req.url} requested"
-  # If agent is not authenticated, then redirect him to `/`
-  # unless he is already heading there or trying to authenticate
-  # TODO: configuration awareness - make access control profiles, and aply them as midlewares.
-  unless req.session.username? 
+
+  unless req.session.username?
+    
+    ###
+    
+    If agent is not authenticated, then redirect him to `/auth`
+    unless he is already heading there or trying to authenticate
+    TODO: configuration awareness - make access control profiles, and aply them as midlewares.
+    
+    ###
+
     if req.method is 'GET'
       if req.url is '/auth'
         $ "ok: Letting agent in to authenticate"
         return res.emit "next"
       else
         $ "not authorized: Redirecting agent to authenticate"
+        res.message "Not authenticated. You cannot access #{req.url} until you authenticate.", "warning" unless req.url is "/"
         # Store requested url in order to redirect agent back after succesful authentication
         req.session.redirect = req.url
         res.redirect '/auth'
@@ -39,10 +47,18 @@ module.exports = (req, res) ->
         res.statusCode = 401
         res.end "Not authorized."
   else
-    if req.session.redirect? 
+    ###
+
+    If agent is an authenticated stakeholder, then 
+
+    ###
+    if req.session.redirect?
+      # if being redirected, greet him and redirect
+      res.message "Hello, #{req.session.stakeholder?.name ? req.session.username}!"
       $ "Redirecting agent back to #{req.session.redirect}"
       res.redirect req.session.redirect
       delete req.session.redirect
+    # at last common situation - authenticated and not redirected
     else res.emit "next"
     
   
