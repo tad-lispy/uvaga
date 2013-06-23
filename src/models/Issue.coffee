@@ -46,18 +46,23 @@ Issue = new mongoose.Schema
     unique      : true
     required    : true
 
+Meta = require "./Meta"
 Issue.pre "validate", (next) ->
   $ "Pre validate"
   # Calculate issue number
-  # TODO: make sure it's really uniqu - even when issues were deleted or something :)
-  model = @model @constructor.modelName
-  $ model
-  model.count (error, count) =>
-    $ "Counted"
-    if error then throw error
-    $ count
-    @number = count + 1
-    do next
+  # TODO: make sure it's really unique - even when issues were deleted or something :)
+  $ "@constructor (Schema)"
+  $ @constructor.collection.name
+
+  Meta.findOneAndUpdate
+    _id: "issues"
+    { $inc: "data.autonumber": 1 }
+    { upsert: true }
+    (error, meta) =>
+      if error then throw error
+      $ meta
+      @number = meta.data.autonumber
+      do next
   
 
 Issue.pre "validate", (next) ->

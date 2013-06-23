@@ -62,7 +62,7 @@ module.exports =
         # No error
         $ "New stakeholder document saved"
         @res.message "Thank you! Your issue is now a public concern :)"
-        @res.redirect "/"
+        @res.redirect "/issues/"
 
       # async.parralel [
       #   (done) ->

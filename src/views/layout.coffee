@@ -54,6 +54,7 @@ module.exports = ->
   @navigation ?= [
     { title: "Start", href: "/" }
     { title: "Stakeholders", href: "/stakeholders" }
+    { title: "Issues", href: "/issues" }
     { title: "Log out", href: "#", "data-signout": true }
   ]
 

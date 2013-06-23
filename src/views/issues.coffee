@@ -1,6 +1,5 @@
 module.exports = ->
   table class: "table", ->
-    caption "Registered stakeholders"
     thead ->
       tr ->
         th "#"
@@ -33,5 +32,11 @@ module.exports = ->
               span class: "label", scope
               text " "
           td issue.description
+
+    caption "Registered stakeholders"
+
+  a class: "btn btn-primary", href: "/issues/__new", ->
+    i class: "icon-plus-sign", " "
+    text "New issue"
 
         

@@ -25,7 +25,7 @@ module.exports = ->
       mode        = "view"
       form_title  = "Profile of #{@stakeholder.name}" 
   else # We are in `/stakeholders/__new`
-    @form_context = {}
+    @form_context = { email: @username }
     mode          = "create"
     form_title    = "Your profile"
     div class: "hero-unit", ->
