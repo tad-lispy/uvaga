@@ -22,7 +22,10 @@ TODO: integrate helpers with creamer. Maybe just add third parameter (status cod
 module.exports = 
   "/issues":
     get: ->
-      Issue.find (error, issues) =>
+      Issue
+      .find()
+      .sort(importance: 1)
+      .exec (error, issues) =>
         if error then throw error
         @bind "issues", { issues, title: "Issues" }
 
@@ -36,17 +39,23 @@ module.exports =
         data.scopes = data.scopes.split /; ?/
 
       # Stakeholder's relation to this issue
-      relation = _.pick @req.body, [
-        "affects"
-        "concerns"
-        "commit"
+      relations = _.pick @req.body, [
+        "affected"
+        "concerned"
+        "commited"
       ]
       $ "New issue data:"
       $ data
-      $ "Relation"
-      $ relation
+      $ "Relations"
+      $ relations
 
       issue = new Issue data
+      $ @req.session
+      for relation of relations
+        $ "Setting issue.#{relation}.stakeholders to #{[ @req.session.stakeholder._id ]}"
+        issue[relation].stakeholders = [ @req.session.stakeholder._id ]
+      $ "To be saved"
+      $ issue
       issue.save (error) =>
         if error
           $ "Error saving issue document"
@@ -60,7 +69,8 @@ module.exports =
           return @res.redirect "/stakeholders/__new"
 
         # No error
-        $ "New stakeholder document saved"
+        $ "New issue saved"
+        $ issue
         @res.message "Thank you! Your issue is now a public concern :)"
         @res.redirect "/issues/"
 

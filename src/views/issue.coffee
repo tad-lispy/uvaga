@@ -45,9 +45,9 @@ module.exports = ->
 
       div class: "row", ->
         checkboxes =
-          affects : "<i class='icon-flag'> </i>This affects me"
-          concerns: "<i class='icon-warning-sign'> </i>I think it's important"
-          commit  : "<i class='icon-eye-open'> </i>I'll take care of that"
+          affected : "<i class='icon-flag'> </i>This affects me"
+          concerned: "<i class='icon-warning-sign'> </i>I think it's important"
+          commited : "<i class='icon-eye-open'> </i>I'll take care of that"
 
         for field, desc of checkboxes
           div "class: span3", ->

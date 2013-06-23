@@ -28,19 +28,23 @@ Issue = new mongoose.Schema
   scopes      : [ String ]
   affected    :
     count       : Number
-    stakeholders:
+    stakeholders: [
       type        : mongoose.Schema.Types.ObjectId
       ref         : 'Stakeholder'
+    ]
   concerned   :
     count       : Number
-    stakeholders:
+    stakeholders: [
       type        : mongoose.Schema.Types.ObjectId
       ref         : 'Stakeholder'
+    ]
   commited    :
     count       : Number
-    stakeholders:
+    stakeholders: [
       type        : mongoose.Schema.Types.ObjectId
       ref         : 'Stakeholder'
+    ]
+  importance  : Number # affected + concerned + commited
   slug        :
     type        : String
     unique      : true
@@ -68,10 +72,13 @@ Issue.pre "validate", (next) ->
 Issue.pre "validate", (next) ->
   # Make sure counts are in sync
   $ "Counters"
+  @importance = 0
   for counter in ['affected', 'concerned', 'commited']
     quantity = @[counter].stakeholders?.length ? 0
     $ "There are #{quantity} #{counter} stakeholders"
     @[counter].count = quantity
+    @importance += quantity
+  $ "Importance is #{@importance}"
 
   do next
 
