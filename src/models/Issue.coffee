@@ -50,6 +50,32 @@ Issue = new mongoose.Schema
     unique      : true
     required    : true
 
+Issue.methods.relations = (stakeholder) ->
+  # stakeholder can be ObjectId, stringified ObjectId or Stakeholder document
+
+  # Let's cast it to ObjectId ...
+  ObjectId = mongoose.Types.ObjectId
+  if stakeholder instanceof Stakeholder
+    stakeholder = stakeholder._id
+  if typeof stakeholder is "string"
+    stakeholder = new ObjectId stakeholder
+  if not stakeholder instanceof ObjectId
+    throw new Error "Issue.relations method only accepts ObjectId, stringified ObjectId or Stakeholder document"
+
+  # ... and then back to string (any better idea for validation?)
+  stakeholder = do stakeholder.toString
+  
+  relations = []
+  for relation in ['affected', 'concerned', 'commited']
+    # Get all related stakeholders ids as strings
+    related = @[relation].stakeholders.map (uuid) ->
+      do uuid.toString
+    # And look for the one we are lookig for
+    if stakeholder in related then relations.push relation
+
+  return relations
+
+
 Meta = require "./Meta"
 Issue.pre "validate", (next) ->
   $ "Pre validate"
@@ -70,14 +96,17 @@ Issue.pre "validate", (next) ->
   
 
 Issue.pre "validate", (next) ->
-  # Make sure counts are in sync
-  $ "Counters"
+  # Make sure related stakeholders are unique and relations are in sync
+  $ "Relations"
   @importance = 0
-  for counter in ['affected', 'concerned', 'commited']
-    quantity = @[counter].stakeholders?.length ? 0
-    $ "There are #{quantity} #{counter} stakeholders"
-    @[counter].count = quantity
-    @importance += quantity
+  for relation in ['affected', 'concerned', 'commited']
+    $ "* " + relation
+    stakeholders  = @[relation].stakeholders
+    stakeholders  = _.unique stakeholders
+    quantity      = stakeholders.length ? 0
+    $ "  #{quantity} stakeholders"
+    @[relation].count = quantity
+    @importance      += quantity
   $ "Importance is #{@importance}"
 
   do next

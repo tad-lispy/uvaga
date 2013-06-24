@@ -32,6 +32,9 @@ module.exports = (req, res) ->
       if req.url is '/auth'
         $ "ok: Letting agent in to authenticate"
         return res.emit "next"
+      else if req.url.match /^\/assets\//
+        $ "ok: Letting agent have some of our assets"
+        return res.emit "next"      
       else
         $ "not authorized: Redirecting agent to authenticate"
         res.message "Not authenticated. You cannot access #{req.url} until you authenticate.", "warning" unless req.url is "/"

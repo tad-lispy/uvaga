@@ -77,6 +77,10 @@ module.exports = ->
         content :"width=device-width, initial-scale=1.0"
 
       link
+        rel : "shortcut icon"
+        href: "assets/icon.png"
+
+      link
         rel : "stylesheet"
         type: "text/css"
         href: "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"

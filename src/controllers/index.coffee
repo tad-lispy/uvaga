@@ -19,3 +19,6 @@ module.exports =
   "/auth":
     get: ->
       @bind "authenticate", layout: navbar: false
+
+  "/([0-9]+)":
+    get: (number) -> @res.redirect "/issues/#{number}"

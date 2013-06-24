@@ -1,4 +1,5 @@
 ###
+
 Issues controller
 =================
 
@@ -6,6 +7,7 @@ This controlls /issues/ urls and /[0-9]+ which is a shortcut to single issue.
 
 ###
 
+mongoose    = require "mongoose"
 Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
@@ -24,7 +26,7 @@ module.exports =
     get: ->
       Issue
       .find()
-      .sort(importance: 1)
+      .sort(importance: -1)
       .exec (error, issues) =>
         if error then throw error
         @bind "issues", { issues, title: "Issues" }
@@ -74,20 +76,11 @@ module.exports =
         @res.message "Thank you! Your issue is now a public concern :)"
         @res.redirect "/issues/"
 
-      # async.parralel [
-      #   (done) ->
-      #     Stakeholder
-      #     .findOne
-      #       email: @req.session.username
-      #       (error, stakeholder) =>
-      #         if error then done error
-
-      # ]
-
     "/__new":
       get: -> 
         data = 
           suggestions : {}
+          relations   : ['concerned'] # let concerned be checked by default
           scripts     : [
             "/assets/scripts/app/issue.js"
           ]
@@ -103,37 +96,38 @@ module.exports =
           if error then throw error
           @bind "issue", data
 
-    # "/:slug":
-    #   get: (slug) -> 
-    #     # Try to DRY here. See `/__new`
-    #     data = 
-    #       suggestions: {}
-    #       scripts     : [
-    #         "/assets/scripts/app/stakeholder.js"
-    #       ]
+    "/:slug":
+      get: (slug) -> 
+        $ "Show an issue # #{slug}"
+        data = 
+          suggestions : {}
+          relations   : []
+          scripts     : [
+            "/assets/scripts/app/issue.js"
+          ]
 
-    #     async.parallel [
-          
-    #       # Get stakeholder
-    #       (done) ->
-    #         Stakeholder.findOne { slug }, (error, stakeholder) =>
-    #           if stakeholder then _.extend data, { stakeholder }
-    #           else
-    #             @res.statusCode = 404
-    #             @bind "not-found", "Nobody at this address."
-
-    #           done error
-          
-    #       # get group suggestions
-    #       (done) ->
-    #         Stakeholder
-    #         .find()
-    #         .distinct "groups", (error, groups) ->
-    #           _.extend data.suggestions, { groups }
-    #           done error
-    #     ], (error) =>
-    #       if error then throw error
-    #       @bind "stakeholder", data
+        async.parallel [
+          (done) ->
+            Issue
+            .find()
+            .distinct "scopes", (error, scopes) ->
+              _.extend data.suggestions, { scopes }
+              done error
+          (done) =>
+            Issue.findOne { slug }, (error, issue) =>
+              if issue
+                _.extend data, { issue }
+                data.relations = issue.relations @req.session.stakeholder._id
+              else
+                $ "issue # 404 :P"
+                @res.statusCode = 404
+                return @bind "not-found", message: "No such issue :("
+              done error
+        ], (error) =>
+          if error then throw error
+          $ "Data to show"
+          $ data
+          @bind "issue", data
 
     #   post: (slug) ->
     #     $ "Updating #{slug}"

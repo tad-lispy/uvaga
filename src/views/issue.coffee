@@ -15,7 +15,9 @@ module.exports = ->
   # No `@issue` indicates that we are in `/issues/__new`
   # TODO: Unite it!
 
-  if @issue
+  $ "Showing"
+  $ @issue
+  if @issue?
     mode          = "view"
     @form_context = @issue
     form_title    = "# #{@issue.number}"
@@ -41,7 +43,8 @@ module.exports = ->
           textarea
             name: "description"
             class: "span9"
-            style: "resize: vertical"
+            style: "resize: vertical",
+            @form_context.description
 
       div class: "row", ->
         checkboxes =
@@ -53,8 +56,9 @@ module.exports = ->
           div "class: span3", ->
             label class: "checkbox", ->
               input
-                type: "checkbox"
-                name: field
+                type    : "checkbox"
+                name    : field
+                checked : @relations? and field in @relations
               text desc
 
       ###
@@ -81,11 +85,11 @@ module.exports = ->
             multiple    : true
             class       : "span9"
             ->
-              for group in @suggestions.scopes
+              for scope in @suggestions.scopes
                 option 
-                  value: group
-                  selected: @form_context.groups? and group in @form_context.groups
-                  group 
+                  value: scope
+                  selected: @form_context.scopes? and scope in @form_context.scopes
+                  scope
 
       div class: "row", ->
         div class: "span9", style: "margin-top: 10px", ->

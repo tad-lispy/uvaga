@@ -15,7 +15,7 @@ dev: watch
 	ENVIRONMENT=development nodemon
 
 watch: end-watch
-	./node_modules/.bin/coffee -cw -o lib src & echo $$! > .watch_pid
+	./node_modules/.bin/coffee -cmw -o lib src & echo $$! > .watch_pid
 
 end-watch:
 	if [ -e .watch_pid ]; then kill `cat .watch_pid`; rm .watch_pid; else echo no .watch_pid file; fi

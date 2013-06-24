@@ -8,6 +8,7 @@ It's an application to ...
 
 The app is [Flatiron][] based. Templates are powered by [Creamer][] - an excelent [Coffecup][] plugin with MVC capabilities. User authentication uses [Mozilla Persona][] with my humble [plugin][Flatiron Persona], which requires session and cookie parser middleware from [Connect][]. 
 ###
+do (require "source-map-support").install
 
 fs       = require 'fs'
 flatiron = require 'flatiron'
