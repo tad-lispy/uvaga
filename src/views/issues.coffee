@@ -14,19 +14,19 @@ module.exports = ->
       # http://net.tutsplus.com/tutorials/javascript-ajax/using-jquery-to-manipulate-and-filter-data/
       for issue in @issues
         tr -> 
-          td -> a href: "/#{issue.slug}", issue.number
+          td -> a href: "/#{issue.number}", issue.number
           td -> 
             span
               class: "badge badge-important"
-              issue.concerned.count
+              issue.concerned
           td -> 
             span
               class: "badge badge-inverse"
-              issue.affected.count
+              issue.affected
           td -> 
             span
               class: "badge badge-info"
-              issue.commited.count
+              issue.commited
           td ->
             for scope in issue.scopes
               span class: "label", scope
