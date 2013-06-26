@@ -12,14 +12,13 @@ Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
+controller  = require "../access-control"
 $           = require "../debug"
 ###
 
 TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
 
 ###
-
-# helpers     = require "creamer-helpers"
 
 default_relation =
   affected    : false
@@ -94,7 +93,7 @@ save = (number) ->
 
 module.exports = 
   "/issues":
-    get: ->
+    get: controller ->
       Issue
       .find()
       .sort(importance: -1)
@@ -103,30 +102,28 @@ module.exports =
         @bind "issues", { issues, title: "Issues" }
 
     # Store new issue
-    post: save
+    post: controller save
+
+    "/stats": 
+      get: controller "administrator", -> @res.end "Got through!"
 
     "/__new":
-      get: -> 
-        data = 
-          suggestions : {}
-          relations   : ['concerned'] # let concerned be checked by default
-          scripts     : [
-            "/assets/scripts/app/issue.js"
-          ]
-
-        async.parallel [
-          (done) ->
+      get: controller -> 
+        async.parallel {
+          suggestions : (done) ->
             Issue
             .find()
             .distinct "scopes", (error, scopes) ->
-              _.extend data.suggestions, { scopes }
-              done error
-        ], (error) =>
+              done error, { scopes }
+          # TODO: improve async to support immediate assignment if values is not a function
+          relation    : (done) -> done null, [ "concerned" ]
+          scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
+        }, (error, data) =>
           if error then throw error
           @bind "issue", data
 
-    "/:number":
-      get: (number) -> 
+    "/([0-9]+)":
+      get: controller (number) -> 
         stakeholder = @req.session.stakeholder
 
         $ "Show an issue # #{number}"
@@ -137,32 +134,26 @@ module.exports =
             "/assets/scripts/app/issue.js"
           ]
 
-        async.parallel [
-          # Get suggested scopes
-          (done) ->
+        async.parallel {
+          suggestions : (done) ->
             Issue
             .find()
             .distinct "scopes", (error, scopes) ->
-              _.extend data.suggestions, { scopes }
-              done error
-          # Get issue document
-          (done) =>
-            Issue.findOne { number }, (error, issue) =>
-              if issue
-                _.extend data, { issue }
-                # throw "Doesn't work!"
-                data.relations = issue.relations.id stakeholder
-                data.relations ?= default_relation
-              else
-                $ "issue # 404 :P"
-                @res.statusCode = 404
-                return @bind "not-found", message: "No such issue :("
-              done error
-        ], (error) =>
+              done error, { scopes }
+          issue : (done) => Issue.findOne { number }, done
+        }, (error, data) =>
           if error then throw error
-          $ "Data to show"
-          $ data
+          if data.issue?
+            data.relation  = data.issue.relations.id stakeholder
+            data.relation ?= default_relation
+            $ "Data to show"
+            $ data
+          else
+            $ "issue # 404 :P"
+            @res.statusCode = 404
+            return @bind "not-found", message: "No issue by thant number :("
+
           @bind "issue", data
 
       # Update issue
-      post: save
+      post: controller save

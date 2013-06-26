@@ -58,7 +58,7 @@ module.exports = ->
               input
                 type    : "checkbox"
                 name    : field
-                checked : @relations? and field in @relations
+                checked : @relation? and field in @relation
               text desc
 
       ###
