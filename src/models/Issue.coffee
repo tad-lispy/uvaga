@@ -8,8 +8,8 @@ Issues are the core of Uvaga.
 ###
 
 mongoose    = require "mongoose"
-ObjectId    = mongoose.Schema.Types.ObjectId
 Stakeholder = require "./Stakeholder"
+_           = require "underscore"
 $           = require "../debug"
 
 # Issue has
@@ -23,18 +23,28 @@ Relation = new mongoose.Schema
   # relations to stakeholders
   _id         :
     # who?
-    type        : ObjectId
+    type        : mongoose.Schema.ObjectId
     ref         : 'Stakeholder'
-  affected    : Boolean 
-  concerned   : Boolean 
-  commited    : Boolean   
+    required    : yes
+  affected    : 
+    type        : Boolean 
+    default     : false
+  concerned   : 
+    type        : Boolean 
+    default     : false
+  commited    : 
+    type        : Boolean 
+    default     : false
 
 Issue = new mongoose.Schema
   number      : 
     type        : Number
     unique      : yes
     index       : yes
-  description : String
+    required    : yes
+  description : 
+    type        : String
+    required    : yes
   scopes      : [ String ]
   relations   : [ Relation ]
   # Counters
@@ -45,50 +55,7 @@ Issue = new mongoose.Schema
     type        : Number
     index       : yes
 
-# TODO: use generators? https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
-Issue.methods.getRelation = (stakeholder) ->
-  # stakeholder can be ObjectId, stringified ObjectId or Stakeholder document
-
-  # Let's cast it to ObjectId
-  if stakeholder instanceof Stakeholder
-    stakeholder = stakeholder._id
-  if typeof stakeholder is "string"
-    stakeholder = new ObjectId stakeholder
-  if not stakeholder instanceof ObjectId
-    throw new Error "Issue.relations method only accepts ObjectId, stringified ObjectId or Stakeholder document"
-  
-  # look for relation
-  for relation in @relations
-    if relation.stakeholder.equals stakeholder
-      return relation
-
-  # if not found
-  return {
-    stakeholder
-    affected    : false
-    concerned   : false
-    commited    : false
-  }
-
-Issue.methods.setRelation = (relation) ->
-  # Sanitize
-  defaults = 
-    stakeholder : null  # has to be ObjectId
-    affected    : false
-    concerned   : false
-    commited    : false
-  if not relation.stakeholder instanceof ObjectId
-    throw new Error "relation.stakeholder has to be an ObjectId"
-  relation = _.pick     relation, _.keys defaults
-  relation = _.defaults relation, defaults
-
-  for r in @relations
-    if r.stakeholder.equals relation.stakeholder
-      return _.extend r, relation
-
-  # if there was no relation already, create one
-  @relations.push relation
-
+# TODO: make a plugin
 Meta = require "./Meta"
 Issue.pre "validate", (next) ->
   $ "Pre validate"
@@ -97,7 +64,9 @@ Issue.pre "validate", (next) ->
   $ "@constructor (Schema)"
   $ @constructor.collection.name
 
-  Meta.findOneAndUpdate
+  if @number 
+    return do next 
+  else Meta.findOneAndUpdate
     _id: @constructor.collection.name
     { $inc: "data.autonumber": 1 }
     { upsert: true }

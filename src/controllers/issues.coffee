@@ -19,6 +19,7 @@ $           = require "../debug"
 TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
 
 ###
+ObjectId = mongoose.Types.ObjectId
 
 default_relation =
   affected    : false
@@ -26,9 +27,10 @@ default_relation =
   commited    : false
 
 save = (number) ->
-  stakeholder = @req.session.stakeholder
   # Used in POST of /issues/ and /issue/:number
 
+  stakeholder = new Stakeholder @req.session.stakeholder
+  
   # Issue data
   data = _.pick @req.body, [
     "description"
@@ -54,7 +56,9 @@ save = (number) ->
   # otherwise we are creating a new one
   async.waterfall [
     (done) =>
-      if number? then Issue.findOne { number }, done
+      # Retrive or create new issue
+      if number? then Issue.findOne { number }, (error, issue) =>
+        done null, (_.extend issue, data)
       else 
         issue = new Issue data
         $ "New issue created"
@@ -62,11 +66,13 @@ save = (number) ->
         done null, issue
 
     (issue, done) =>
-      $ "Setting relations of"
+      # Set relation to current stakeholder
+      $ "Setting relations"
+      relation = _.extend relation, _id: stakeholder
+      $ relation
+      do (issue.relations.id stakeholder)?.remove
+      issue.relations.push relation
       $ issue
-      r = issue.relations.id stakeholder
-      if r? then _.extend r, relation
-      else issue.relations.push (_.extend relation, _id: stakeholder)
       done null, issue
   ], (error, issue) =>
     if error then throw error
@@ -124,15 +130,11 @@ module.exports =
 
     "/([0-9]+)":
       get: controller (number) -> 
-        stakeholder = @req.session.stakeholder
-
         $ "Show an issue # #{number}"
-        data = 
-          suggestions : {}
-          relations   : []
-          scripts     : [
-            "/assets/scripts/app/issue.js"
-          ]
+        stakeholder = new Stakeholder @req.session.stakeholder
+        $ "stakeholder instanceof Stakeholder?"
+        $  stakeholder instanceof Stakeholder
+        $ stakeholder
 
         async.parallel {
           suggestions : (done) ->
@@ -140,11 +142,13 @@ module.exports =
             .find()
             .distinct "scopes", (error, scopes) ->
               done error, { scopes }
-          issue : (done) => Issue.findOne { number }, done
+          issue       : (done) => Issue.findOne { number }, done
+          scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
         }, (error, data) =>
           if error then throw error
           if data.issue?
             data.relation  = data.issue.relations.id stakeholder
+
             data.relation ?= default_relation
             $ "Data to show"
             $ data

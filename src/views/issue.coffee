@@ -17,6 +17,9 @@ module.exports = ->
 
   $ "Showing"
   $ @issue
+  $ "Relation"
+  $ @relation
+
   if @issue?
     mode          = "view"
     @form_context = @issue
@@ -58,7 +61,7 @@ module.exports = ->
               input
                 type    : "checkbox"
                 name    : field
-                checked : @relation? and field in @relation
+                checked : @relation? and field of @relation and @relation[field]
               text desc
 
       ###
