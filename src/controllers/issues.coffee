@@ -6,8 +6,6 @@ Issues controller
 This controlls /issues/ urls and /[0-9]+ which is a shortcut to single issue.
 
 ###
-
-mongoose    = require "mongoose"
 Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
@@ -19,8 +17,6 @@ $           = require "../debug"
 TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
 
 ###
-ObjectId = mongoose.Types.ObjectId
-
 default_relation =
   affected    : false
   concerned   : false
@@ -95,7 +91,7 @@ save = (number) ->
       $ "Issue saved"
       $ issue
       @res.message "Thank you! Your issue is now a public concern :)"
-      @res.redirect "/issues/"
+      @res.redirect "/"
 
 module.exports = 
   "/issues":
@@ -122,7 +118,7 @@ module.exports =
             .distinct "scopes", (error, scopes) ->
               done error, { scopes }
           # TODO: improve async to support immediate assignment if values is not a function
-          relation    : (done) -> done null, [ "concerned" ]
+          relation    : (done) -> done null, concerned: true
           scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
         }, (error, data) =>
           if error then throw error

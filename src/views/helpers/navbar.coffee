@@ -23,7 +23,7 @@ module.exports = (navigation) ->
             
         a href: "/", class: "brand", ->
           strong "Uvaga ! "
-          span class: "title", @title
+          small class: "title", @title
 
         div class: "nav-collapse collapse", ->
           ul class: "nav", ->

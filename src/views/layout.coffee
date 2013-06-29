@@ -78,7 +78,7 @@ module.exports = ->
 
       link
         rel : "shortcut icon"
-        href: "assets/icon.png"
+        href: "/assets/icon.png"
 
       link
         rel : "stylesheet"
@@ -93,6 +93,10 @@ module.exports = ->
         rel : "stylesheet"
         type: "text/css"
         href: "/assets/scripts/vendor/selectize/selectize.css"
+
+      link
+        rel: "stylesheet"
+        href: "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/css/bootstrap-editable.css"
 
       stylus """
         body
@@ -109,20 +113,18 @@ module.exports = ->
 
       div class: 'container-fluid', ->
         do messages
-        div class: "page-header", ->
-          h1 ->
-            text "Uvaga ! "
-            small @title
+
         do content
 
-        div class: footer ->
-          do footer
+        do footer
 
       script src: "http://code.jquery.com/jquery-1.9.1.min.js"
       script src: "http://code.jquery.com/jquery-migrate-1.1.1.min.js"
       script src: "/assets/scripts/app/persona.js"
       script src: "//login.persona.org/include.js"
       script src: "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"
+      script src: "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/js/bootstrap-editable.min.js"
+      script src: "/assets/scripts/app/editable.js"
 
       script src: "/assets/scripts/vendor/selectize/selectize.js"
       if @scripts? then script src: path for path in @scripts

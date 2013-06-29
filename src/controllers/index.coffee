@@ -9,12 +9,38 @@ Learn [more about controllers](https://github.com/twilson63/creamer/tree/master/
 
 
 ###
-$ = require "../debug"
+async       = require "async"
+controller  = require "../access-control"
+Issue       = require "../models/Issue"
+Stakeholder = require "../models/Stakeholder"
+_           = require "underscore"
+$           = require "../debug"
 
 module.exports = 
   "/":
-    get: ->
-      @bind "index"
+    get: controller ->
+      stakeholder = new Stakeholder @req.session.stakeholder
+      async.waterfall [
+        (done) =>
+          Issue.aggregate [
+            { $unwind: "$relations" }
+            { $match: 
+              "relations._id": stakeholder._id
+              $or: [
+                {"relations.commited": true},
+                {"relations.affected": true},
+                {"relations.concerned": true}
+              ] 
+            }
+            { $sort: importance: -1 }
+          ], done
+        (related, done) =>
+          rids = related.map (issue) -> issue._id
+          Issue.find _id: $nin: rids, (error, other) ->
+            done error, {related, other}
+      ], (error, issues) =>
+        if error then throw error
+        @bind "index", { issues }
 
   "/auth":
     get: ->

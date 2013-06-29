@@ -1,0 +1,1 @@
+# jQuery ($) -> do ($ "[data-editable='editable']").data-editable
