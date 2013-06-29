@@ -27,7 +27,7 @@ module.exports =
             { $match: 
               "relations._id": stakeholder._id
               $or: [
-                {"relations.commited": true},
+                {"relations.committed": true},
                 {"relations.affected": true},
                 {"relations.concerned": true}
               ] 

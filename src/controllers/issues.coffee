@@ -20,7 +20,7 @@ TODO: integrate helpers with creamer. Maybe just add third parameter (status cod
 default_relation =
   affected    : false
   concerned   : false
-  commited    : false
+  committed    : false
 
 save = (number) ->
   # Used in POST of /issues/ and /issue/:number
@@ -39,7 +39,7 @@ save = (number) ->
   relation = _.pick @req.body, [
     "affected"
     "concerned"
-    "commited"
+    "committed"
   ]
   relation = _.defaults relation, default_relation
 
@@ -128,9 +128,6 @@ module.exports =
       get: controller (number) -> 
         $ "Show an issue # #{number}"
         stakeholder = new Stakeholder @req.session.stakeholder
-        $ "stakeholder instanceof Stakeholder?"
-        $  stakeholder instanceof Stakeholder
-        $ stakeholder
 
         async.parallel {
           suggestions : (done) ->
@@ -138,14 +135,19 @@ module.exports =
             .find()
             .distinct "scopes", (error, scopes) ->
               done error, { scopes }
-          issue       : (done) => Issue.findOne { number }, done
+          issue       : (done) => 
+            query = Issue.findOne { number }
+            query.populate "comments.author"
+            query.populate "relations._id"
+            query.exec done
           scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
         }, (error, data) =>
           if error then throw error
           if data.issue?
             data.relation  = data.issue.relations.id stakeholder
-
             data.relation ?= default_relation
+
+            data.commitee
             $ "Data to show"
             $ data
           else
@@ -157,3 +159,22 @@ module.exports =
 
       # Update issue
       post: controller save
+
+      "/comments":
+        post: controller (number) ->
+          stakeholder = new Stakeholder @req.session.stakeholder
+          if not @req.body.comment? then return @res.redirect "/issues/#{number}"
+          content = @req.body.comment
+          Issue.findOne { number }, (error, issue) =>
+            if error then throw error
+            $ issue
+            issue.comments.push
+              author  : stakeholder
+              content : content
+            issue.save (error) =>
+              if error then throw error
+              comment = do issue.comments.pop
+              $ "Comment is"
+              $ comment
+              $ issue.comments
+              return @res.redirect "/issues/#{number}#comment-#{comment._id}"

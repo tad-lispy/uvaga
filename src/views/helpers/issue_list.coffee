@@ -16,7 +16,7 @@ module.exports = (attributes) ->
         th "#"
         th -> i class: "icon-warning-sign"  # concerned
         th -> i class: "icon-group"         # affected
-        th -> i class: "icon-eye-open"      # commited
+        th -> i class: "icon-eye-open"      # committed
         th "Scopes"
         th "Description"
     tbody ->
@@ -37,7 +37,7 @@ module.exports = (attributes) ->
           td -> 
             span
               class: "badge badge-info"
-              issue.commited
+              issue.committed
           td ->
             for scope in issue.scopes
               span class: "label", scope

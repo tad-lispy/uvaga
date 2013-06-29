@@ -16,9 +16,10 @@ $           = require "../debug"
 # * User friendly identifier (number)
 # * description (text)
 # * scopes (list of strings, like tags)
-# * list of relations to stakeholders (affected, concerned, commited)
-# * counters - how many affected, concerned and commited stakeholders
+# * list of relations to stakeholders (affected, concerned, committed)
+# * counters - how many affected, concerned and committed stakeholders
 # * importance (number) - how important is it. Sum of counters.
+
 Relation = new mongoose.Schema
   # relations to stakeholders
   _id         :
@@ -32,9 +33,21 @@ Relation = new mongoose.Schema
   concerned   : 
     type        : Boolean 
     default     : false
-  commited    : 
+  committed    : 
     type        : Boolean 
     default     : false
+
+Comment = new mongoose.Schema
+  author      :
+    type        : mongoose.Schema.ObjectId
+    ref         : 'Stakeholder'
+    required    : yes
+  content     : 
+    type        : String
+    required    : yes
+    validate    : 
+      validator   : (value) -> value.length < 256
+      msg         : "Too long. Keep your comments under 256 characters long. Less is more :)"
 
 Issue = new mongoose.Schema
   number      : 
@@ -47,13 +60,15 @@ Issue = new mongoose.Schema
     required    : yes
   scopes      : [ String ]
   relations   : [ Relation ]
+  comments    : [ Comment ]
   # Counters
   affected    : Number 
   concerned   : Number 
-  commited    : Number
-  importance  : # affected + concerned + commited
+  committed    : Number
+  importance  : # affected + concerned + committed
     type        : Number
     index       : yes
+
 
 # TODO: make a plugin
 Meta = require "./Meta"
@@ -79,7 +94,7 @@ Issue.pre "validate", (next) ->
 Issue.pre "validate", (next) ->
   # Make sure related stakeholders are unique and relations are in sync
   $ "Related stakeholders count"
-  types = ['affected', 'concerned', 'commited']
+  types = ['affected', 'concerned', 'committed']
 
   @importance = 0
   for type in types
