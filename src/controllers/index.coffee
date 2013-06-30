@@ -22,6 +22,7 @@ module.exports =
       stakeholder = new Stakeholder @req.session.stakeholder
       async.waterfall [
         (done) =>
+          # Get related issues
           Issue.aggregate [
             { $unwind: "$relations" }
             { $match: 
@@ -35,6 +36,7 @@ module.exports =
             { $sort: importance: -1 }
           ], done
         (related, done) =>
+          # get other issues
           rids = related.map (issue) -> issue._id
           Issue.find _id: $nin: rids, (error, other) ->
             done error, {related, other}

@@ -82,6 +82,18 @@ module.exports = ->
             do br
             text " Would you like to tell us more?"
 
+      # ## Image
+      #
+      div class: "control-group", ->
+        label
+          class: "control-label"
+          for: "image"
+          "Image"
+        div class: "controls", ->
+          textbox
+            name: "image"
+            class: "span3"
+
       # * Telephone
       #
       div class: "control-group", ->

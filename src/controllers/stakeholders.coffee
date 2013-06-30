@@ -1,4 +1,5 @@
 ###
+
 Stakeholders controller
 =======================
 
@@ -10,14 +11,79 @@ Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
+controller  = require "../access-control"
 $           = require "../debug"
-###
 
-TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
+save = (slug) ->
+  # Used in POST of /stakeholders/ and /stakeholders/:slug
+  create = not slug?
 
-###
+  data = _.pick @req.body, [
+    "name"
+    "image"
+    "telephone"
+    "occupation"
+    "groups"
+  ]
+  if typeof data.groups is "string"
+    data.groups = data.groups.split /; ?/
+  if create 
+    data.email = @req.session.username
+    $ "New stakeholder's data:"
+    $ data
+  else
+    $ "Updating stakeholder #{slug} with new data" 
+    $ data
 
-# helpers     = require "creamer-helpers"
+  async.waterfall [
+    (done) =>
+      # 1. Retrive or create new stakeholder
+      if create then Stakeholder.findOne
+        email: @req.session.username,
+        (error, stakeholder) =>
+          # Make sure agent is not trying to create new stakeholder document, while one exists already
+          if stakeholder? then done new Error """ 
+              This e-mail (#{stakeholder.email}) is already in use.
+              You cannot create more then one profile.
+              Would you rather
+              <a href='/stakeholders/#{stakeholder.slug}'>
+              make changes to the one you already have
+              </a>?
+            """
+          done null, new Stakeholder data
+      else Stakeholder.findOne { slug }, (error, stakeholder) ->
+        if not stakeholder? then done new Error """
+          No such stakeholder: #{slug}.
+          Stakeholder update requested, but wrong url was used.
+        """          
+        for attribute, value of data
+          stakeholder[attribute] = value
+        done null, stakeholder
+
+    # 2. Save stakeholder's data
+    (stakeholder, done) =>
+      stakeholder.save (error) => 
+        @req.session.stakeholder = stakeholder unless error 
+        done error
+  ], (error) =>
+    if error
+      $ "Error saving stakeholder's document"
+      $ error
+      if error.name is "ValidationError"
+        for field of error.errors
+          @res.message "#{field} was missing.", "error"
+      else
+        @res.message "There was an error. Sorry !( <br />" + error.message, "error"
+      # @bind stakeholder with error data
+      return @res.redirect (
+        if create then  "/stakeholders/__new"
+        else            "/stakeholders/#{slug}"
+      )
+
+    # if everything is fine
+    $ "New stakeholder document saved"
+    @res.message "Thank you! You are good to go."
+    @res.redirect "/"
 
 module.exports = 
   "/stakeholders":
@@ -26,58 +92,7 @@ module.exports =
         if error then throw error
         @bind "stakeholders", { stakeholders, title: "Stakeholders" }
 
-    post: ->
-      data = _.pick @req.body, [
-        "name"
-        "telephone"
-        "occupation"
-        "groups"
-      ]
-      if typeof data.groups is "string"
-        data.groups = data.groups.split /; ?/
-      data.email = @req.session.username
-
-      $ "New stakeholder's data:"
-      $ data
-
-      Stakeholder.findOne
-        email: @req.session.username,
-        (error, stakeholder) =>
-          if error then throw error
-
-          if stakeholder?
-            $ "# Warning: new stakeholder document requested, but email is already registered."
-            $ "## New data:"
-            $ data
-            $ "## Existing data:"
-            $ data
-            @res.message """ 
-              This e-mail (#{stakeholder.email}) is already in use.
-              You cannot create more then one profile.
-              Would you rather
-              <a href='/stakeholders/#{stakeholder.slug}'>
-              make changes to the one you already have
-              </a>?
-            """, "error"
-
-          else stakeholder = new Stakeholder data
-
-          stakeholder.save (error) =>
-            if error
-              $ "Error saving stakeholder's document"
-              $ error
-              if error.name is "ValidationError"
-                for field of error.errors
-                  @res.message "#{field} was missing.", "error"
-              else
-                @res.message "There was an error. Sorry !(", "error"
-              # @bind stakeholder with error data
-              return @res.redirect "/stakeholders/__new"
-
-            # if everything is fine
-            $ "New stakeholder document saved"
-            @res.message "Thank you! You are good to go."
-            @res.redirect "/"
+    post: controller save
     
     "/__new":
       get: -> 
@@ -137,42 +152,4 @@ module.exports =
           if error then throw error
           @bind "stakeholder", data
 
-      post: (slug) ->
-        $ "Updating #{slug}"
-        data = _.pick @req.body, [
-          "name"
-          "telephone"
-          "occupation"
-          "groups"
-        ]
-        if typeof data.groups is "string"
-          data.groups = data.groups.split /; ?/
-
-        $ "Updated stakeholder's data:"
-        $ data
-
-        Stakeholder.findOne
-          slug: slug
-          (error, stakeholder) =>
-            if error then throw error
-
-            if not stakeholder?
-              $ "# Warning: stakeholder update requested for nonexistent slug: #{slug}."
-              $ data
-              @res.message "There was an error. Sorry !(", "error"
-              return @res.redirect "/stakeholders/#{slug}"
-
-            for attribute, value of  data
-              stakeholder[attribute] = value
-
-            stakeholder.save (error) =>
-              if error
-                $ "Error saving stakeholder's document"
-                $ error
-                if error.name is "ValidationError"
-                  for field of error.errors
-                    @res.message "#{field} was missing.", "error"
-                else
-                  @res.message "There was an error. Sorry !(", "error"
-                return @res.redirect "/stakeholders/#{slug}"
-              @res.redirect "/stakeholders/" + stakeholder.slug
+      post: controller save

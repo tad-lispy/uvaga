@@ -36,6 +36,7 @@ Stakeholder = new mongoose.Schema {
     lowercase : true
     unique    : true
     required  : true
+  image     : String
   telephone :
     type      : String
   groups    : [ String ]

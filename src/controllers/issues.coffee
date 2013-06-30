@@ -6,17 +6,14 @@ Issues controller
 This controlls /issues/ urls and /[0-9]+ which is a shortcut to single issue.
 
 ###
+
 Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
 controller  = require "../access-control"
 $           = require "../debug"
-###
 
-TODO: integrate helpers with creamer. Maybe just add third parameter (status code) to @bind?
-
-###
 default_relation =
   affected    : false
   concerned   : false
@@ -85,7 +82,7 @@ save = (number) ->
         else
           @res.message "There was an error. Sorry !(", "error"
         
-        return @res.redirect "/stakeholders/" + (number ? "__new")
+        return @res.redirect "/issue/" + (slug ? "__new")
 
       # No error
       $ "Issue saved"
@@ -172,7 +169,16 @@ module.exports =
               author  : stakeholder
               content : content
             issue.save (error) =>
-              if error then throw error
+              if error
+                if error.name is "ValidationError"
+                  for field of error.errors
+                    field = do (field.split '.').pop
+                    @res.message "#{field} was missing.", "error"
+                else
+                  @res.message "There was an error. Sorry !(", "error"
+                
+                return @res.redirect "/issues/#{number}"
+              
               comment = do issue.comments.pop
               $ "Comment is"
               $ comment

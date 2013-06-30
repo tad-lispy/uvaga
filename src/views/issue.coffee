@@ -149,7 +149,10 @@ module.exports = ->
     for comment in @issue.comments.reverse()
       div class: "media", id: "comment-#{comment.id}", ->
         a class: "pull-left", ->
-          img class: "media-object", src: "//fillmurray.com/64/64"
+          img
+            class: "media-object"
+            style: "max-width: 64px; max-heigh: 64px"
+            src: comment.author.image ? "//fillmurray.com/64/64"
         div class: "media-body", ->
           h4 comment.author.name
           p comment.content

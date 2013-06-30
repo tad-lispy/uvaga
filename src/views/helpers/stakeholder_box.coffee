@@ -12,7 +12,18 @@ module.exports = (attributes) ->
             type    : "text"
             title   : "Name"
           stakeholder.name
-        img src: "http://fillmurray.com/g/200/200"
+        a
+          href: "#"
+          # TODO: data-type: image (http://vitalets.github.io/x-editable/assets/x-editable/inputs-ext/address/address.js)
+          class: "image"
+          data:
+            edit  : true
+            type  : "text"
+            title : "image url"
+          ->
+            img 
+              src: stakeholder.image ? "http://www.fillmurray.com/160/160"
+          
         p style: "text-align: center", stakeholder.occupation
         table ->
           tr ->

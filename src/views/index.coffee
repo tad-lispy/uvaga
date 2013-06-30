@@ -4,7 +4,7 @@ module.exports = ->
   div class: "row", ->
     # TODO: pull and push grid elements
     div class: "span3", ->
-      do stakeholderbox
+      do stakeholder_box
 
 
     div class: "span9", ->

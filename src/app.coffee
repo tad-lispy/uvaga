@@ -44,13 +44,7 @@ app.router.configure
   # This enables trailing slashes in routes - otherwise it's 404
   # See: https://github.com/flatiron/director/issues/74
   strict: false
-  
-  # TODO: access control
-  # which route will be called for this request?
-  # does agent have sufficien access level for this route?  
-  on: ->
-    # console.dir app.router.routes
-    # console.dir @
+
 
 app.use flatiron.plugins.static, dir: "assets/", url: "/assets/"
 
