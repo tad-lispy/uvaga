@@ -125,6 +125,7 @@ module.exports = ->
       script src: "//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"
       script src: "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/js/bootstrap-editable.min.js"
       script src: "/assets/scripts/app/editable.js"
+      script src: "/assets/scripts/app/tooltips.js"
 
       script src: "/assets/scripts/vendor/selectize/selectize.js"
       if @scripts? then script src: path for path in @scripts

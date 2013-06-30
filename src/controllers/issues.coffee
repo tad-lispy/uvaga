@@ -141,10 +141,12 @@ module.exports =
         }, (error, data) =>
           if error then throw error
           if data.issue?
-            data.relation  = data.issue.relations.id stakeholder
+            data.relation  = data.issue.relations.id stakeholder._id
             data.relation ?= default_relation
 
-            data.commitee
+            # Who is commited?
+            data.commitee  = (data.issue.relations.filter (relation) -> relation.committed).map (relation) ->
+              relation._id
             $ "Data to show"
             $ data
           else
