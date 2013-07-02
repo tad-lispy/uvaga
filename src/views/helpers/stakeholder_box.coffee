@@ -4,25 +4,11 @@ module.exports = (attributes) ->
   ul class: "thumbnails", -> 
     li class: "span3", ->
       div class: "thumbnail", ->
-        p style: "text-align: center", -> strong -> a        
-          href: "#"
-          id: "name"
-          data:
-            edit    : true
-            type    : "text"
-            title   : "Name"
-          stakeholder.name
-        a
-          href: "#"
-          # TODO: data-type: image (http://vitalets.github.io/x-editable/assets/x-editable/inputs-ext/address/address.js)
-          class: "image"
-          data:
-            edit  : true
-            type  : "text"
-            title : "image url"
-          ->
-            img 
-              src: stakeholder.image ? "http://www.fillmurray.com/160/160"
+        h4 style: "text-align: center", -> 
+          a href  : "/stakeholders/" + stakeholder.slug, stakeholder.name
+
+        img 
+          src: stakeholder.image ? "http://www.fillmurray.com/160/160"
           
         p style: "text-align: center", stakeholder.occupation
         table ->
@@ -38,3 +24,12 @@ module.exports = (attributes) ->
             if stakeholder[field]? then tr ->
               td -> i class: "icon-#{label}"
               td stakeholder[field]
+
+        p style: "text-align: center; margin-top: 1em", -> 
+          a 
+            class : "btn"
+            href  : "/stakeholders/" + stakeholder.slug + "/profile"
+            ->
+              i class: "icon-edit", " "
+              text "edit profile" 
+              

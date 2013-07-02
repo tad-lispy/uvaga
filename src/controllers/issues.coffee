@@ -87,8 +87,9 @@ save = (number) ->
       # No error
       $ "Issue saved"
       $ issue
-      @res.message "Thank you! Your issue is now a public concern :)"
-      @res.redirect "/"
+      if number? then @res.message "Thank you! Your changes were applied :)"
+      else            @res.message "Thank you! Your issue is now a public concern :)"
+      @res.redirect "/#{issue.number}"
 
 module.exports = 
   "/issues":

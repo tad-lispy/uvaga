@@ -32,42 +32,45 @@ module.exports = ->
 
       small ->
         text " spostrzeżenie "
-        div class: "pull-right", ->
-          # Configure counters of affected, concerned and committed stakeholders
-          for counter in [
-            {
-              name  : "affected"
-              icon  : "group"
-              class : "warning"
-              tip   : "number of affected stakeholders."
-            }
-            { 
-              name  : "concerned"
-              icon  : "warning-sign"
-              class : "important"
-              tip   : "number of stakeholders who consider this issue important."
-            }
-            { 
-              name  : "committed"
-              icon  : "eye-open"
-              class : "info"
-              tip   : "number of stakeholders commited to work on that."
-            }
-          ]
-            # TODO: inline editing - merge with checkboxes below
-            a 
-              href  : "#"
-              class : "badge " + (if @relation[counter.name] then "badge-" + counter.class)
-              data  :
-                toggle: "tooltip"
-                title : counter.tip
-              ->
-                i class: "icon-#{counter.icon}", " "
-                text @form_context[counter.name]
-            text " "
+        unless create
+          div class: "pull-right", ->
+            # Configure counters of affected, concerned and committed stakeholders
+            for counter in [
+              {
+                name  : "affected"
+                icon  : "group"
+                class : "warning"
+                tip   : "number of affected stakeholders."
+              }
+              { 
+                name  : "concerned"
+                icon  : "warning-sign"
+                class : "important"
+                tip   : "number of stakeholders who consider this issue important."
+              }
+              { 
+                name  : "committed"
+                icon  : "eye-open"
+                class : "info"
+                tip   : "number of stakeholders commited to work on that."
+              }
+            ]
+              # TODO: inline editing - merge with checkboxes below
+              a 
+                href  : "#"
+                class : "badge " + (if @relation[counter.name] then "badge-" + counter.class)
+                data  :
+                  toggle: "tooltip"
+                  title : counter.tip
+                ->
+                  i class: "icon-#{counter.icon}", " "
+                  text @form_context[counter.name]
+              text " "
+
 
   div class: "row", ->
     div class: "span9", id: "form", ->
+      $ "So far so good # 1 (before form)"
       form
         class: "issue form"
         method: "post"
@@ -83,6 +86,7 @@ module.exports = ->
                 @form_context.description
 
           # TODO: DRY
+          $ "So far so good # 2 (before relation checkboxes)"
           div class: "row", ->
             for field, icon of {
               affected  : cede ->
@@ -114,7 +118,7 @@ module.exports = ->
 
           Use it like tags.
           ###
-
+          $ "So far so good # 3 (before scopes)"
           div class: "row", ->
             div class: "span9", ->
               label
@@ -134,6 +138,7 @@ module.exports = ->
                       selected: @form_context.scopes? and scope in @form_context.scopes
                       scope
 
+          $ "So far so good # 4 (before submit)"
           div class: "row", ->
             div class: "span9", style: "margin-top: 10px", ->
               button
@@ -199,27 +204,31 @@ module.exports = ->
                 small class: "muted", comment._id.getTimestamp().toLocaleDateString()
               p comment.content
 
-    div class: "span3", id: "aside", ->
-      h4 "Commited stakeholders"
-      for stakeholder in @commitee
-        div class: "media well", id: "commited-stakeholder-#{stakeholder.id}", ->
-          a class: "pull-left", ->
-            img
-              class: "media-object"
-              style: "max-width: 48px; max-heigh: 48px"
-              src: stakeholder.image ? "//fillmurray.com/48/48"
-          div class: "media-body", ->
-            h5 ->
-              text stakeholder.name
-              do br
-              small ([stakeholder.occupation].concat stakeholder.groups).join ", "
-            p ->
-              for label, field of {
-                "phone-sign": "telephone"
-                "envelope"  : "email"
-              }
-                if stakeholder[field]? 
-                  small ->
-                    i class: "icon-#{label}", " "
-                    text stakeholder[field]
-                  do br
+    unless create
+      div class: "span3", id: "aside", ->
+        h4 "Commited stakeholders"
+        for stakeholder in @commitee
+          div class: "media well", id: "commited-stakeholder-#{stakeholder.id}", ->
+            a class: "pull-left", ->
+              img
+                class: "media-object"
+                style: "max-width: 48px; max-heigh: 48px"
+                src: stakeholder.image ? "//fillmurray.com/48/48"
+            div class: "media-body", ->
+              p ->
+                strong -> a
+                  href  : "/stakeholders/" + stakeholder.slug
+                  title : stakeholder.name
+                  stakeholder.name
+                do br
+                small ([stakeholder.occupation].concat stakeholder.groups).join ", "
+              p ->
+                for label, field of {
+                  "phone-sign": "telephone"
+                  "envelope"  : "email"
+                }
+                  if stakeholder[field]? 
+                    small ->
+                      i class: "icon-#{label}", " "
+                      text stakeholder[field]
+                    do br

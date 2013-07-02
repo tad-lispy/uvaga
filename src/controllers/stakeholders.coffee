@@ -63,7 +63,9 @@ save = (slug) ->
     # 2. Save stakeholder's data
     (stakeholder, done) =>
       stakeholder.save (error) => 
-        @req.session.stakeholder = stakeholder unless error 
+        # Update session data
+        if @req.session.stakeholder.slug is stakeholder.slug and not error
+          @req.session.stakeholder = stakeholder
         done error
   ], (error) =>
     if error
@@ -111,7 +113,7 @@ module.exports =
               done error
         ], (error) =>
           if error then throw error
-          @bind "stakeholder", data
+          @bind "profile", data
 
         # Only let authenticated users in
         # if @req.session?.username? then 
@@ -121,35 +123,85 @@ module.exports =
         #   @res.end "Not authenticated."
 
     "/:slug":
-      get: (slug) -> 
-        # Try to DRY here. See `/__new`
-        data = 
-          suggestions: {}
-          scripts     : [
-            "/assets/scripts/app/stakeholder.js"
-          ]
-
-        async.parallel [
-          
-          # Get stakeholder
-          (done) ->
+      get: controller (slug) ->
+        async.waterfall [
+          (done) =>
+            # get stakeholder
             Stakeholder.findOne { slug }, (error, stakeholder) =>
-              if stakeholder then _.extend data, { stakeholder }
+              if stakeholder then done error, stakeholder
               else
                 @res.statusCode = 404
                 @bind "not-found", "Nobody at this address."
-
-              done error
-          
-          # get group suggestions
-          (done) ->
-            Stakeholder
-            .find()
-            .distinct "groups", (error, groups) ->
-              _.extend data.suggestions, { groups }
-              done error
-        ], (error) =>
+          (stakeholder, done) =>
+            # get related issues
+            Issue.aggregate [
+              { $unwind: "$relations" }
+              { $match: 
+                "relations._id": stakeholder._id
+                $or: [
+                  {"relations.committed": true},
+                  {"relations.affected" : true},
+                  {"relations.concerned": true}
+                ] 
+              }
+              { $sort: importance: -1 }
+            ], (error, related) -> done error, { stakeholder, issues: { related } }
+          # TODO: try to mark them in one aggregate call
+          # http://docs.mongodb.org/manual/reference/aggregation/#exp._S_cond ?
+          # (data, done) =>
+          #   # get common issues
+          #   agent = @req.session.stakeholder
+          #   rids  = _.pluck data.related, '_id'
+          #   Issue.aggregate [
+          #     # Only those that are related to a stakeholder from previous step
+          #     { $match: _id: $in: rids }
+          #     { $unwind: "$relations" }
+          #     # and that are related to acting stakeholder (agent)
+          #     { $match: 
+          #       "relations._id": agent._id
+          #       $or: [
+          #         {"relations.committed": true},
+          #         {"relations.affected" : true},
+          #         {"relations.concerned": true}
+          #       ] 
+          #     }
+          #     { $sort: importance: -1 }
+        ], (error, data) =>
           if error then throw error
+          $ "Stakeholder data"
+          $ data
           @bind "stakeholder", data
+
+      "/profile":
+        get: (slug) -> 
+          # Try to DRY here. See `/__new`
+          data = 
+            suggestions: {}
+            scripts     : [
+              "/assets/scripts/app/stakeholder.js"
+            ]
+
+          async.parallel [
+            
+            # Get stakeholder
+            (done) ->
+              Stakeholder.findOne { slug }, (error, stakeholder) =>
+                if stakeholder then _.extend data, { stakeholder }
+                else
+                  @res.statusCode = 404
+                  @bind "not-found", "Nobody at this address."
+
+                done error
+            
+            # get group suggestions
+            (done) ->
+              Stakeholder
+              .find()
+              .distinct "groups", (error, groups) ->
+                _.extend data.suggestions, { groups }
+                done error
+          ], (error) =>
+            if error then throw error
+            @bind "profile", data
 
       post: controller save
