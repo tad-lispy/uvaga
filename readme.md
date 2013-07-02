@@ -13,9 +13,9 @@ The solution
 
 Let people share their experience and concerns with other members of organisation or society on all levels in 
 
-    * __easy__,
-    * __non-obtrusive__ and
-    * __engaging__ way.
+*   __easy__,
+*   __non-obtrusive__ and
+*   __engaging__ way.
     
 Allow decision makers to __track__ and to __analyse__ issues and to engage in dialog with other stakeholders.
 
@@ -24,28 +24,28 @@ User stories
 
 Stakeholder can:
 
-  *   fill his / her profile, with following data
-      * name
-      * telephone number
-      * list of departments / units / groups / organisations
-      * occupation or role in organisation or society
-  *   share an issue, with following details
-      * description (text)
-      * scope (e.g. whole organisation, department, process, location, group)
-  *   list issues
-  *   view an issue
-  *   mark an issue as directly affecting him / her
-  *   mark an issue as concerning to him / her (i.e. important to organisation, but not necessarily directly affecting him / her)
-  *   mark his commitment to improve the issue (let other's know about commitment)
-  *   suggest who should take interest in this issue
-  *   comment on an issue
-  *   list closed issues (see below)
+*   fill his / her profile, with following data
+    * name
+    * telephone number
+    * list of departments / units / groups / organisations
+    * occupation or role in organisation or society
+*   share an issue, with following details
+    * description (text)
+    * scope (e.g. whole organisation, department, process, location, group)
+*   list issues
+*   view an issue
+*   mark an issue as directly affecting him / her
+*   mark an issue as concerning to him / her (i.e. important to organisation, but not necessarily directly affecting him / her)
+*   mark his commitment to improve the issue (let other's know about commitment)
+*   suggest who should take interest in this issue
+*   comment on an issue
+*   list closed issues (see below)
 
 Commited and affected stakeholder can:
 
-  *   change issue details (update it)
-  *   close an issue (mark as no longer concerning the organisation)
-  *   reopen closed issue
+*   change issue details (update it)
+*   close an issue (mark as no longer concerning the organisation)
+*   reopen closed issue
 
 Above list is not exhaustive and will be filled with further stories. This is a minimal set of interactions.
 
