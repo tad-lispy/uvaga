@@ -50,3 +50,8 @@ module.exports =
 
   "/([0-9]+)":
     get: (number) -> @res.redirect "/issues/#{number}"
+
+  "/licence":
+    get: controller "anyone", ->
+      # TODO: display it pretty, but don't parse markdown on each request (?)
+      @res.redirect "/assets/license.md"
