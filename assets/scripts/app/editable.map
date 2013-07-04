@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "editable.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "src/frontend/editable.coffee"
+  ],
+  "names": [],
+  "mappings": ";AA8M2B;CAAA;CAAA"
+}

@@ -5,14 +5,16 @@ all: install build test start
 clean:
 	rm -rf lib/*
 
-install:
+init:
+	if [ -e npm-shrinkwrap.json ]; then rm npm-shrinkwrap.json; fi
+	ln -sf ../assets/scripts/app lib/frontend
 	npm install
 
-build: clean install
+build: clean init
 	./node_modules/.bin/coffee -c -o lib src
 
 dev: watch
-	ENVIRONMENT=development nodemon
+	NODE_ENV=development nodemon
 
 watch: end-watch
 	./node_modules/.bin/coffee -cmw -o lib src & echo $$! > .watch_pid

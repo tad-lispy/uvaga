@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "tooltips.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "src/frontend/tooltips.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA,CAAA,CAAO,GAAP,GAAQ;CACF,MAAJ,IAAG,eAAC;CADN,EAAO;CAAP"
+}

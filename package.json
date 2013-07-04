@@ -14,7 +14,7 @@
     "st": "~0.1.4",
     "creamer": "*",
     "async": "~0.2.9",
-    "flatiron-persona": "~0.2.0",
+    "flatiron-persona": "0.2.2",
     "source-map-support": "~0.1.6"
   },
   "devDependencies": {

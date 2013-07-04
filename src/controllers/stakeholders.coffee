@@ -64,8 +64,9 @@ save = (slug) ->
     (stakeholder, done) =>
       stakeholder.save (error) => 
         # Update session data
-        if @req.session.stakeholder.slug is stakeholder.slug and not error
-          @req.session.stakeholder = stakeholder
+        unless create
+          if @req.session.stakeholder.slug is stakeholder.slug and not error
+            @req.session.stakeholder = stakeholder
         done error
   ], (error) =>
     if error
