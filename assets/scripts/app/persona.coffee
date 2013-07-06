@@ -20,10 +20,16 @@ jQuery ($) ->
     onlogout    : ->
       console.log "Logging out..."
       $.ajax {
-        type  : "POST"
-        url   : "/auth/logout"
+        type    : "POST"
+        url     : "/auth/logout"
+        data    : 
+          msg     : "Bye bye"
         success : -> do window.location.reload
-        error   : (xhr, status, error) -> console.error "Logout failed: #{error}"
+        error   : (xhr, status, error) -> 
+          console.error "Logout failed: #{error}"
+          console.dir xhr
+          console.dir status
+          console.dir error
       }
   }
 

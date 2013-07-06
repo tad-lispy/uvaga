@@ -1,0 +1,8 @@
+{
+  "name": "jquery.autoellipsis",
+  "version": "1.0.10",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pvdspek/jquery.autoellipsis.git"
+  }
+}

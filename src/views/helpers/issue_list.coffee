@@ -12,10 +12,10 @@ module.exports = (attributes) ->
   table class: "table", ->
     thead ->
       tr ->
-        th "#"
-        th -> i class: "icon-warning-sign"  # concerned
-        th -> i class: "icon-group"         # affected
-        th -> i class: "icon-eye-open"      # committed
+        th style: "width: 10px", "#"
+        th style: "width: 10px; text-align: center", -> i class: "icon-warning-sign"  # concerned
+        th style: "width: 10px; text-align: center", -> i class: "icon-group"         # affected
+        th style: "width: 10px; text-align: center", -> i class: "icon-eye-open"      # committed
         th "Scopes"
         th "Description"
     tbody ->

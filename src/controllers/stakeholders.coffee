@@ -86,7 +86,10 @@ save = (slug) ->
     # if everything is fine
     $ "New stakeholder document saved"
     @res.message "Thank you! You are good to go."
-    @res.redirect "/"
+    return @res.redirect (
+      if create then  "/"
+      else            "/stakeholders/#{slug}"
+    )
 
 module.exports = 
   "/stakeholders":

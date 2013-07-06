@@ -12,15 +12,12 @@ Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
 controller  = require "../access-control"
-$ = (require "debug") "Issues controllers"
-
-default_relation =
-  affected    : false
-  concerned   : false
-  committed    : false
+debug       = require "debug"
+$           = debug "uvaga:issues-controllers"
 
 save = (number) ->
   # Used in POST of /issues/ and /issue/:number
+  $ = debug "uvaga:issues-controllers:save"
 
   stakeholder = new Stakeholder @req.session.stakeholder
   
@@ -32,50 +29,34 @@ save = (number) ->
   if typeof data.scopes is "string"
     data.scopes = data.scopes.split /; ?/
 
-  # Stakeholder's relation to this issue
-  relation = _.pick @req.body, [
-    "affected"
-    "concerned"
-    "committed"
-  ]
-  relation = _.defaults relation, default_relation
-
-  $ "New issue data:"
-  $ data
-  $ "Relations"
-  $ relation
+  $ "New issue data: %j", data
 
   # If number was set, then we are updating existing issue
   # otherwise we are creating a new one
   async.waterfall [
     (done) =>
       # Retrive or create new issue
+      $ = debug "uvaga:issues-controllers:save:get-or-create"
       if number? then Issue.findOne { number }, (error, issue) =>
+        $ "Got one: %j", issue
         done null, (_.extend issue, data)
       else 
         issue = new Issue data
-        $ "New issue created"
-        $ issue
+        issue.relations.push {
+          _id       : stakeholder
+          affected  : false
+          concerned : true
+          committed : false
+        }
+        $ "New issue created: %j", issue
         done null, issue
-
-    (issue, done) =>
-      # Set relation to current stakeholder
-      $ "Setting relations"
-      relation = _.extend relation, _id: stakeholder
-      $ relation
-      do (issue.relations.id stakeholder)?.remove
-      issue.relations.push relation
-      $ issue
-      done null, issue
   ], (error, issue) =>
     if error then throw error
-    $ "To be saved"
-    $ issue
+    $ "To be saved: %j", issue
 
     issue.save (error) =>
       if error
-        $ "Error saving issue document"
-        $ error
+        $ "Error saving issue document: %j", error
         if error.name is "ValidationError"
           for field of error.errors
             @res.message "#{field} was missing.", "error"
@@ -85,8 +66,7 @@ save = (number) ->
         return @res.redirect "/issue/" + (slug ? "__new")
 
       # No error
-      $ "Issue saved"
-      $ issue
+      $ "Issue saved: %j", issue
       if number? then @res.message "Thank you! Your changes were applied :)"
       else            @res.message "Thank you! Your issue is now a public concern :)"
       @res.redirect "/#{issue.number}"
@@ -120,19 +100,16 @@ module.exports =
           scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
         }, (error, data) =>
           if error then throw error
-          @bind "issue", data
+          @bind "issue-edit", data
 
     "/([0-9]+)":
       get: controller (number) -> 
-        $ "Show an issue # #{number}"
+        $ = debug "uvaga:issues-controllers:get:issue"
+        $ "Show an issue #%d", number
+        # TODO: there will be a mess when we let anonymous access to this
         stakeholder = new Stakeholder @req.session.stakeholder
 
         async.parallel {
-          suggestions : (done) ->
-            Issue
-            .find()
-            .distinct "scopes", (error, scopes) ->
-              done error, { scopes }
           issue       : (done) => 
             query = Issue.findOne { number }
             query.populate "comments.author"
@@ -143,13 +120,12 @@ module.exports =
           if error then throw error
           if data.issue?
             data.relation  = data.issue.relations.id stakeholder._id
-            data.relation ?= default_relation
+            data.relation ?= {}
 
             # Who is commited?
             data.commitee  = (data.issue.relations.filter (relation) -> relation.committed).map (relation) ->
               relation._id
-            $ "Data to show"
-            $ data
+            $ "Data to show: %j", data
           else
             $ "issue # 404 :P"
             @res.statusCode = 404
@@ -159,6 +135,80 @@ module.exports =
 
       # Update issue
       post: controller save
+
+      "/edit":
+        get: controller (number) -> 
+          $ = debug "uvaga:issues-controllers:get:issue:edit"
+          $ "Show an issue # #{number}"
+          # TODO: there will be a mess when we let anonymous access to this
+          stakeholder = new Stakeholder @req.session.stakeholder
+
+          async.parallel {
+            suggestions : (done) ->
+              Issue
+              .find()
+              .distinct "scopes", (error, scopes) ->
+                done error, { scopes }
+            issue       : (done) => 
+              query = Issue.findOne { number }
+              query.populate "comments.author"
+              query.populate "relations._id"
+              query.exec done
+            scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
+          }, (error, data) =>
+            if error then throw error
+            if data.issue?
+              data.relation  = data.issue.relations.id stakeholder._id
+              data.relation ?= default_relation
+
+              # Who is commited?
+              data.commitee  = (data.issue.relations.filter (relation) -> relation.committed).map (relation) ->
+                relation._id
+              $ "Data to show %j", data
+            else
+              $ "issue # 404 :P"
+              @res.statusCode = 404
+              return @bind "not-found", message: "No issue by thant number :("
+
+            @bind "issue-edit", data
+
+
+      "/relation":
+        post: controller (number) ->
+          # Update issue - acting stakeholder relation 
+          $ = debug "uvaga:issues-controllers:relation:set"
+          
+          stakeholder = new Stakeholder @req.session.stakeholder
+          # Stakeholder's updated relation to this issue
+          relation = _.pick @req.body, [
+            "affected"
+            "concerned"
+            "committed"
+          ]
+          $ "Setting relation of %s to issue # %d: %j", stakeholder.email, number, relation
+          _.extend relation, _id: stakeholder
+          Issue.findOne { number }, (error, issue) =>
+            if error then throw new Error
+            if not issue
+              @res.statusCode = 404
+              @res.bind "not-found", "There is no issue ##{number}"
+
+            do (issue.relations.id stakeholder)?.remove
+            issue.relations.push relation
+
+            issue.save (error) =>
+              if error 
+                $ "Error saving issue document: %j", error
+                if error.name is "ValidationError"
+                  for field of error.errors
+                    @res.message "Error in #{field}", "error"
+                    @res.redirect "/issues/#{number}"
+                else # error other then validation
+                  @res.message "There was an error. Sorry !(", "error"
+                  @res.redirect "/issues/#{number}"
+              
+              # finally
+              return @res.redirect "/issues/#{number}"
 
       "/comments":
         post: controller (number) ->

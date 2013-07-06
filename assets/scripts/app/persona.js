@@ -32,11 +32,17 @@
         return $.ajax({
           type: "POST",
           url: "/auth/logout",
+          data: {
+            msg: "Bye bye"
+          },
           success: function() {
             return window.location.reload();
           },
           error: function(xhr, status, error) {
-            return console.error("Logout failed: " + error);
+            console.error("Logout failed: " + error);
+            console.dir(xhr);
+            console.dir(status);
+            return console.dir(error);
           }
         });
       }

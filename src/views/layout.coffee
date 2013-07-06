@@ -40,7 +40,7 @@ module.exports = ->
 
   ###
 
-  @title ?= "Synergy stimulant for the masses."
+  @title ?= "Synergy stimulant for the masses"
 
   ###
 
@@ -57,6 +57,10 @@ module.exports = ->
     { title: "Issues", href: "/issues" }
     { title: "Log out", href: "#", "data-signout": true }
   ]
+
+  if @profile? then @navigation.push
+    title: @profile.name
+    href: "/stakeholders/#{@profile.slug}"
 
   ###
 

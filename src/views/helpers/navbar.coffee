@@ -12,10 +12,11 @@ module.exports = (navigation) ->
     div class: "navbar-inner", ->
       div class: "container", ->
         button
-          type        : "button"
-          class       : "btn btn-navbar"
-          data-toggle : "collapse"
-          data-target : ".nav-collapse"
+          type  : "button"
+          class : "btn btn-navbar"
+          data  : 
+            toggle: "collapse"
+            target: ".nav-collapse"
           ->
             span class: "icon-bar"
             span class: "icon-bar"

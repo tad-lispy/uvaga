@@ -38,7 +38,7 @@ module.exports =
         (related, done) =>
           # get other issues
           rids = related.map (issue) -> issue._id
-          Issue.find _id: $nin: rids, (error, other) ->
+          Issue.find(_id: $nin: rids).sort(importance: -1).exec (error, other) ->
             done error, {related, other}
       ], (error, issues) =>
         if error then throw error

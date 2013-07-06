@@ -4,8 +4,7 @@ module.exports = (attributes) ->
   ul class: "thumbnails", -> 
     li class: "span3", ->
       div class: "thumbnail", ->
-        h4 style: "text-align: center", -> 
-          a href  : "/stakeholders/" + stakeholder.slug, stakeholder.name
+        h4 style: "text-align: center", stakeholder.name
 
         img 
           src: stakeholder.image ? "http://www.fillmurray.com/160/160"
@@ -25,11 +24,10 @@ module.exports = (attributes) ->
               td -> i class: "icon-#{label}"
               td stakeholder[field]
 
-        p style: "text-align: center; margin-top: 1em", -> 
-          a 
-            class : "btn"
-            href  : "/stakeholders/" + stakeholder.slug + "/profile"
-            ->
-              i class: "icon-edit", " "
-              text "edit profile" 
+        a 
+          class : "btn btn-link btn-block"
+          href  : "/stakeholders/" + stakeholder.slug + "/profile"
+          ->
+            i class: "icon-edit", " "
+            text "edit profile" 
               
