@@ -1,9 +1,9 @@
 {
   "version": 3,
   "file": "stakeholder.js",
-  "sourceRoot": "../..",
+  "sourceRoot": "../../..",
   "sources": [
-    "src/frontend/stakeholder.coffee"
+    "assets/scripts/app/stakeholder.coffee"
   ],
   "names": [],
   "mappings": ";AAAA;CAAA,CAAA,CAAO,GAAP,GAAQ;CACL,QAAA,EAAD;CACE,CAAW,CAAX,GAAA,GAAA;CAAA,CACQ,CAAA,EAAA,CAAR,GAAS;eAAU;CAAA,CAAM,EAAN,CAAA,KAAA;CAAA,CAAoB,GAAP,KAAA;CAAxB;CADR,MACQ;CAHL,KACL;CADF,EAAO;CAAP"

@@ -1,4 +1,6 @@
 node_modules
 lib
+assets/scripts/app/*.js
+assets/scripts/app/*.map
 npm-debug.log
-.watch_pid
+.*_pid
