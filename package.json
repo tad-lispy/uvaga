@@ -1,6 +1,6 @@
 {
   "description": "Synergy stimulant for the masses",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "main": "lib/app.js",
   "dependencies": {
