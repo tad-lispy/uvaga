@@ -14,7 +14,6 @@ module.exports = ->
 
   # No `@issue` indicates that we are in `/issues/__new`
   # TODO: Unite it!
-  $ "Issue view"
 
   # Are we in /issues/__new?
   create = not @issue?
@@ -70,7 +69,7 @@ module.exports = ->
 
   div class: "row", ->
     div class: "span9", id: "form", ->
-      $ "So far so good # 1 (before form)"
+      # $ "So far so good # 1 (before form)"
       form
         class: "issue form"
         method: "post"
@@ -86,7 +85,7 @@ module.exports = ->
                 @form_context.description
 
           # TODO: DRY
-          $ "So far so good # 2 (before relation checkboxes)"
+          # $ "So far so good # 2 (before relation checkboxes)"
           div class: "row", ->
             for field, icon of {
               affected  : cede ->
@@ -100,7 +99,7 @@ module.exports = ->
                 text " I'll take care of that"
             }
               div class: "span3", ->
-                $ @relation
+                # $ @relation
                 label class: "checkbox", ->
                   input
                     type    : "checkbox"
@@ -118,7 +117,7 @@ module.exports = ->
 
           Use it like tags.
           ###
-          $ "So far so good # 3 (before scopes)"
+          # $ "So far so good # 3 (before scopes)"
           div class: "row", ->
             div class: "span9", ->
               label
@@ -138,7 +137,7 @@ module.exports = ->
                       selected: @form_context.scopes? and scope in @form_context.scopes
                       scope
 
-          $ "So far so good # 4 (before submit)"
+          # $ "So far so good # 4 (before submit)"
           div class: "row", ->
             div class: "span9", style: "margin-top: 10px", ->
               button
@@ -197,7 +196,8 @@ module.exports = ->
               img
                 class: "media-object"
                 style: "max-width: 64px; max-heigh: 64px"
-                src: comment.author.image ? "//fillmurray.com/64/64"
+                # TODO: Author can be null, if corresponding stakeholder document was removed from db. Take care of that in model or controller
+                src: comment.author?.image ? "//fillmurray.com/64/64"
             div class: "media-body", ->
               h6 ->
                 text comment.author.name + " "
@@ -207,7 +207,8 @@ module.exports = ->
     unless create
       div class: "span3", id: "aside", ->
         h4 "Commited stakeholders"
-        for stakeholder in @commitee
+        # TODO: Author can be null, if corresponding stakeholder document was removed from db. Take care of that in model or controller
+        for stakeholder in @commitee when stakeholder?
           div class: "media well", id: "commited-stakeholder-#{stakeholder.id}", ->
             a class: "pull-left", ->
               img

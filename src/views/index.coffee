@@ -1,5 +1,5 @@
 module.exports = ->
-  $ @issues
+  # $ "%j", @issues
 
   div class: "row", ->
     # TODO: pull and push grid elements
@@ -15,11 +15,11 @@ module.exports = ->
 
     div class: "span9", ->
       h3 "My issues"
-      $ @issues.related
+      # $ "%j", @issues.related
       issue_list issues: @issues.related
 
     div class: "span9", ->
       h3 "Other issues"
-      $ @issues.other
+      # $ "%j", @issues.other
       issue_list issues: @issues.other
 

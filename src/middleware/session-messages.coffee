@@ -1,4 +1,4 @@
-$ = require "../debug"
+$ = (require "debug") "Session messages middleware"
 
 module.exports = (req, res) ->
   res.message = (message, level) ->

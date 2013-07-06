@@ -10,7 +10,7 @@ Issues are the core of Uvaga.
 mongoose    = require "mongoose"
 Stakeholder = require "./Stakeholder"
 _           = require "underscore"
-$           = require "../debug"
+$           = (require "debug") "Issue model"
 
 # Issue has
 # * User friendly identifier (number)

@@ -6,10 +6,12 @@ Configure
 Update configuration when on AppFog
 
 ###
-$ = require "./debug"
+debug = require "debug"
+$     = debug "uvaga:configure"
+
 
 appFog = (app) ->
-  console.log "Configuring for AppFog"
+  $ = debug "uvaga:configure:appfog"
   if process.env.VCAP_APPLICATION?
     application = JSON.parse process.env.VCAP_APPLICATION
     app.config.set "host",  application.uris[0]
@@ -29,19 +31,20 @@ appFog = (app) ->
   else
     mongo.url = "mongodb://#{mongo.hostname}:#{mongo.port}/#{mongo.db}"
   app.config.set "mongo:url", mongo.url
+  $ "Done"
 
 modulus = (app) ->
-  console.log "Configuring for Modulus"
+  $ = debug "uvaga:configure:modulus"
   app.config.set "port", process.env.PORT
   app.config.set "host",  process.env.hostname
   app.config.set "mongo:url", process.env.mongourl
   app.config.set "persona:audience", "http://#{app.config.get "host"}/"
+  $ "Done"
   
 module.exports = (app) ->    
   app.config.set "persona:audience", "http://#{app.config.get "host"}:#{app.config.get "port"}/"
   if process.env.platform is "modulus" then modulus app
   else if process.env.VCAP_APPLICATION? then appFog app
 
-  $ "Configuration:"
-  $ do app.config.get
+  $ "%j", do app.config.get
 

@@ -12,11 +12,11 @@ Each authenticated agent has a profile associated with his e-mail address. Anoth
 ####
 
 Stakeholder = require "../models/Stakeholder"
-$ = require "../debug"
+debug = require "debug"
+$     = debug "uvaga:middleware:access-control"
 
 module.exports = (req, res) ->
-  $ "# Access control middleware"
-  $ "#{req.method}\t: #{req.url} requested"
+  $ "%s\t%s requested", req.method, req.url 
 
   unless req.session.username?
     

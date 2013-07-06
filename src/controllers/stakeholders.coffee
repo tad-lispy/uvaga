@@ -12,7 +12,7 @@ Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
 controller  = require "../access-control"
-$           = require "../debug"
+$ = (require "debug") "Stakeholders controllers"
 
 save = (slug) ->
   # Used in POST of /stakeholders/ and /stakeholders/:slug

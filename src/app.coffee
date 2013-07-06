@@ -21,6 +21,9 @@ You should have received a copy of the GNU General Public License along with thi
 ###
 do (require "source-map-support").install
 
+debug    = require "debug"
+$        = debug "uvaga"
+
 fs       = require 'fs'
 flatiron = require 'flatiron'
 creamer  = require 'creamer'
@@ -28,7 +31,7 @@ persona  = require 'flatiron-persona'
 connect  = require 'connect'
 path     = require 'path'
 mongoose = require 'mongoose'
-$        = require "./debug"
+
 app      = flatiron.app
 
 ###
@@ -52,7 +55,7 @@ app.use creamer,
   views       : __dirname + '/views'
   helpers     : __dirname + '/views/helpers'
   controllers : __dirname + '/controllers'
-app.registerHelper "$", $
+app.registerHelper "$", debug "uvaga:view"
 
 app.router.configure 
   # This enables trailing slashes in routes - otherwise it's 404
@@ -60,7 +63,6 @@ app.router.configure
   strict: false
 
 assets = __dirname + "/../assets/"
-$ assets
 app.use flatiron.plugins.static, dir: assets, url: "/assets/"
 
 app.http.before.push do connect.cookieParser
@@ -74,11 +76,11 @@ app.http.before.push require "./middleware/access-control"
 # Let's start listening to requests from our stakeholders:
 
 app.start (app.config.get "port"), ->
+  $ = debug "uvaga:init"
   mongoose.connect (app.config.get "mongo:url")
   app.log.info "Uvaga! http://#{app.config.get "host"}:#{app.config.get "port"}/"
 
 ###
-[Vicious circle]:   http://en.wikipedia.org/wiki/Vicious_circle
 [Flatiron]:         http://flatironjs.org/
 [Creamer]:          https://github.com/twilson63/creamer
 [Coffecup]:         https://github.com/gradus/coffeecup

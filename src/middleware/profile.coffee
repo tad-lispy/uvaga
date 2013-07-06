@@ -25,7 +25,7 @@ Requests should be only allowed when:
 
 ###
 
-$ = require "../debug"
+$ = (require "debug") "Profile middleware"
 
 module.exports = (req, res) ->
   $ "# Profile check middleware"

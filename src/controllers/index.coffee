@@ -14,7 +14,7 @@ controller  = require "../access-control"
 Issue       = require "../models/Issue"
 Stakeholder = require "../models/Stakeholder"
 _           = require "underscore"
-$           = require "../debug"
+$           = (require "debug") "Index controllers"
 
 module.exports = 
   "/":

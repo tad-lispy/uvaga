@@ -7,8 +7,7 @@ List of issues
 
 module.exports = (attributes) ->
   attributes.issues ?= []
-  $ "Issue list helper"
-  $ attributes.issues
+  # $ "Issues: %j", attributes.issues
 
   table class: "table", ->
     thead ->

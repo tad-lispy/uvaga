@@ -12,7 +12,7 @@ Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
 controller  = require "../access-control"
-$           = require "../debug"
+$ = (require "debug") "Issues controllers"
 
 default_relation =
   affected    : false

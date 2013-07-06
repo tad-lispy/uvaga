@@ -14,7 +14,7 @@ build: clean init
 	./node_modules/.bin/coffee -c -o lib src
 
 dev: watch
-	NODE_ENV=development nodemon
+	NODE_ENV=development DEBUG=uvaga,uvaga:*,persona,persona:* nodemon
 
 watch: end-watch
 	./node_modules/.bin/coffee -cmw -o lib src & echo $$! > .watch_pid
