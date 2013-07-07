@@ -2,6 +2,7 @@ src
 docs
 doc
 test
+avatars/cache/*
 Makefile
 .watch_pid
 .watch_frontend_pid
