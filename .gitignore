@@ -2,5 +2,7 @@ node_modules
 lib
 assets/scripts/app/*.js
 assets/scripts/app/*.map
+avatars/cache/*
+modulus-auto-zip-*
 npm-debug.log
 .*_pid

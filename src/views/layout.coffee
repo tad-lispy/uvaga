@@ -91,6 +91,11 @@ module.exports = ->
 
         .selectize-control
           margin-left: 0
+
+        .label
+          white-space normal
+          margin      2px
+
       """
     body "data-username": @username, ->
       do navbar unless @layout?.navbar is false
