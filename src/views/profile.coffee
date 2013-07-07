@@ -90,9 +90,44 @@ module.exports = ->
           for: "image"
           "Image"
         div class: "controls", ->
-          textbox
-            name: "image"
-            class: "span3"
+          image = if mode is "create" then @suggestions.image else @stakeholder.image
+          div style: "float: left", ->
+            select
+              id    : "shape"
+              name  : "shape"
+              title : "Symbol"
+              ->
+                for shape in @suggestions.shapes
+                  option
+                    selected: shape is image.shape
+                    shape 
+                  
+            do br
+
+            select
+              id    : "color"
+              name  : "color"
+              title : "Color"
+              ->
+                for color in @suggestions.colors
+                  option
+                    selected: color is image.color
+                    color
+            do br
+
+            select
+              id    : "background"
+              name  : "background"
+              title : "Background"
+              ->
+                for color in @suggestions.colors
+                  option
+                    selected: color is image.background
+                    color
+
+          img id: "avatar", width: 200, heigh: 200, style: "float: left"
+
+
 
       # * Telephone
       #

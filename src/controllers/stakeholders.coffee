@@ -11,10 +11,103 @@ Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
+glob        = require "glob"
+path        = require "path"
 controller  = require "../access-control"
-$ = (require "debug") "Stakeholders controllers"
+debug       = require "debug"
+$           = debug "uvaga:controllers:stakeholders"
+
+suggestions = (done) ->
+  $ = debug "uvaga:controllers:stakeholders:suggestions"
+  # get suggestions
+  async.parallel {
+    groups: (done) =>
+      Stakeholder
+      .find()
+      .distinct "groups", (error, groups) ->
+        if error then done error
+        done null, groups
+    
+    occupations: (done) =>
+      Stakeholder
+      .find()
+      .distinct "occupation", (error, occupations) ->
+        if error then done error
+        done null, occupations
+
+    shapes: (done) =>
+      pattern = path.resolve __dirname, "../../avatars/*.svg"
+      $ "shapes pattern is %s", pattern
+      glob pattern, (error, files) =>
+        if error then throw error
+        shapes = files.map (file) -> path.basename file, ".svg"
+        done null, shapes
+
+    colors: (done) =>
+      done null, [
+        "white"
+        "red"
+        "maroon"
+        "pink"
+        "crimson"
+        "hotpink"
+        "deeppink"
+        "MediumVioletRed"
+        "magenta"
+        "DarkMagenta"
+        "purple"
+        "indigo"
+        "DarkSlateBlue"
+        "blue"
+        "MidnightBlue"
+        "NavyBlue"
+        "RoyalBlue"
+        "CornflowerBlue"
+        "LightSteelBlue"
+        "DarkCyan"
+        "lime"
+        "LimeGreen"
+        "ForestGreen"
+        "GreenYellow"
+        "DarkOliveGreen"
+        "yellow"
+        "gold2"
+        "goldenrod"
+        "wheat"
+        "orange"
+        "DarkOrange"
+        "OrangeRed2"
+        "silver"
+        "gray"
+        "dimgray"
+        "black"
+      ]
+  }, (error, suggestions) =>
+    if error then throw error
+
+    # Suggest random avatar - used only in __new
+    suggestions.image =
+      shape: (
+        length = suggestions.shapes.length
+        random = Math.floor (Math.random() * length)
+        suggestions.shapes[random]
+      )
+      color: (
+        length = suggestions.colors.length
+        random = Math.floor (Math.random() * length)
+        suggestions.colors[random]
+      )
+      background: (
+        length = suggestions.colors.length
+        random = Math.floor (Math.random() * length)
+        suggestions.colors[random]
+      )
+
+    done null, suggestions
+
 
 save = (slug) ->
+  $ = debug "uvaga:controllers:stakeholders:save"
   # Used in POST of /stakeholders/ and /stakeholders/:slug
   create = not slug?
 
@@ -25,6 +118,12 @@ save = (slug) ->
     "occupation"
     "groups"
   ]
+  data.image = _.pick @req.body, [
+    "shape"
+    "color"
+    "background"
+  ]
+
   if typeof data.groups is "string"
     data.groups = data.groups.split /; ?/
   if create 
@@ -94,6 +193,7 @@ save = (slug) ->
 module.exports = 
   "/stakeholders":
     get: ->
+      $ = debug "uvaga:controllers:get"
       Stakeholder.find (error, stakeholders) =>
         if error then throw error
         @bind "stakeholders", { stakeholders, title: "Stakeholders" }
@@ -101,22 +201,18 @@ module.exports =
     post: controller save
     
     "/__new":
-      get: -> 
-        data = 
-          suggestions : {}
-          scripts     : [
+      get: ->
+        $ = debug "uvaga:controllers:stakeholders:new" 
+        $ "Gathering suggestions"
+
+        async.parallel {
+          suggestions : suggestions
+          scripts     : (done) -> done null, [
             "/assets/scripts/app/stakeholder.js"
           ]
-
-        async.parallel [
-          (done) ->
-            Stakeholder
-            .find()
-            .distinct "groups", (error, groups) ->
-              _.extend data.suggestions, { groups }
-              done error
-        ], (error) =>
+        }, (error, data) =>
           if error then throw error
+          $ "New stakeholder %j", data
           @bind "profile", data
 
         # Only let authenticated users in
@@ -128,6 +224,7 @@ module.exports =
 
     "/:slug":
       get: controller (slug) ->
+        $ = debug "uvaga:controllers:single:get"
         async.waterfall [
           (done) =>
             # get stakeholder
@@ -172,40 +269,33 @@ module.exports =
           #     { $sort: importance: -1 }
         ], (error, data) =>
           if error then throw error
-          $ "Stakeholder data"
-          $ data
+          $ "Stakeholder data: %j", data
           @bind "stakeholder", data
 
       "/profile":
         get: (slug) -> 
-          # Try to DRY here. See `/__new`
-          data = 
-            suggestions: {}
-            scripts     : [
-              "/assets/scripts/app/stakeholder.js"
-            ]
-
-          async.parallel [
-            
-            # Get stakeholder
-            (done) ->
+          $ = debug "uvaga:controllers:stakeholders:single:profile"
+          async.parallel {
+            stakeholder: (done) =>
+              # Get stakeholder
               Stakeholder.findOne { slug }, (error, stakeholder) =>
-                if stakeholder then _.extend data, { stakeholder }
-                else
-                  @res.statusCode = 404
-                  @bind "not-found", "Nobody at this address."
-
-                done error
+                if error then done error
+                if stakeholder then done null, stakeholder
+                else done 404
             
-            # get group suggestions
-            (done) ->
-              Stakeholder
-              .find()
-              .distinct "groups", (error, groups) ->
-                _.extend data.suggestions, { groups }
-                done error
-          ], (error) =>
-            if error then throw error
+            suggestions: suggestions
+              
+            scripts: (done) ->
+              done null, [
+                "/assets/scripts/app/stakeholder.js"
+              ]
+          }, (error, data) =>
+            if error 
+              if error is 404
+                @res.statusCode = 404
+                @bind "not-found", "Nobody at this address."
+              else throw error
+            $ "Profile data %j", data
             @bind "profile", data
 
       post: controller save

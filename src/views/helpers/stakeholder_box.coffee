@@ -6,8 +6,14 @@ module.exports = (attributes) ->
       div class: "thumbnail", ->
         h4 style: "text-align: center", stakeholder.name
 
-        img 
-          src: stakeholder.image ? "http://www.fillmurray.com/160/160"
+        if stakeholder.image?
+          { shape, color, background } = stakeholder.image
+          img 
+            width : 300
+            height: 300
+            src   : "/avatars/#{shape}/#{color}/#{background}/300"
+            title : stakeholder.name
+            alt   : "Avatar of #{stakeholder.name} in Uvaga"
           
         p style: "text-align: center", stakeholder.occupation
         table ->

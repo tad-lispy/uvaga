@@ -125,47 +125,13 @@ module.exports = ->
                     i class: "icon-remove"
                     " Cancel"
 
-
-
-            for comment in @issue.comments.reverse()
-              div class: "media well", id: "comment-#{comment.id}", ->
-                a class: "pull-left", ->
-                  img
-                    class: "media-object"
-                    style: "max-width: 64px; max-heigh: 64px"
-                    # TODO: Author can be null, if corresponding stakeholder document was removed from db. Take care of that in model or controller
-                    src: comment.author?.image ? "//fillmurray.com/64/64"
-                div class: "media-body", ->
-                  h6 ->
-                    text comment.author.name + " "
-                    small class: "muted", comment._id.getTimestamp().toLocaleDateString()
-                  p comment.content
+            comment_box comment for comment in @issue.comments.reverse()
+              
+              
 
     div class: "span3", id: "aside", ->
       h4 "Commited stakeholders"
       # TODO: Author can be null, if corresponding stakeholder document was removed from db. Take care of that in model or controller
-      for stakeholder in @commitee when stakeholder?
-        div class: "media well", id: "commited-stakeholder-#{stakeholder.id}", ->
-          a class: "pull-left", ->
-            img
-              class: "media-object"
-              style: "max-width: 48px; max-heigh: 48px"
-              src: stakeholder.image ? "//fillmurray.com/48/48"
-          div class: "media-body", ->
-            p ->
-              strong -> a
-                href  : "/stakeholders/" + stakeholder.slug
-                title : stakeholder.name
-                stakeholder.name
-              do br
-              small ([stakeholder.occupation].concat stakeholder.groups).join ", "
-            p ->
-              for label, field of {
-                "phone-sign": "telephone"
-                "envelope"  : "email"
-              }
-                if stakeholder[field]? 
-                  small ->
-                    i class: "icon-#{label}", " "
-                    text stakeholder[field]
-                  do br
+      # TODO: helper
+      commited_box stakeholder for stakeholder in @commitee when stakeholder?
+        

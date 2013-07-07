@@ -12,14 +12,15 @@ Each authenticated agent has a profile associated with his e-mail address. Anoth
 ####
 
 Stakeholder = require "../models/Stakeholder"
-debug = require "debug"
-$     = debug "uvaga:middleware:access-control"
+debug       = require "debug"
+$           = debug "uvaga:middleware:access-control"
 
 module.exports = (req, res) ->
   $ "%s\t%s requested", req.method, req.url 
 
+  # TODO: get rid of this in favor of ../access-control (this is mainly reduntant)
   unless req.session.username?
-    
+
     ###
     
     If agent is not authenticated, then redirect him to `/auth`
@@ -32,7 +33,7 @@ module.exports = (req, res) ->
       if req.url is '/auth'
         $ "ok: Letting agent in to authenticate"
         return res.emit "next"
-      else if req.url.match /^\/assets\//
+      else if (req.url.match /^\/assets\// or req.url.match /^\/avatars\//)
         $ "ok: Letting agent have some of our assets"
         return res.emit "next"      
       else

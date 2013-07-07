@@ -44,26 +44,6 @@ module.exports = ->
 
   ###
 
-  Navigation menu items
-  ---------------------
-
-  See navbar below
-
-  ###
-
-  @navigation ?= [
-    { title: "Start", href: "/" }
-    { title: "Stakeholders", href: "/stakeholders" }
-    { title: "Issues", href: "/issues" }
-    { title: "Log out", href: "#", "data-signout": true }
-  ]
-
-  if @profile? then @navigation.push
-    title: @profile.name
-    href: "/stakeholders/#{@profile.slug}"
-
-  ###
-
   HTML
   ----
   The rest is [html as coffescript](https://github.com/gradus/coffeecup#coffeecup-).
@@ -113,7 +93,7 @@ module.exports = ->
           margin-left: 0
       """
     body "data-username": @username, ->
-      navbar @navigation unless @layout?.navbar is false
+      do navbar unless @layout?.navbar is false
 
       div class: 'container-fluid', ->
         do messages

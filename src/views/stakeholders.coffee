@@ -13,7 +13,9 @@ module.exports = ->
       for stakeholder in @stakeholders
         tr -> 
           td -> 
-            a href: "/stakeholders/#{stakeholder.slug}", stakeholder.name
+            a href: "/stakeholders/#{stakeholder.slug}", ->
+              avatar {stakeholder, size: 24}
+              strong " " + stakeholder.name
             if stakeholder.email is @username then text " (that's you!)"
           td stakeholder.occupation
           td ->
