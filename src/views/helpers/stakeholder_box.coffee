@@ -1,7 +1,7 @@
 module.exports = (attributes) ->
   stakeholder = attributes?.stakeholder ? @profile
 
-  ul class: "thumbnails", -> 
+  ul class: "thumbnails stakeholder-box", -> 
     li class: "span3", ->
       div class: "thumbnail", ->
         h4 style: "text-align: center", stakeholder.name
@@ -16,21 +16,29 @@ module.exports = (attributes) ->
             alt   : "Avatar of #{stakeholder.name} in Uvaga"
           
         p style: "text-align: center", stakeholder.occupation
-        table ->
-          tr ->
-            td -> i class: "icon-sitemap"
-            td ->
-              for group in stakeholder.groups
-                span class: "label", group + " "
-          for label, field of {
-            "phone-sign": "telephone"
-            "envelope"  : "email"
-          }
-            if stakeholder[field]? then tr ->
-              td -> i class: "icon-#{label}"
-              td stakeholder[field]
+        
+        dl class: "dl-horizontal", ->
+          if stakeholder.groups.length
+            dt -> i class: "icon-sitemap", title: "Groups"
+            for group in stakeholder.groups
+              dd group              
 
-        a 
+          if stakeholder.telephone
+            dt -> i class: "icon-phone-sign", title: "Telephone"
+            dd -> a
+              href: "tel:#{stakeholder.telephone}"
+              stakeholder.telephone
+
+          dt -> i class: "icon-envelope", title: "e-Mail address"
+          dd -> 
+            if @profile.email is stakeholder.email then a 
+              href: "mailto:#{stakeholder.email}"
+              stakeholder.email
+            else a
+              href: "#"
+              "*.*****@****.com"
+
+        p -> a 
           class : "btn btn-link btn-block"
           href  : "/stakeholders/" + stakeholder.slug + "/profile"
           ->

@@ -96,6 +96,13 @@ module.exports = ->
           white-space normal
           margin      2px
 
+        .stakeholder-box, .commited-box
+          .dl-horizontal 
+            > dt
+              width 20px
+            > dd
+              margin-left 40px
+
       """
     body "data-username": @username, ->
       do navbar unless @layout?.navbar is false

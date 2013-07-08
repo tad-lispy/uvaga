@@ -46,7 +46,7 @@ module.exports = ->
       # This is for information only.
       # It will be filtered out in controller anyway. (?)
       # 
-      div class: "control-group", ->
+      if mode is "create" then div class: "control-group", ->
 
         label
           class: "control-label"
