@@ -6,18 +6,18 @@ A synergy stimulus for the masses.
 The problem
 -----------
 
-In medium and large organisations and in general public there is often insufficient proliferation of information. Individual stakeholders know what could be improved, and sometimes how to improve it, but it's often the organisational barrier to share their concerns is too high.
+In medium and large organisations and in general public there is often insufficient proliferation of information. Individual stakeholders know what could be improved, and sometimes how to improve it, but often the organisational barrier to share their concerns is too high.
 
 The solution
 ------------
 
-Let people share their experience and concerns with other members of organisation or society on all levels in 
+Let people share their experience and concerns with other members of organisation or society on all levels in a way, that is
 
 *   __easy__,
 *   __non-obtrusive__ and
-*   __engaging__ way.
+*   __engaging__.
     
-Allow decision makers to __track__ and to __analyse__ issues and to engage in dialog with other stakeholders.
+Allow decision makers to __track__ and to __analyse__ issues and to __engage__ in dialog with other stakeholders.
 
 User stories
 ------------
