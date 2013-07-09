@@ -61,6 +61,11 @@ app.router.configure
   # This enables trailing slashes in routes - otherwise it's 404
   # See: https://github.com/flatiron/director/issues/74
   strict: false
+  notfound: ->
+    $ = debug "uvaga:404"
+    $ @req.url
+    @res.message "Error accessing #{@req.url}"
+    @bind "not-found"
 
 assets = __dirname + "/../assets/"
 app.use flatiron.plugins.static, dir: assets, url: "/assets/"

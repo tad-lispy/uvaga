@@ -17,19 +17,17 @@ module.exports = (attributes) ->
       if @profile?
         a href: "/stakeholders/#{@profile.slug}", @profile.name
       else text @username
-    p ->
+      text ". You can always "
       a
         id: "signout"
-        "data-signout": true
+        data:
+          signout: true
         href: "#"
-        class: "btn btn-large btn-danger"
-        -> 
-          i class: "icon-chevron-sign-left"
-          text " Get annonymous"
-
-    # a {
-    #   id: "profile"
-    #   class: "button blue"
-    #   href: "/profile"
-    # }, @user?.name ? "utwórz profil"
-###
+        "Get annonymous"
+    a
+      id: "start"
+      href: "/"
+      class: "btn btn-large btn-success"
+      -> 
+        i class: "icon-chevron-sign-right"
+        text " Begin"
