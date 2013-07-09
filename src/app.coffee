@@ -64,7 +64,7 @@ app.router.configure
   notfound: ->
     $ = debug "uvaga:404"
     $ @req.url
-    @res.message "Error accessing #{@req.url}"
+    @res.message "Error accessing #{@req.url}", "error"
     @bind "not-found"
 
 assets = __dirname + "/../assets/"

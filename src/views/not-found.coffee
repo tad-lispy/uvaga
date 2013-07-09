@@ -1,8 +1,7 @@
 module.exports = ->
   h1 class: "page-header", ->
    text "# 404 "
-   small "not found"
-  p @message ? "There is nothing to see here."
+   small @message ? "not found"
   p ->
     text "We are sorry. We can only suggest you to "
     a href: "/", "go to startpage"

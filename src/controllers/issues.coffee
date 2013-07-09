@@ -129,7 +129,7 @@ module.exports =
           else
             $ "issue # 404 :P"
             @res.statusCode = 404
-            return @bind "not-found", message: "No issue by thant number :("
+            return @bind "not-found", message: "No issue by thant number (#{number})"
 
           @bind "issue", data
 
