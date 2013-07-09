@@ -6,8 +6,7 @@ module.exports = ->
   p ->
     text "We are sorry. We can only suggest you to "
     a href: "/", "go to startpage"
-    text "."
-    text "Or if you think this is an error in Uvaga, please"
+    text ". If you think this is an error in Uvaga, please"
   ul ->
     li -> a href: "/issues/__new", "write an issue about it"
     li -> a href: "mailto:wydawnictwo@lazurski.pl", "contact us by mail"
