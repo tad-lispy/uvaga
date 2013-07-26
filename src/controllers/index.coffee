@@ -7,14 +7,15 @@ It controlls `/` and various other paths.
 
 Learn [more about controllers](https://github.com/twilson63/creamer/tree/master/examples/mvc).
 
-
 ###
+
 async       = require "async"
 controller  = require "../access-control"
 Issue       = require "../models/Issue"
 Stakeholder = require "../models/Stakeholder"
 _           = require "underscore"
-$           = (require "debug") "Index controllers"
+debug       = require "debug"
+$           = debug "uvaga:controllers:index"
 
 module.exports = 
   "/":
@@ -46,7 +47,10 @@ module.exports =
 
   "/auth":
     get: ->
-      @bind "authenticate", layout: navbar: false
+      @bind "authenticate", {
+        layout:
+          navbar: false
+      }
 
   "/([0-9]+)":
     get: (number) -> @res.redirect "/issues/#{number}"

@@ -19,6 +19,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ###
+
 do (require "source-map-support").install
 
 debug    = require "debug"
@@ -31,6 +32,7 @@ persona  = require 'flatiron-persona'
 connect  = require 'connect'
 path     = require 'path'
 mongoose = require 'mongoose'
+I18n     = require 'i18n-2'
 
 app      = flatiron.app
 
@@ -45,8 +47,15 @@ app.config.defaults {
   secret  : "Kiedy nikogo nie ma w domu, Katiusza maluje pazury na zielono i głośno się śmieje swoim kocim głosem. To prawda!"
   mongo   :
     url     :  "mongodb://localhost/uvaga"
+  locales : [
+    "pl"
+    "en"
+  ]
 }
 (require "./configure") app
+
+i18n = new I18n 
+  locales: app.config.get "locales"
 
 app.use flatiron.plugins.http
 app.use persona, audience: app.config.get "persona:audience"
@@ -55,6 +64,10 @@ app.use creamer,
   views       : __dirname + '/views'
   helpers     : __dirname + '/views/helpers'
   controllers : __dirname + '/controllers'
+  attach      : (data) ->
+    $ "running creamer attach"
+    data.i18n = i18n
+
 app.registerHelper "$", debug "uvaga:view"
 
 app.router.configure 
@@ -66,6 +79,8 @@ app.router.configure
     $ @req.url
     @res.message "Error accessing #{@req.url}", "error"
     @bind "not-found"
+app.router.attach ->
+  @i18n = i18n
 
 assets = __dirname + "/../assets/"
 app.use flatiron.plugins.static, dir: assets, url: "/assets/"
@@ -84,6 +99,7 @@ app.start (app.config.get "port"), ->
   $ = debug "uvaga:init"
   mongoose.connect (app.config.get "mongo:url")
   app.log.info "Uvaga! http://#{app.config.get "host"}:#{app.config.get "port"}/"
+  app.log.info i18n.__ "System is up and running!"
 
 ###
 [Flatiron]:         http://flatironjs.org/

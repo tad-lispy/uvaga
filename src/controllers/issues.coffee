@@ -59,11 +59,11 @@ save = (number) ->
         $ "Error saving issue document: %j", error
         if error.name is "ValidationError"
           for field of error.errors
-            @res.message "#{field} was missing.", "error"
+            @res.message (@i18n.__ "%s was missing.", @i18n.__ field), "error"
         else
-          @res.message "There was an error. Sorry !(", "error"
+          @res.message (@i18n.__ "There was an error. Sorry !("), "error"
         
-        return @res.redirect "/issue/" + (slug ? "__new")
+        return @res.redirect "/issues/" + (slug ? "__new")
 
       # No error
       $ "Issue saved: %j", issue
