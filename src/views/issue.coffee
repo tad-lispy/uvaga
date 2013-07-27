@@ -8,9 +8,9 @@ module.exports = ->
 
   div class: "page-header", ->
     h1 -> 
-      text "# " + @issue.number
+      text "# #{@issue.number} "
       small ->
-        text " issue "
+        translate "issue"
         div class: "pull-right", ->
           # Configure counters of affected, concerned and committed stakeholders
           for counter in [
@@ -18,19 +18,19 @@ module.exports = ->
               name  : "affected"
               icon  : "group"
               class : "warning"
-              tip   : "number of affected stakeholders."
+              tip   : translate "number of affected stakeholders."
             }
             { 
               name  : "concerned"
               icon  : "warning-sign"
               class : "important"
-              tip   : "number of stakeholders who consider this issue important."
+              tip   : translate "number of stakeholders who consider this issue important."
             }
             { 
               name  : "committed"
               icon  : "eye-open"
               class : "info"
-              tip   : "number of stakeholders commited to work on that."
+              tip   : translate "number of stakeholders commited to work on that."
             }
           ]
             a 
@@ -59,7 +59,7 @@ module.exports = ->
               href: "/issues/#{@issue.number}/edit"
               ->
                 i class : "icon-edit"
-                text "Edit this issue"
+                translate "Edit this issue"
 
 
 
@@ -71,14 +71,14 @@ module.exports = ->
           ->
             for field, icon of {
               affected  : cede ->
-                i class: 'icon-user'
-                text " This affects me"
+                i class: 'icon-user', " "
+                translate "This affects me"
               concerned :  cede -> 
-                i class: 'icon-warning-sign'
-                text " I think it's important"
+                i class: 'icon-warning-sign', " "
+                translate "I think it's important"
               committed : cede -> 
-                i class: 'icon-eye-open'
-                text " I'll take care of that"
+                i class: 'icon-eye-open', " "
+                translate "I'll take care of that"
             }
               div class: "span3 relation #{field}", ->
                 label class: "checkbox", ->
@@ -94,7 +94,7 @@ module.exports = ->
         action: "/issues/#{@issue.number}/comments"
         ->
           fieldset ->
-            legend "Comments"
+            legend translate "Comments"
 
             div class: "row", ->
 
@@ -104,7 +104,7 @@ module.exports = ->
                 label
                   class: "control-label"
                   for: "comment"
-                  "Your comment"
+                  translate "Your comment"
                 textarea
                   name: "comment"
                   class: "span9"
@@ -116,21 +116,21 @@ module.exports = ->
                   type  : "submit"
                   class : "btn btn-primary"
                   ->
-                    i class: "icon-comment"
-                    " Say it!"
+                    i class: "icon-comment", " "
+                    translate "Say it!"
                 a
                   class : "btn btn-link"
                   href  : "#"
                   ->
-                    i class: "icon-remove"
-                    " Cancel"
+                    i class: "icon-remove", " "
+                    translate "Cancel"
 
             comment_box comment for comment in @issue.comments.reverse()
               
               
 
     div class: "span3", id: "aside", ->
-      h4 "Commited stakeholders"
+      h4 translate "Commited stakeholders"
       # TODO: Author can be null, if corresponding stakeholder document was removed from db. Take care of that in model or controller
       # TODO: helper
       commited_box stakeholder for stakeholder in @commitee when stakeholder?

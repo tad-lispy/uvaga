@@ -40,7 +40,7 @@ module.exports = ->
 
   ###
 
-  @title ?= "Synergy stimulant for the masses"
+  @title ?= translate "Synergy stimulant for the masses"
 
   ###
 
@@ -51,14 +51,15 @@ module.exports = ->
   ###
 
   doctype 5
-  html lang: "en", ->
+  # TODO: lang from config
+  html lang: "pl", ->
     head ->
       title "Uvaga ! " + @title
       meta charset: "utf-8"
       meta "http-equiv": "X-UA-Compatible", content: "IE=Edge"
       meta 
         name    : "viewport"
-        content :"width=device-width, initial-scale=1.0"
+        content : "width=device-width, initial-scale=1.0"
 
       link
         rel : "shortcut icon"

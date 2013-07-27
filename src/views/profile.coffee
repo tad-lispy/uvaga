@@ -20,17 +20,17 @@ module.exports = ->
     @form_context = @stakeholder
     if @stakeholder.email is @username
       mode        = "update"
-      form_title  = "Your profile"
+      form_title  = translate "Your profile"
     else
       mode        = "view"
-      form_title  = "Profile of #{@stakeholder.name}" 
+      form_title  = translate "Profile of #{@stakeholder.name}" 
   else # We are in `/stakeholders/__new`
     @form_context = { email: @username }
     mode          = "create"
-    form_title    = "Your profile"
+    form_title    = translate "Your profile"
     div class: "hero-unit", ->
-      h1 "Hello! Thanks for authenticating."
-      p  "It seems to be your first time here. Please fill your profile beolw. We need at least your name, so that we know how to address you :)"
+      h1 translate "Hello! Thanks for authenticating."
+      p  translate "It seems to be your first time here. Please fill your profile beolw. We need at least your name, so that we know how to address you :)"
 
   form {
     class: "profile #{mode} form-horizontal"
@@ -51,7 +51,7 @@ module.exports = ->
         label
           class: "control-label"
           for: "email"
-          "E-mail"
+          translate "E-mail"
         div class: "controls", ->
           textbox
             name: "email"
@@ -65,7 +65,7 @@ module.exports = ->
         label
           class: "control-label"
           for: "name"
-          "Name"
+          translate "Name"
         div class: "controls", ->
           textbox
             name      : "name"
@@ -78,9 +78,9 @@ module.exports = ->
       if mode is "create"
         div class: "controls", ->
           p class: "help-block", ->
-            strong "That's all we really need to begin."
+            strong translate "That's all we really need to begin."
             do br
-            text " Would you like to tell us more?"
+            translate "Would you like to tell us more?"
 
       # ## Image
       #
@@ -88,14 +88,14 @@ module.exports = ->
         label
           class: "control-label"
           for: "image"
-          "Image"
+          translate "Image"
         div class: "controls", ->
           image = if mode is "create" then @suggestions.image else @stakeholder.image
           div style: "float: left", ->
             select
               id    : "shape"
               name  : "shape"
-              title : "Symbol"
+              title : translate "Symbol"
               ->
                 for shape in @suggestions.shapes
                   option
@@ -107,7 +107,7 @@ module.exports = ->
             select
               id    : "color"
               name  : "color"
-              title : "Color"
+              title : translate "Color"
               ->
                 for color in @suggestions.colors
                   option
@@ -118,7 +118,7 @@ module.exports = ->
             select
               id    : "background"
               name  : "background"
-              title : "Background"
+              title : translate "Background"
               ->
                 for color in @suggestions.colors
                   option
@@ -135,7 +135,7 @@ module.exports = ->
         label
           class: "control-label"
           for: "telephone"
-          "Telephone"
+          translate "Telephone"
         div class: "controls", ->
           textbox
             name: "telephone"
@@ -147,7 +147,7 @@ module.exports = ->
         label
           class: "control-label"
           for: "occupation"
-          "Occupation"
+          translate "Occupation"
         div class: "controls", ->
           textbox
             name: "occupation"
@@ -160,12 +160,12 @@ module.exports = ->
         label
           class: "control-label"
           for: "groups"
-          "Groups"
+          translate "Groups"
         div class: "controls", ->
           select
             id          : "groups"
             name        : "groups"
-            placeholder : "Select one or more groups..."
+            placeholder : translate "Select one or more groups..."
             multiple    : true
             class       : "span3"
             ->
@@ -181,14 +181,14 @@ module.exports = ->
             type  : "submit"
             class : "btn btn-success"
             ->
-              i class: "icon-ok-sign"
-              " Done!"
+              i class: "icon-ok-sign", " "
+              translate "Done!"
           if mode is "create" then a
             class           : "btn"
             "data-signout"  : true
             ->
-              i class: "icon-remove-sign"
-              " No thanks."
+              i class: "icon-remove-sign", " "
+              translate "No thanks."
 
 
     

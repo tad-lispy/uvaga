@@ -16,8 +16,8 @@ module.exports = (attributes) ->
         th style: "width: 10px; text-align: center", -> i class: "icon-warning-sign"  # concerned
         th style: "width: 10px; text-align: center", -> i class: "icon-group"         # affected
         th style: "width: 10px; text-align: center", -> i class: "icon-eye-open"      # committed
-        th "Scopes"
-        th "Description"
+        th translate "Scopes"
+        th translate "Description"
     tbody ->
       # TODO: Sorting and filtering
       # http://www.datatables.net/

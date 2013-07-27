@@ -1,22 +1,22 @@
 module.exports = ->
-  table class: "table", ->
-    caption "Registered stakeholders"
+  table class: "table table-hover", ->
+    caption translate "Registered stakeholders"
     thead ->
       tr ->
-        th "Name"
-        th "Occupation"
-        th "Groups"
+        th translate "Name"
+        th translate "Occupation"
+        th translate "Groups"
     tbody ->
       # TODO: Sorting and filtering
       # http://www.datatables.net/
       # http://net.tutsplus.com/tutorials/javascript-ajax/using-jquery-to-manipulate-and-filter-data/
       for stakeholder in @stakeholders
-        tr -> 
+        tr class: ("info" if stakeholder.email is @username), -> 
           td -> 
             a href: "/stakeholders/#{stakeholder.slug}", ->
               avatar {stakeholder, size: 24}
               strong " " + stakeholder.name
-            if stakeholder.email is @username then text " (that's you!)"
+            
           td stakeholder.occupation
           td ->
             for group in stakeholder.groups

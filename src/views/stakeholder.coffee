@@ -7,6 +7,6 @@ module.exports = ->
 
     div class: "span9", ->
       # $ "Related issues: %j", @issues
-      h3 "Issues related to #{@stakeholder.name}"
+      h3 translate "Issues related to %s", @stakeholder.name
       issue_list issues: @issues.related
 

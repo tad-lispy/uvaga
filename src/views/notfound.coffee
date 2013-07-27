@@ -1,3 +1,3 @@
 module.exports = ->
-  h1 "404, man."
+  h1 translate "404, man."
   p @message

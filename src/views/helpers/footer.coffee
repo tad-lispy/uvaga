@@ -1,10 +1,6 @@
 module.exports = ->
-  p ->
-    strong "Uvaga!"
-    text " is "
-    a href: "/licence", "an open source"
-    text " software by "
-    a href: "http://lazurski.pl/", "Tadeusz Łazurski"
-    text ". "
-    a href: "http://github/lzrski/uvaga/", "Fork me at GitHub"
-    text "!"
+  p -> translate "%s is an %s software by %s. %s!",
+    cede -> strong "Uvaga!"
+    cede -> a href: "/licence", translate "an open source"
+    cede -> a href: "http://lazurski.pl/", "Tadeusz Łazurski"
+    cede -> a href: "http://github.com/lzrski/uvaga/", translate "Fork me at GitHub"

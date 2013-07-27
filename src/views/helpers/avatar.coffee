@@ -15,4 +15,4 @@ module.exports = (properties) ->
     height: size
     src   : "/avatars/#{shape}/#{color}/#{background}/#{size}"
     title : stakeholder.name
-    alt   : "Avatar of stakeholder #{stakeholder.name}"
+    alt   : translate "Avatar %s - an Uvaga stakeholder", stakeholder.name

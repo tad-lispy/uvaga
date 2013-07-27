@@ -21,13 +21,14 @@ module.exports = ->
   div class: "page-header", ->
     h1 -> 
       if create
-        i class: "icon-asterisk"
-        text " New"
+        i class: "icon-asterisk", " "
+        text translate "New"
       else
         text "# " + @form_context.number
 
+      text " "
       small ->
-        text " issue "
+        translate "issue "
         unless create
           div class: "pull-right", ->
             # Configure counters of affected, concerned and committed stakeholders
@@ -56,7 +57,7 @@ module.exports = ->
                 class : "badge " + (if @relation[counter.name] then "badge-" + counter.class)
                 data  :
                   toggle: "tooltip"
-                  title : counter.tip
+                  title : translate counter.tip
                 ->
                   i class: "icon-#{counter.icon}", " "
                   text @form_context[counter.name]
@@ -95,11 +96,11 @@ module.exports = ->
               label
                 class: "control-label"
                 for: "groups"
-                "scopes"
+                translate "scopes"
               select
                 id          : "scopes"
                 name        : "scopes"
-                placeholder : "Select one or more scopes of this issue..."
+                placeholder : translate "Select one or more scopes of this issue..."
                 multiple    : true
                 class       : "span9"
                 ->
@@ -115,21 +116,21 @@ module.exports = ->
                 type  : "submit"
                 class : "btn btn-success"
                 ->
-                  i class: "icon-ok-sign"
-                  " Done!"
+                  i class: "icon-ok-sign", " "
+                  translate "Done!"
               text " "
               a
                 class           : "btn"
                 href            : if create then "/" else "/issues/#{@issue.number}"
                 ->
-                  i class: "icon-remove-sign"
-                  " Cancel."
+                  i class: "icon-remove-sign", " "
+                  translate "Cancel."
 
       unless create
         comment_box comment for comment in @issue.comments.reverse()
 
     unless create
       div class: "span3", id: "aside", ->
-        h4 "Commited stakeholders"
+        h4 translate "Commited stakeholders"
         commited_box stakeholder for stakeholder in @commitee when stakeholder?
         

@@ -13,9 +13,9 @@ Navigation menu items
 
 module.exports = (navigation) ->
   navigation ?= [
-    { title: "Start", href: "/" }
-    { title: "Stakeholders", href: "/stakeholders" }
-    { title: "Issues", href: "/issues" }
+    { title: (translate "Start"),         href: "/" }
+    { title: (translate "Stakeholders"),  href: "/stakeholders" }
+    { title: (translate "Issues"),        href: "/issues" }
   ]
 
   div class: "navbar navbar-inverse navbar-fixed-top", ->
@@ -48,15 +48,10 @@ module.exports = (navigation) ->
                 title : @profile.name
                 href: "/stakeholders/#{@profile.slug}"
                 ->
-                  img 
-                    width : 24
-                    height: 24
-                    src   : "/avatars/#{shape}/#{color}/#{background}/24"
-                    title : @profile.name
-                    alt   : "Avatar of #{@profile.name} in Uvaga"
+                  avatar size: 24
                   strong style: "margin-left: 10px", @profile.name
               li -> a
-                title: "Log out"
+                title: translate "Log out"
                 href: "#"
                 data:
                   signout: true 

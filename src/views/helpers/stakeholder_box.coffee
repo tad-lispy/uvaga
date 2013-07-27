@@ -8,28 +8,23 @@ module.exports = (attributes) ->
 
         if stakeholder.image?
           { shape, color, background } = stakeholder.image
-          img 
-            width : 300
-            height: 300
-            src   : "/avatars/#{shape}/#{color}/#{background}/300"
-            title : stakeholder.name
-            alt   : "Avatar of #{stakeholder.name} in Uvaga"
+          avatar { stakeholder, size: 300 }
           
         p style: "text-align: center", stakeholder.occupation
         
         dl class: "dl-horizontal", ->
           if stakeholder.groups.length
-            dt -> i class: "icon-sitemap", title: "Groups"
+            dt -> i class: "icon-sitemap", title: translate "Groups"
             for group in stakeholder.groups
               dd group              
 
           if stakeholder.telephone
-            dt -> i class: "icon-phone-sign", title: "Telephone"
+            dt -> i class: "icon-phone-sign", title: translate "Telephone"
             dd -> a
               href: "tel:#{stakeholder.telephone}"
               stakeholder.telephone
 
-          dt -> i class: "icon-envelope", title: "e-Mail address"
+          dt -> i class: "icon-envelope", title: translate "e-Mail address"
           dd -> 
             if @profile.email is stakeholder.email then a 
               href: "mailto:#{stakeholder.email}"
@@ -43,5 +38,5 @@ module.exports = (attributes) ->
           href  : "/stakeholders/" + stakeholder.slug + "/profile"
           ->
             i class: "icon-edit", " "
-            text "edit profile" 
+            text translate "edit profile" 
               

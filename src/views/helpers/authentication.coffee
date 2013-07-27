@@ -8,26 +8,28 @@ module.exports = (attributes) ->
         href: "#"
         class: "btn btn-large btn-primary"
         ->
-          i class: "icon-chevron-sign-right"
-          text " Introduce yourself"
+          i class: "icon-chevron-sign-right", " "
+          translate "Introduce yourself"
 
   else
     p ->
-      text "You are authenticated as "
-      if @profile?
-        a href: "/stakeholders/#{@profile.slug}", @profile.name
-      else text @username
-      text ". You can always "
-      a
-        id: "signout"
-        data:
-          signout: true
-        href: "#"
-        "Get annonymous"
+      translate "You are authenticated as %s. You can always %s.",
+        cede =>
+          if @profile? then a
+            href: "/stakeholders/#{@profile.slug}",
+            @profile.name
+          else text @username
+
+        cede => a
+          id: "signout"
+          data:
+            signout: true
+          href: "#"
+          translate "Get annonymous"
     a
       id: "start"
       href: "/"
       class: "btn btn-large btn-success"
       -> 
-        i class: "icon-chevron-sign-right"
-        text " Begin"
+        i class: "icon-chevron-sign-right", " "
+        translate "Begin"
