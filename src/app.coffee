@@ -55,7 +55,8 @@ app.config.defaults {
 (require "./configure") app
 
 i18n = new I18n 
-  locales: app.config.get "locales"
+  locales   : app.config.get "locales"
+  directory : __dirname + "/../locales"
 
 app.use flatiron.plugins.http
 app.use persona, audience: app.config.get "persona:audience"
