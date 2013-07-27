@@ -54,6 +54,8 @@ app.config.defaults {
 }
 (require "./configure") app
 
+version = (require "../package.json").version
+
 i18n = new I18n 
   locales   : app.config.get "locales"
   directory : __dirname + "/../locales"
@@ -67,7 +69,9 @@ app.use creamer,
   controllers : __dirname + '/controllers'
   attach      : (data) ->
     $ "running creamer attach"
-    data.i18n = i18n
+    data.i18n     = i18n
+    data.version  = version
+    data.test = "abcd"
 
 app.registerHelper "$", debug "uvaga:view"
 
@@ -99,7 +103,7 @@ app.http.before.push require "./middleware/access-control"
 app.start (app.config.get "port"), ->
   $ = debug "uvaga:init"
   mongoose.connect (app.config.get "mongo:url")
-  app.log.info "Uvaga! http://#{app.config.get "host"}:#{app.config.get "port"}/"
+  app.log.info "Uvaga! v. #{version} at http://#{app.config.get "host"}:#{app.config.get "port"}/"
   app.log.info i18n.__ "System is up and running!"
 
 ###
