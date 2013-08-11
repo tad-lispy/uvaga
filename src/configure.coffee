@@ -41,8 +41,9 @@ modulus = (app) ->
   app.config.set "persona:audience", "http://#{app.config.get "host"}/"
   $ "Done"
   
-module.exports = (app) ->    
-  app.config.set "persona:audience", "http://#{app.config.get "host"}:#{app.config.get "port"}/"
+module.exports = (app) ->
+  if (app.config.get "persona:audience") is undefined
+    app.config.set "persona:audience", "http://#{app.config.get "host"}:#{app.config.get "port"}/"
   if process.env.platform is "modulus" then modulus app
   else if process.env.VCAP_APPLICATION? then appFog app
 
