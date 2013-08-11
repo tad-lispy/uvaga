@@ -1,6 +1,6 @@
 {
   "description": "Synergy stimulant for the masses",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "main": "lib/app.js",
   "repository": "git://github.com/lzrski/uvaga",
