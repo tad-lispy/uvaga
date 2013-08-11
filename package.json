@@ -3,6 +3,7 @@
   "version": "0.3.1",
   "private": true,
   "main": "lib/app.js",
+  "repository": "git://github.com/lzrski/uvaga",
   "dependencies": {
     "union": "~0.3.5",
     "flatiron": "~0.3.4",
