@@ -46,8 +46,8 @@ Comment = new mongoose.Schema
     type        : String
     required    : yes
     validate    : 
-      validator   : (value) -> value.length < 256
-      msg         : "Too long. Keep your comments under 256 characters long. Less is more :)"
+      validator   : (value) -> value.length < 1024
+      message     : "Too long. Keep your comments under 1024 characters long. Less is more :)"
 
 Issue = new mongoose.Schema
   number      : 
