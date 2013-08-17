@@ -84,8 +84,10 @@ app.router.configure
     $ @req.url
     @res.message "Error accessing #{@req.url}", "error"
     @bind "not-found"
+
 app.router.attach ->
   @i18n = i18n
+  @app  = app
 
 assets = __dirname + "/../assets/"
 app.use flatiron.plugins.static, dir: assets, url: "/assets/"

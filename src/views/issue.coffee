@@ -12,6 +12,12 @@ module.exports = ->
       small ->
         translate "issue"
         div class: "pull-right", ->
+          img 
+            src : @qrcode
+            style: "width: 40px"
+            id  : "qrcode"
+            alt: "QR Code with url to this issue"
+
           # Configure counters of affected, concerned and committed stakeholders
           for counter in [
             {
@@ -54,6 +60,7 @@ module.exports = ->
             text @issue.description
             ul class: "inline", -> for scope in @issue.scopes
               li -> a class: "label", href: "#", scope
+
             a 
               class: "btn btn-link btn-large pull-right"
               href: "/issues/#{@issue.number}/edit"

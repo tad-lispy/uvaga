@@ -11,6 +11,7 @@ Stakeholder = require "../models/Stakeholder"
 Issue       = require "../models/Issue"
 _           = require "underscore"
 async       = require "async"
+qrcode      = require "qrcode"
 controller  = require "../access-control"
 debug       = require "debug"
 $           = debug "uvaga:issues-controllers"
@@ -115,6 +116,9 @@ module.exports =
             query.populate "comments.author"
             query.populate "relations._id"
             query.exec done
+          qrcode      : (done) =>
+            url = (@app.config.get "persona:audience") + number
+            qrcode.toDataURL url, done
           scripts     : (done) -> done null, [ "/assets/scripts/app/issue.js" ]
         }, (error, data) =>
           if error then throw error
