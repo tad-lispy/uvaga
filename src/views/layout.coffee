@@ -79,10 +79,6 @@ module.exports = ->
         type: "text/css"
         href: "/assets/scripts/vendor/selectize/selectize.css"
 
-      link
-        rel: "stylesheet"
-        href: "//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/css/bootstrap-editable.css"
-
       stylus """
         body
           padding-top 60px
