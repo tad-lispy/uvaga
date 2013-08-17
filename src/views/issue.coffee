@@ -10,11 +10,10 @@ module.exports = ->
     h1 -> 
       text "# #{@issue.number} "
       small ->
-        translate "issue"
+        text translate "issue"
         div class: "pull-right", ->
           img 
             src : @qrcode
-            style: "width: 40px"
             id  : "qrcode"
             alt: "QR Code with url to this issue"
 
@@ -62,8 +61,9 @@ module.exports = ->
               li -> a class: "label", href: "#", scope
 
             a 
-              class: "btn btn-link btn-large pull-right"
-              href: "/issues/#{@issue.number}/edit"
+              id    : "edit-issue"
+              class : "btn btn-link btn-large pull-right"
+              href  : "/issues/#{@issue.number}/edit"
               ->
                 i class : "icon-edit"
                 translate "Edit this issue"
@@ -103,7 +103,7 @@ module.exports = ->
           fieldset ->
             legend translate "Comments"
 
-            div class: "row", ->
+            div class: "row add-comment", ->
 
               # TODO: stakeholders image on wide screens
               div class: "span9", ->

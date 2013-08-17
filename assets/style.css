@@ -1,0 +1,18 @@
+@media screen {
+  #qrcode {
+    height: 40px
+  }    
+}
+
+@media print {
+  #qrcode {
+    height: initial
+  }  
+  .navbar,
+  .alert,
+  #edit-issue,
+  .relation,
+  .add-comment {
+    display: none
+  }
+}

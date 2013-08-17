@@ -79,6 +79,11 @@ module.exports = ->
         type: "text/css"
         href: "/assets/scripts/vendor/selectize/selectize.css"
 
+      link
+        rel : "stylesheet"
+        type: "text/css"
+        href: "/assets/style.css"
+
       stylus """
         body
           padding-top 60px
