@@ -33,6 +33,7 @@ connect  = require 'connect'
 path     = require 'path'
 mongoose = require 'mongoose'
 I18n     = require 'i18n-2'
+marked   = require 'marked'
 
 app      = flatiron.app
 
@@ -71,9 +72,9 @@ app.use creamer,
     $ "running creamer attach"
     data.i18n     = i18n
     data.version  = version
-    data.test = "abcd"
+    data.marked        = marked
 
-app.registerHelper "$", debug "uvaga:view"
+marked.setOptions breaks: true
 
 app.router.configure 
   # This enables trailing slashes in routes - otherwise it's 404
@@ -86,8 +87,9 @@ app.router.configure
     @bind "not-found"
 
 app.router.attach ->
-  @i18n = i18n
-  @app  = app
+  @debug  = debug "uvaga:view"
+  @i18n   = i18n
+  @app    = app
 
 assets = __dirname + "/../assets/"
 app.use flatiron.plugins.static, dir: assets, url: "/assets/"

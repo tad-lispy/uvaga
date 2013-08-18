@@ -56,7 +56,7 @@ module.exports = ->
 
           div class: "hero-unit", ->
             # TODO: move to controller .replace "\n\n", "<p>" .replace "\n", "<br />"
-            text @issue.description
+            markdown @issue.description
             ul class: "inline", -> for scope in @issue.scopes
               li -> a class: "label", href: "#", scope
 
